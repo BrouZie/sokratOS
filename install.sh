@@ -41,7 +41,7 @@ cp -r "$REPO_INSTALL/configs/rofi" "$HOME/.config/rofi"
 cp -r "$REPO_INSTALL/configs/swaync" "$HOME/.config/swaync"
 cp -r "$REPO_INSTALL/configs/fastfetch" "$HOME/.config/fastfetch"
 cp -r "$REPO_INSTALL/configs/zathura" "$HOME/.config/zathura"
-cp -r "$REPO_INSTALL/configs/applications/*" "$HOME/.local/share/applications"
+# cp -r "$REPO_INSTALL/configs/applications" "$HOME/.local/share/applications"
 cp -r "$REPO_INSTALL/configs/nvim" "$HOME/.config/nvim"
 
 # Tmux and neovim dependencies
@@ -55,7 +55,8 @@ uv pip install -p ~/.venvs/nvim/bin/python \
 
 # Ensure wallpaper for first boot
 mkdir -p "$HOME/Pictures/wallpaper"
+mkdir -p "$HOME/.local/bin"
 cp "$REPO_INSTALL/configs/elden_purple.jpg" "$HOME/Pictures/wallpaper/"
-cp "$REPO_INSTALL/configs/sokratos-first-login" "$HOME/.local/bin/"
+cp "$REPO_INSTALL/sokratos-first-login" "$HOME/.local/bin/"
 chmod +x "$HOME/.local/bin/sokratos-first-login"
 cp "$REPO_INSTALL/WELCOME.md" "$HOME/.config/sokratOS/WELCOME.md"
