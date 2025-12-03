@@ -5,5 +5,5 @@ Comment=GitHub
 Exec=firefox --new-window "https://github.com/"
 Terminal=false
 Type=Application
-Icon=/home/brouzie/.local/share/applications/icons/github.png
+Icon=~/.local/share/applications/icons/github.png
 StartupNotify=true

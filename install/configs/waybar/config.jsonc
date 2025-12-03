@@ -40,8 +40,9 @@
 	"hyprland/window": {
 		"format": "{}",
 		"rewrite": {
-			"(.*) - tmux": "> [$1]",
-			"(.*) - Mozilla Firefox": "$1"
+			"^$": "sokratOS",
+			"tmux": "sokratOS",
+			"Kitty Float": "sokratOS",
 		},
 		"separate-outputs": true
 	},
