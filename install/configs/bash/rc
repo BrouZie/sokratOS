@@ -4,7 +4,7 @@ BASHCFG="$HOME/.config/bash"
 [[ -f "$BASHCFG/envs" ]] && source "$BASHCFG/envs"
 
 # Runs only in interactive shell
-[[ $- == *i* ]]
+[[ $- == *i* ]] || return
 [[ -f "$BASHCFG/shell" ]] && source "$BASHCFG/shell"
 [[ -f "$BASHCFG/init" ]] && source "$BASHCFG/init"
 [[ -f "$BASHCFG/aliases" ]] && source "$BASHCFG/aliases"
