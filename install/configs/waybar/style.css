@@ -81,11 +81,11 @@ tooltip label {
 }
 
 #battery.warning {
-	background-color: @on_tertiary;
+	color: @error;
 }
 
 #battery.critical {
-	background-color: @on_error;
+	background-color: @error_container;
 }
 
 #power-profiles-daemon {
