@@ -2,11 +2,11 @@
 
 * {
 	border: none;
-	border-radius: 0pt;
+	border-radius: 0;
 	font-family: "Adwaita Sans", "JetBrainsMono Nerd Font Propo", sans-serif;
 	font-weight: bold;
 
-	font-size: 12pt;
+	font-size: 10pt;   /* base size – everything else scales from this */
 	min-height: 0;
 	padding: 0;
 	margin: 0;
@@ -18,32 +18,32 @@ window#waybar {
 
 tooltip {
 	background: @background;
-	border: 1pt solid @on_primary;
-	border-radius: 12pt;
+	border: 0.1em solid @on_primary;
+	border-radius: 1.2em;
 }
 
 tooltip label {
 	color: #ffffff;
-	padding: 6pt;
+	padding: 0.6em;
 }
 
 #workspaces {
-	margin: 4pt 20pt;
+	margin: 0.4em 2em;
 }
 
 #workspaces button {
-    border-radius: 16pt;
-		margin: 0 3pt;
-    padding: 3pt 3pt;
-		transition: all 0.1s ease-in-out;
+    border-radius: 1.6em;
+	margin: 0 0.3em;
+    padding: 0.3em 0.3em;
+	transition: all 0.1s ease-in-out;
 }
 
 #workspaces button.active {
     background-color: @on_primary_container;
     color: @on_tertiary_fixed;
-		min-width: 30pt;
-		min-height: 10pt;
-		transition: all 0.1s ease-in-out;
+	min-width: 3em;
+	min-height: 1em;
+	transition: all 0.1s ease-in-out;
 }
 
 #workspaces button:hover {
@@ -53,7 +53,7 @@ tooltip label {
 
 #workspaces button.focused {
     background-color: @surface_container;
-    box-shadow: inset 0 -3pt #ffffff;
+    box-shadow: inset 0 -0.3em #ffffff;
 }
 
 #workspaces button.urgent {
@@ -69,15 +69,15 @@ tooltip label {
 #bluetooth,
 #battery {
 	background-color: @surface_container;
-	padding: 0 9pt 0 9pt;
-	border-radius: 12pt;
-	margin: 0 0 0 12pt;
+	padding: 0 0.9em;
+	border-radius: 1.2em;
+	margin: 0 0 0 0.6em;
 	color: @primary;
 }
 
 #clock {
 	/* font-weight: bold; */
-	border: 1pt solid @primary;
+	border: 0.1em solid @primary;
 }
 
 #battery.warning {
@@ -90,9 +90,9 @@ tooltip label {
 
 #power-profiles-daemon {
 	background-color: @surface_container;
-	padding: 0 9pt 0 9pt;
-	border-radius: 10pt;
-	margin: 0 0 0 12pt;
+	padding: 0 0.9em;
+	border-radius: 1em;
+	margin: 0 0 0 0.6em;
 }
 
 #power-profiles-daemon.performance {
