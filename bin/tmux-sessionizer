@@ -1,16 +1,43 @@
 #!/bin/bash
+# ========================================
+# TMUX SESSIONIZER - ThePrimeagen inspired
+# ========================================
 
-# =====================================
-# TMUX SESSIONIZER - ThePrimeagen style
-# =====================================
-
-# Directories to search (adjust these to your setup)
+# Regular directories to search
 SEARCH_PATHS=(
-    "$HOME/workspace"
+    "$HOME/Robotics"
+    "$HOME/Projects"
+    "$HOME/School"
     "$HOME/Documents"
-    "$HOME/.config"
-    "$HOME/.local/share"
-		"$HOME/dotfiles"
+)
+
+# Specific .config subdirectories to include
+CONFIG_DIRS=(
+    "nvim"
+		"hypr"
+		"rofi"
+		"kitty"
+    "waybar"
+    "bash"
+		"matugen"
+		"sokratOS"
+		"fastfetch"
+    "gtk-3.0"
+    "gtk-4.0"
+    "zathura"
+    "swaync"
+    "ghostty"
+)
+
+# Specifig .local subdirectories to include
+LOCAL_DIRS=(
+    "bin"
+)
+
+# Specific .local/share subdirectories to include
+LOCAL_SHARE_DIRS=(
+    "applications"
+    "sokratOS"
 )
 
 MAX_DEPTH=3
@@ -20,18 +47,45 @@ MAX_DEPTH=3
 # =====================================
 
 get_directories() {
-    # Find all directories up to MAX_DEPTH, excluding common noise
+    local dirs=()
+    
+    # Get regular search paths
     for path in "${SEARCH_PATHS[@]}"; do
         if [[ -d "$path" ]]; then
-            find "$path" -mindepth 1 -maxdepth "$MAX_DEPTH" -type d \
-                -not -path '*/.git/*' \
-                -not -path '*/node_modules/*' \
-                -not -path '*/.venv/*' \
-                -not -path '*/__pycache__/*' \
-                -not -path '*/.cache/*' \
-                2>/dev/null
+            while IFS= read -r dir; do
+                dirs+=("$dir")
+            done < <(find "$path" -mindepth 1 -maxdepth "$MAX_DEPTH" -type d \
+                \( -name '.git' -o -name 'node_modules' -o -name '.venv' -o -name '__pycache__' -o -name '.cache' \) -prune -o \
+                -type d -print 2>/dev/null)
         fi
-    done | sort -u
+    done
+    
+    # Get specific .config directories
+    for config_dir in "${CONFIG_DIRS[@]}"; do
+        local full_path="$HOME/.config/$config_dir"
+        if [[ -d "$full_path" ]]; then
+            dirs+=("$full_path")
+        fi
+    done
+
+    # Get specific .local/share directories
+    for share_dir in "${LOCAL_DIRS[@]}"; do
+        local full_path="$HOME/.local/$share_dir"
+        if [[ -d "$full_path" ]]; then
+            dirs+=("$full_path")
+        fi
+    done
+    
+    # Get specific .local/share directories
+    for share_dir in "${LOCAL_SHARE_DIRS[@]}"; do
+        local full_path="$HOME/.local/share/$share_dir"
+        if [[ -d "$full_path" ]]; then
+            dirs+=("$full_path")
+        fi
+    done
+    
+    # Print unique, sorted directories
+    printf '%s\n' "${dirs[@]}" | sort -u
 }
 
 sessionize() {
@@ -44,7 +98,8 @@ sessionize() {
     selected=$(readlink -f "$selected")
     
     # Create session name from directory basename
-    local selected_name=$(basename "$selected" | tr . _)
+    # Handle dots and dashes in directory names
+    local selected_name=$(basename "$selected" | tr '.' '_' | tr '-' '_')
     
     # Check if we're inside tmux
     if [[ -z "$TMUX" ]]; then
@@ -78,7 +133,8 @@ else
         --preview-window=right:50%:wrap \
         --bind 'ctrl-/:toggle-preview' \
         --header 'Select directory (Ctrl-/ toggle preview)' \
-        --height=100%)
+        --height=100% \
+				--layout=reverse)
     
     sessionize "$selected"
 fi

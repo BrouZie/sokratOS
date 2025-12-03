@@ -1,0 +1,97 @@
+#!/bin/bash
+# =====================================
+# Rofi wrapper for tmux-sessionizer
+# Save as ~/.local/bin/rofi-sessionizer
+# =====================================
+
+SEARCH_PATHS=(
+    "$HOME/Robotics"
+    "$HOME/Projects"
+    "$HOME/School"
+    "$HOME/Documents"
+    "$HOME/dotfiles"
+)
+
+CONFIG_DIRS=(
+    "nvim" "waybar" "hypr" "fastfetch" "bash" "rofi"
+    "matugen" "kitty" "gtk-3.0" "gtk-4.0" "sokratOS"
+    "zathura" "swaync" "ghostty"
+)
+
+LOCAL_SHARE_DIRS=(
+    "applications"
+    "sokratOS"
+)
+
+MAX_DEPTH=3
+
+get_directories() {
+    local dirs=()
+    
+    for path in "${SEARCH_PATHS[@]}"; do
+        if [[ -d "$path" ]]; then
+            while IFS= read -r dir; do
+                dirs+=("$dir")
+            done < <(find "$path" -mindepth 1 -maxdepth "$MAX_DEPTH" -type d \
+                \( -name '.git' -o -name 'node_modules' -o -name '.venv' -o -name '__pycache__' -o -name '.cache' \) -prune -o \
+                -type d -print 2>/dev/null)
+        fi
+    done
+    
+    for config_dir in "${CONFIG_DIRS[@]}"; do
+        local full_path="$HOME/.config/$config_dir"
+        [[ -d "$full_path" ]] && dirs+=("$full_path")
+    done
+    
+    for share_dir in "${LOCAL_SHARE_DIRS[@]}"; do
+        local full_path="$HOME/.local/share/$share_dir"
+        [[ -d "$full_path" ]] && dirs+=("$full_path")
+    done
+    
+    printf '%s\n' "${dirs[@]}" | sort -u
+}
+
+# Get selection from rofi
+selected=$(get_directories | rofi -dmenu -i -p "Select project" -theme-str 'window {width: 40%;}')
+
+# Exit if nothing selected
+[[ -z "$selected" ]] && exit 0
+
+# Resolve symlinks
+selected=$(readlink -f "$selected")
+
+# Create session name from directory basename
+session_name=$(basename "$selected" | tr '.' '_' | tr '-' '_')
+
+# Create session if it doesn't exist
+if ! tmux has-session -t "$session_name" 2>/dev/null; then
+    tmux new-session -ds "$session_name" -c "$selected"
+fi
+
+# Get the currently focused window
+focused_window=$(hyprctl activewindow -j | jq -r '.address')
+
+# Check if the focused window is running tmux
+is_tmux_focused=$(hyprctl activewindow -j | jq -r '.title' | grep -q "tmux" && echo "yes" || echo "no")
+
+# Check if there's ANY active tmux client
+if tmux list-clients &>/dev/null; then
+    if [[ "$is_tmux_focused" == "yes" ]]; then
+        # Currently focused window is tmux - switch its session
+        tmux switch-client -t "$session_name"
+    else
+        # Tmux exists but we're not focused on it
+        # Option A: Focus existing tmux window
+        tmux_window=$(hyprctl clients -j | jq -r '.[] | select(.title | contains("tmux")) | .address' | head -n1)
+        if [[ -n "$tmux_window" ]]; then
+            hyprctl dispatch focuswindow address:"$tmux_window"
+            tmux switch-client -t "$session_name"
+        else
+            # Couldn't find tmux window, open new one
+            kitty -e tmux attach-session -t "$session_name" &
+        fi
+    fi
+else
+    # No active tmux client, open new terminal and attach
+    kitty -e tmux attach-session -t "$session_name" &
+fi

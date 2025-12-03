@@ -25,7 +25,10 @@ source "$REPO_INSTALL/xtras/all.sh"
 
 # Configs
 mkdir -p "$HOME/.config/sokratOS/current/theme"
+mkdir -p "$HOME/.local/share/applications"
 mkdir -p "$HOME/.config/kitty"
+mkdir -p "$HOME/Pictures/wallpaper"
+mkdir -p "$HOME/.local/bin"
 
 cp "$REPO_INSTALL/configs/bashrc" "$HOME/.bashrc"
 cp "$REPO_INSTALL/configs/kitty.conf" "$HOME/.config/kitty/kitty.conf"
@@ -41,8 +44,10 @@ cp -r "$REPO_INSTALL/configs/rofi" "$HOME/.config/rofi"
 cp -r "$REPO_INSTALL/configs/swaync" "$HOME/.config/swaync"
 cp -r "$REPO_INSTALL/configs/fastfetch" "$HOME/.config/fastfetch"
 cp -r "$REPO_INSTALL/configs/zathura" "$HOME/.config/zathura"
-# cp -r "$REPO_INSTALL/configs/applications" "$HOME/.local/share/applications"
 cp -r "$REPO_INSTALL/configs/nvim" "$HOME/.config/nvim"
+cp -r "$REPO_INSTALL/configs/applications/*.desktop" \
+      "$REPO_INSTALL/configs/applications/icons" \
+      "~/.local/share/applications/"
 
 # Tmux and neovim dependencies
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -54,8 +59,6 @@ uv pip install -p ~/.venvs/nvim/bin/python \
 
 
 # Ensure wallpaper for first boot
-mkdir -p "$HOME/Pictures/wallpaper"
-mkdir -p "$HOME/.local/bin"
 cp "$REPO_INSTALL/configs/elden_purple.jpg" "$HOME/Pictures/wallpaper/"
 cp "$REPO_INSTALL/sokratos-first-login" "$HOME/.local/bin/"
 chmod +x "$HOME/.local/bin/sokratos-first-login"
