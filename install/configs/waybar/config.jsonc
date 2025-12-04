@@ -68,7 +68,7 @@
 			"phone-muted": "",
 			"portable": "",
 			"car": "",
-			"default": ["", ""]
+			"default": ["", ""],
 		},
 		"scroll-step": 1,
 		"on-click": "pavucontrol",
@@ -81,7 +81,8 @@
 	"format-connected": " {num_connections} connected",
 	"tooltip-format": "{controller_alias}\t{controller_address}",
 	"tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
-	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+	"tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+	"on-click": "blueberry"
 	},
 	"network": {
 		"format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"],
@@ -94,7 +95,7 @@
 		"tooltip-format-disconnected": "Disconnected",
 		"interval": 3,
 		"nospacing": 1,
-		"on-click": "kitty --class=kitty -e nmtui"
+		"on-click": "kitty --class=floatnmtui -e nmtui"
 	},
 	"battery": {
 		"interval": 60,
