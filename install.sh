@@ -45,8 +45,8 @@ cp -r "$REPO_INSTALL/configs/swaync" "$HOME/.config/swaync"
 cp -r "$REPO_INSTALL/configs/fastfetch" "$HOME/.config/fastfetch"
 cp -r "$REPO_INSTALL/configs/zathura" "$HOME/.config/zathura"
 cp -r "$REPO_INSTALL/configs/nvim" "$HOME/.config/nvim"
-cp -r "$REPO_INSTALL/configs/applications/*.desktop" \
-      "$REPO_INSTALL/configs/applications/icons" \
+cp -r "$REPO_INSTALL/configs/applications/"*.desktop \
+      "$REPO_INSTALL/configs/applications/"icons \
       "~/.local/share/applications/"
 
 # Tmux and neovim dependencies
