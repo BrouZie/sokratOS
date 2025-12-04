@@ -24,11 +24,11 @@ source "$REPO_INSTALL/desktop/all.sh"
 source "$REPO_INSTALL/xtras/all.sh"
 
 # Configs
-mkdir -p "$HOME/.config/sokratOS/current/theme"
-mkdir -p "$HOME/.local/share/applications"
-mkdir -p "$HOME/.config/kitty"
-mkdir -p "$HOME/Pictures/wallpaper"
-mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.config/sokratOS/current/theme" \
+	"$HOME/.local/share/applications" \
+	"$HOME/.config/kitty" \
+	"$HOME/Pictures/wallpaper" \
+	"$HOME/.local/bin"
 
 cp "$REPO_INSTALL/configs/bashrc" "$HOME/.bashrc"
 cp "$REPO_INSTALL/configs/kitty.conf" "$HOME/.config/kitty/kitty.conf"

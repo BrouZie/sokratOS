@@ -1,0 +1,100 @@
+# Base: Ubuntu 22.04 + ROS 2 Humble desktop
+FROM osrf/ros:humble-desktop
+
+# Prevent interactive prompts during build
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Essential development tools
+RUN apt-get update && apt-get install -y \
+    # Terminal & editors
+    vim neovim tmux git curl wget \
+    ncurses-term less \
+    # System utilities
+    ca-certificates locales sudo \
+    bash-completion \
+    # Build tools
+    build-essential cmake \
+    python3-pip python3-venv \
+    # ROS2 development tools
+    python3-colcon-common-extensions \
+    python3-rosdep \
+    python3-vcstool \
+    # Debugging tools
+    gdb valgrind \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install ROS2 packages for learning and development
+RUN apt-get update && apt-get install -y \
+    # Gazebo Classic integration (Humble uses Gazebo 11)
+    ros-humble-gazebo-ros-pkgs \
+    # Gazebo Harmonic bridge (newer option for Humble)
+    ros-humble-ros-gz \
+    ros-humble-ros-gz-bridge \
+    # Control packages
+    ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
+    ros-humble-gz-ros2-control \
+    # Robot description & visualization
+    ros-humble-robot-state-publisher \
+    ros-humble-joint-state-publisher \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-xacro \
+    ros-humble-urdf \
+    # Common sensors
+    ros-humble-camera-info-manager \
+    ros-humble-image-transport \
+    ros-humble-cv-bridge \
+    # Useful utilities
+    ros-humble-rqt \
+    ros-humble-rqt-common-plugins \
+    ros-humble-rviz2 \
+    # TF and transforms
+    ros-humble-tf2-tools \
+    ros-humble-tf2-ros \
+    # Navigation2 (popular for mobile robotics)
+    ros-humble-navigation2 \
+    ros-humble-nav2-bringup \
+    # Example packages for learning
+    ros-humble-demo-nodes-cpp \
+    ros-humble-demo-nodes-py \
+    ros-humble-example-interfaces \
+    && rm -rf /var/lib/apt/lists/*
+
+# Locale configuration (avoids warnings)
+RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
+
+# Set default editor
+RUN echo 'export EDITOR=vim' > /etc/profile.d/editor.sh
+
+# ROS2 setup in bashrc
+RUN echo 'source /opt/ros/humble/setup.bash' >> /etc/bash.bashrc && \
+    echo '# Auto-source workspace if it exists' >> /etc/bash.bashrc && \
+    echo 'if [ -f ~/ros2_ws/install/setup.bash ]; then' >> /etc/bash.bashrc && \
+    echo '    source ~/ros2_ws/install/setup.bash' >> /etc/bash.bashrc && \
+    echo 'fi' >> /etc/bash.bashrc && \
+    echo '' >> /etc/bash.bashrc && \
+    echo '# Helpful aliases' >> /etc/bash.bashrc && \
+    echo 'alias cb="cd ~/ros2_ws && colcon build --symlink-install"' >> /etc/bash.bashrc && \
+    echo 'alias cbt="cd ~/ros2_ws && colcon test"' >> /etc/bash.bashrc && \
+    echo 'alias cbp="cd ~/ros2_ws && colcon build --symlink-install --packages-select"' >> /etc/bash.bashrc && \
+    echo 'alias cws="cd ~/ros2_ws"' >> /etc/bash.bashrc && \
+    echo 'alias src="source ~/ros2_ws/install/setup.bash"' >> /etc/bash.bashrc
+
+# Give ubuntu user passwordless sudo
+RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
+    chmod 0440 /etc/sudoers.d/ubuntu
+
+# Create ubuntu home with proper ROS2 workspace structure
+RUN mkdir -p /home/ubuntu/ros2_ws/src \
+             /home/ubuntu/.ros \
+             /home/ubuntu/.gazebo && \
+    chmod -R 777 /home/ubuntu
+
+# Initialize rosdep (needed for dependency management)
+RUN rosdep init || true
+
+# Set working directory
+WORKDIR /home/ubuntu/ros2_ws

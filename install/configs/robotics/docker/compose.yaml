@@ -1,0 +1,76 @@
+name: ros2-dev
+
+services:
+  ros-jazzy:
+    build:
+      context: .
+      dockerfile: Dockerfile.jazzy
+    user: "${UID:-1000}:${GID:-${UID:-1000}}"
+    image: ros-jazzy-dev:local
+    container_name: ros-jazzy
+    hostname: ros-jazzy
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_QPA_PLATFORM=xcb
+      - QT_X11_NO_MITSHM=1
+      - ROS_DOMAIN_ID=23
+      - HOME=/home/ubuntu
+      - USER=ubuntu
+      - TERM=xterm-256color
+      - XDG_RUNTIME_DIR=/tmp/runtime-ubuntu
+    devices:
+      - /dev/dri:/dev/dri  # GPU acceleration
+    volumes:
+      # X11 for GUI applications
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Main workspace - where your ROS2 projects live
+      - ${HOME}/Robotics/ros2_jazzy:/home/ubuntu/ros2_ws:rw
+      # tmux configuration (read-only to prevent accidental changes)
+      - ${HOME}/.tmux.conf:/home/ubuntu/.tmux.conf:ro
+      - ${HOME}/.tmux/:/home/ubuntu/.tmux:rw
+      # Shared resources between host and container
+      - /dev/shm:/dev/shm  # Shared memory for DDS communication
+    network_mode: host
+    ipc: host
+    privileged: false  # Start unprivileged, add capabilities as needed
+    stdin_open: true
+    tty: true
+    working_dir: /home/ubuntu/ros2_ws
+    command: bash -c "tail -f /dev/null"
+
+  ros-humble:
+    build:
+      context: .
+      dockerfile: Dockerfile.humble
+    user: "${UID:-1000}:${GID:-${UID:-1000}}"
+    image: ros-humble-dev:local
+    container_name: ros-humble
+    hostname: ros-humble
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_QPA_PLATFORM=xcb
+      - QT_X11_NO_MITSHM=1
+      - ROS_DOMAIN_ID=24  # Different domain to avoid interference when both running
+      - HOME=/home/ubuntu
+      - USER=ubuntu
+      - TERM=xterm-256color
+      - XDG_RUNTIME_DIR=/tmp/runtime-ubuntu
+    devices:
+      - /dev/dri:/dev/dri  # GPU acceleration
+    volumes:
+      # X11 for GUI applications
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      # Main workspace - where your ROS2 projects live
+      - ${HOME}/Robotics/ros2_humble:/home/ubuntu/ros2_ws:rw
+      # tmux configuration (read-only to prevent accidental changes)
+      - ${HOME}/.tmux.conf:/home/ubuntu/.tmux.conf:ro
+      - ${HOME}/.tmux/:/home/ubuntu/.tmux:rw
+      # Shared resources between host and container
+      - /dev/shm:/dev/shm  # Shared memory for DDS communication
+    network_mode: host
+    ipc: host
+    privileged: false  # Start unprivileged, add capabilities as needed
+    stdin_open: true
+    tty: true
+    working_dir: /home/ubuntu/ros2_ws
+    command: bash -c "tail -f /dev/null"
