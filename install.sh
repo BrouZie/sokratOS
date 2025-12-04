@@ -59,7 +59,7 @@ uv pip install -p ~/.venvs/nvim/bin/python \
 
 
 # Ensure wallpaper for first boot
-cp "$REPO_INSTALL/configs/elden_purple.jpg" "$HOME/Pictures/wallpaper/"
+cp -r "$REPO_INSTALL/configs/wallpaper" "$HOME/Pictures/wallpaper"
 cp "$REPO_INSTALL/sokratos-first-login" "$HOME/.local/bin/"
 chmod +x "$HOME/.local/bin/sokratos-first-login"
 cp "$REPO_INSTALL/WELCOME.md" "$HOME/.config/sokratOS/WELCOME.md"
