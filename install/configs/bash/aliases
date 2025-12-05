@@ -49,3 +49,44 @@ extract(){
   esac
 }
 please(){ sudo "$(fc -ln -1)"; } # rerun last command with sudo
+
+# Navigation function wrapper using tmux and fzf
+__sokratOS_nav__() {
+    local script_name="sokratos-navigation"
+    local script_path=""
+    local candidate
+
+    # Possible locations for the script
+    local script_candidates=(
+        "$HOME/.local/bin/$script_name"
+        "$HOME/.local/share/sokratOS/bin/$script_name"
+    )
+
+    for candidate in "${script_candidates[@]}"; do
+        if [[ -x "$candidate" ]]; then
+            script_path="$candidate"
+            break
+        fi
+    done
+
+    # If we didn't find the script, silently do nothing
+    [[ -z "$script_path" ]] && return 0
+
+    # Run the script: outside tmux it prints the directory or nothing,
+    # inside tmux it handles tmux navigation and prints nothing.
+    local dir
+    dir="$("$script_path")" || return 0
+
+    # If we got a real directory, output a cd command that bash will execute
+    if [[ -n "$dir" && -d "$dir" ]]; then
+        printf 'builtin cd -- %q' "$dir"
+    fi
+}
+
+# Bash readline macro to run __tmux_nav_cd__, then execute it as a command.
+# This is a simpler variant of fzf’s ALT-C binding, tailored to your helper.
+bind -m emacs-standard '"\C-f": "\C-u`__sokratOS_nav__`\C-m"'
+
+# In vi mode, temporarily switch to emacs, run the same binding, then back.
+bind -m vi-command '"\C-f": "\C-z\C-f\C-z"'
+bind -m vi-insert  '"\C-f": "\C-z\C-f\C-z"'

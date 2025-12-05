@@ -20,6 +20,3 @@ SELECTED_WALL=$(for a in *.jpg *.png *.jpeg; do echo -en "$a\0icon\x1f$a\n" ; do
 if [ -n "$SELECTED_WALL" ]; then
     sokratos-apply-theme "$SELECTED_WALL"
 fi
-
-# Go back to where you came from
-cd "$CWD" || exit

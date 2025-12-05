@@ -6,23 +6,30 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-IMAGE="$1"
+WALL="$1"
+CACHE_DIR="$HOME/.cache/sokratOS/theme"
+PROCESSED_IMG="$CACHE_DIR/theme-source.png"
+
+mkdir -p "$CACHE_DIR"
+
+magick "$WALL" \
+  -resize 1920x1080^ \
+  -gravity center -crop 70%x70%+0+0 +repage \
+  -resize 1920x1080 \
+  "$PROCESSED_IMG"
 
 # Set wallpaper
-swww img "$IMAGE"
+swww img "$WALL" -t fade
 
 # Generate matugen colors
-matugen image "$IMAGE"
-sleep 0.4
-
-pywalfox update
+matugen image "$PROCESSED_IMG"
 
 refresh-app-daemons
 
 # Image analysis variables
 PRIMARY_HEX=$(<~/.config/sokratOS/matugen/.primary-hex.txt)
 COLOR1=$(pastel format name $PRIMARY_HEX)
-SHADE=$(magick "$IMAGE" \
+SHADE=$(magick "$WALL" \
   -alpha remove -alpha off -colorspace Gray \
   -format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}'
 )
@@ -42,6 +49,8 @@ set_theme() {
 case "$SHADE $COLOR1" in
   "dark lightsteelblue")  set_theme nord ;;
   "light lightsteelblue") set_theme tokyonight ;;
+	"dark sandybrown") set_theme tokyonight ;;
+	"dark mediumaquamarine") set_theme osaka-jade ;;
 
   # Shade-agnostic: any SHADE + color
   *" lightsalmon")        set_theme gruvbox ;;
