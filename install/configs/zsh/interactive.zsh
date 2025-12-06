@@ -87,9 +87,9 @@ bindkey -M viins '^U' backward-kill-line  # Ctrl-U
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
-# Accept autosuggestion with Ctrl-F (works in both insert and command mode)
-bindkey -M viins '^F' forward-char
-bindkey -M vicmd '^F' forward-char
+# Accept autosuggestion with Ctrl-E (works in both insert and command mode)
+bindkey -M viins '^E' forward-char
+bindkey -M vicmd '^E' forward-char
 
 # Disable Alt-C in vi command mode (conflicts with fzf's ESC-C sequence)
 bindkey -M vicmd -r $'\ec'
@@ -254,5 +254,5 @@ __sokratOS_nav_widget() {
 # Register as a ZLE widget
 zle -N __sokratOS_nav_widget
 
-# Bind to Ctrl-E (works in both vi insert and command mode)
-bindkey '^E' __sokratOS_nav_widget
+# Bind to Ctrl-F (works in both vi insert and command mode)
+bindkey '^F' __sokratOS_nav_widget

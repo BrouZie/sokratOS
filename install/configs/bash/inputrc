@@ -1,52 +1,89 @@
+# ~/.config/bash/inputrc
+# Readline configuration for Bash
+
+# =====================
+# Vi Mode Configuration
+# =====================
+
 set editing-mode vi
 
 $if mode=vi
-	# Normal mode (command)
+  # Normal mode (command mode) keybindings
   set keymap vi-command
+  
+  # Unbind Alt-C to prevent conflict with FZF
+  "\ec": ""
+  
   # Arrow keys: search history by prefix
   "\e[A": history-search-backward
   "\e[B": history-search-forward
   "\e[C": forward-char
   "\e[D": backward-char
 
-	# Insert mode setting
+  # Insert mode keybindings
   set keymap vi-insert
+  
+  # Ctrl-P/N for history search (like vim)
   "\C-p": history-search-backward
   "\C-n": history-search-forward
 
-  # Make it feel like classic Bash readline
+  # Emacs-style line editing (convenience)
   "\C-a": beginning-of-line
   "\C-e": end-of-line
   "\C-b": backward-char
-  "\C-f": forward-char
   "\C-k": kill-line
   "\C-u": unix-line-discard
   "\C-w": unix-word-rubout
   "\C-y": yank
-  # "\C-l": clear-screen
 
 $endif
 
-# Encoding / meta
+# ================
+# ESC Key Behavior
+# ================
+
+# Make ESC resolve quickly (10ms) instead of waiting for Alt sequences
+set keyseq-timeout 10
+
+# ==================
+# Character Encoding
+# ==================
+
 set meta-flag on
 set input-meta on
 set output-meta on
 set convert-meta off
 
+# ===================
+# Completion Behavior
+# ===================
+
 # Case-insensitive completion
 set completion-ignore-case on
+
+# Show all completions immediately if ambiguous
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
+
+# Show prefix before completion starts
 set completion-prefix-display-length 2
 
-# Better menu completion (Tab cycles, Shift-Tab back) MIGHT CHANGE
+# Tab behavior: cycle through completions
 TAB: menu-complete
 "\e[Z": menu-complete-backward
 set menu-complete-display-prefix on
+
+# Completion display options
 set page-completions off
 set mark-symlinked-directories on
 set colored-stats on
 set skip-completed-text on
 set visible-stats on
 set completion-query-items 200
+
+# ========================
+# Modern Terminal Features
+# ========================
+
+# Enable bracketed paste (safer pasting)
 set enable-bracketed-paste on
