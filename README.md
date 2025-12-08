@@ -13,6 +13,15 @@ SokratOS is a comprehensive dotfiles and configuration management system for Arc
 - 🔧 **Development Ready**: Docker, development tools, and Neovim configuration included
 - 📱 **Modern UI Components**: Waybar, Rofi, SwayNC for notifications and menus
 
+## 📚 Documentation
+
+**New to sokratOS?** Start here:
+- 📖 **[Complete Documentation](docs/index.md)** - Full documentation hub
+- 🚀 **[Installation Guide](docs/01-getting-started/installation-arch.md)** - Get started
+- 🎯 **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** - Learn the basics
+- ⌨️ **[Keybinds Overview](docs/02-keybinds/overview.md)** - Essential shortcuts
+- 🔧 **[Troubleshooting](docs/90-troubleshooting/common-issues.md)** - Fix common issues
+
 ## 📸 Preview
 
 ![preview1](docs/images/preview4.png)
@@ -119,6 +128,8 @@ SokratOS provides several custom scripts in the `bin` directory:
 - `sokratos-wf-recorder`: Screen recording helper
 - `refresh-app-daemons`: Restart UI components
 
+📖 **[Complete Scripts Reference](docs/05-reference/scripts.md)**
+
 ## ⚙️ Configuration
 
 ### User Configurations
@@ -134,6 +145,8 @@ After installation, you can customize your setup by editing these files:
 
 The current terminal theme is symlinked at:
 - `~/.config/sokratos/current/theme/colors.conf`
+
+📖 **[File Locations Reference](docs/05-reference/file-locations.md)** | **[Theme Switcher Guide](docs/04-tweaking-and-theming/theme-switcher.md)**
 
 ## 📁 Project Structure
 
@@ -206,7 +219,20 @@ This project is open source and available for personal use. Individual component
 
 ## 📞 Support
 
-For issues and questions, please open an issue on the GitHub repository.
+For issues and questions:
+- 📖 **[Documentation](docs/index.md)** - Complete guides
+- 🔧 **[Troubleshooting](docs/90-troubleshooting/common-issues.md)** - Common issues
+- ❓ **[FAQ](docs/90-troubleshooting/faq.md)** - Frequently asked questions
+- 🐛 **[GitHub Issues](https://github.com/BrouZie/sokratOS/issues)** - Report bugs
+
+## 🗺️ Documentation Map
+
+- **[Getting Started](docs/01-getting-started/)** - Installation and first steps
+- **[Keybinds](docs/02-keybinds/)** - Complete keyboard shortcut reference
+- **[Workflows](docs/03-workflows/)** - Efficient usage patterns
+- **[Theming](docs/04-tweaking-and-theming/)** - Customization guides
+- **[Reference](docs/05-reference/)** - Technical documentation
+- **[Troubleshooting](docs/90-troubleshooting/)** - Help and support
 
 ---
 
