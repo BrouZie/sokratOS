@@ -1,0 +1,613 @@
+---
+id: coding-workflow
+title: Coding Workflow
+tags: [workflow, development, coding, tmux, neovim]
+---
+
+# Coding Workflow
+
+Efficient development workflows using sokratOS's terminal-centric setup.
+
+## The Terminal-First Approach
+
+sokratOS is built around terminal tools:
+- **Hyprland**: Window and workspace management
+- **Tmux**: Terminal multiplexing
+- **Neovim**: Code editing
+- **Kitty**: Fast terminal emulator
+
+This guide shows how to combine them effectively.
+
+## Setting Up a Project
+
+### 1. Create Project Workspace
+
+Use a dedicated workspace for your project:
+
+```bash
+# Switch to workspace 2 for coding
+SUPER + 2
+
+# Open terminal
+SUPER + Return
+```
+
+### 2. Start Tmux Session
+
+```bash
+# Create named session for project
+tmux new -s myproject
+
+# Or rename current session
+Ctrl-Space + :
+rename-session myproject
+```
+
+**Why named sessions?**
+- Easy to find and reattach
+- Persist between logins
+- Organize multiple projects
+
+### 3. Create Development Layout
+
+Set up your ideal layout with tmux splits:
+
+```bash
+# Vertical split for editor | terminal
+Ctrl-Space + v
+
+# Focus right pane, horizontal split for tests | server
+Ctrl-Space + l
+Ctrl-Space + s
+```
+
+**Result**:
+```
+┌──────────────┬──────────────┐
+│              │              │
+│              │  Run/Test    │
+│   Neovim     │              │
+│              ├──────────────┤
+│              │              │
+│              │  Server/Logs │
+└──────────────┴──────────────┘
+```
+
+### 4. Navigate to Project
+
+```bash
+# In left pane (editor)
+cd ~/projects/myproject
+nvim .
+```
+
+## Common Development Patterns
+
+### Pattern 1: Full-Screen Editor
+
+For deep focus on code:
+
+```bash
+# One terminal, just neovim
+tmux
+nvim .
+
+# Use neovim's built-in terminal when needed
+:terminal
+```
+
+**Toggle terminal in neovim**:
+- Open: `:terminal`
+- Switch back: `Ctrl-\ Ctrl-n` then `Ctrl-h`
+
+### Pattern 2: Editor + REPL
+
+For interpreted languages (Python, Node.js):
+
+```bash
+# Top pane: Editor
+nvim main.py
+
+# Bottom pane: REPL/tests
+Ctrl-Space + s
+python3
+# or
+node
+```
+
+**Workflow**:
+1. Write code in top pane
+2. Test snippets in bottom REPL
+3. Iterate quickly
+
+### Pattern 3: Editor + Watcher + Server
+
+For web development:
+
+```bash
+# Pane 1: Editor (left, full height)
+nvim .
+
+# Pane 2: Build watcher (top right)
+Ctrl-Space + v
+Ctrl-Space + l
+npm run dev
+# or
+cargo watch -x run
+
+# Pane 3: Server logs (bottom right)
+Ctrl-Space + s
+tail -f server.log
+```
+
+### Pattern 4: Multi-Service Project
+
+For projects with database, API, frontend:
+
+```bash
+# Window 1: Editor
+nvim .
+
+# Window 2: Database
+Ctrl-Space + c  # new window
+docker-compose up postgres
+
+# Window 3: API
+Ctrl-Space + c
+npm run api
+
+# Window 4: Frontend
+Ctrl-Space + c
+npm run dev
+
+# Switch windows
+Alt + h  # previous
+Alt + l  # next
+```
+
+## Neovim Workflow
+
+### Opening Files
+
+**Oil.nvim file browser**:
+```bash
+<leader>e       # Open file browser
+Enter           # Open file/directory
+-               # Go up one level
+```
+
+**Telescope fuzzy finder**:
+```bash
+<leader>ff      # Find files
+<leader>fg      # Grep text in files
+<leader>fb      # Find open buffers
+```
+
+### Editing Multiple Files
+
+**Splits**:
+```bash
+<leader>v       # Vertical split
+<leader>s       # Horizontal split
+<leader>S       # Split with alternate file
+
+# Navigate splits
+Ctrl-h/j/k/l    # Move between splits
+```
+
+**Buffers**:
+```bash
+<leader>b       # Switch to alternate buffer
+<leader>fb      # Telescope buffer picker
+:bnext          # Next buffer
+:bprev          # Previous buffer
+```
+
+### Code Navigation
+
+**LSP-powered**:
+```bash
+gd              # Go to definition
+gr              # Find references
+K               # Hover documentation
+<leader>ca      # Code actions
+<leader>rn      # Rename symbol
+```
+
+**Search**:
+```bash
+/pattern        # Search forward
+n               # Next match
+N               # Previous match
+<Esc>           # Clear highlights
+```
+
+### Git Integration
+
+```bash
+<leader>Gs      # Git status (fugitive)
+<leader>GG      # Git command
+
+# In git status window:
+-               # Stage/unstage file
+cc              # Commit
+ca              # Commit amend
+P               # Push
+```
+
+## Debugging Workflow
+
+### Terminal Debugger (GDB)
+
+For C/C++/Rust:
+
+```bash
+# Compile with debug symbols
+gcc -g myprogram.c -o myprogram
+
+# Start in tmux pane
+Ctrl-Space + s
+gdb myprogram
+
+# GDB commands
+break main
+run
+next
+print variable
+```
+
+### Print Debugging
+
+For quick debugging:
+
+```python
+# Python
+print(f"DEBUG: {variable}")
+
+# JavaScript
+console.log("DEBUG:", variable);
+
+# Rust
+println!("DEBUG: {:?}", variable);
+```
+
+**View output**: In separate tmux pane running the program.
+
+### Language-Specific Tools
+
+**Python**:
+```bash
+# Interactive debugging
+python -m pdb script.py
+
+# IPython REPL
+ipython
+```
+
+**Node.js**:
+```bash
+# Node inspector
+node inspect script.js
+```
+
+**Rust**:
+```bash
+# Cargo with backtrace
+RUST_BACKTRACE=1 cargo run
+```
+
+## Testing Workflow
+
+### Running Tests
+
+**Pattern**: Editor + test runner
+
+```bash
+# Pane 1: Editor
+nvim .
+
+# Pane 2: Test runner (watch mode)
+Ctrl-Space + s
+pytest --watch
+# or
+npm test -- --watch
+# or
+cargo watch -x test
+```
+
+**Workflow**:
+1. Write test in editor
+2. Save file
+3. See results in bottom pane
+4. Red → Green → Refactor
+
+### Test-Driven Development (TDD)
+
+```bash
+# Write failing test
+<leader>w       # Save
+
+# See test fail in bottom pane
+
+# Write implementation
+<leader>w       # Save
+
+# See test pass
+
+# Refactor
+```
+
+## Docker Development
+
+### Docker Compose Workflow
+
+```bash
+# Window 1: Editor
+nvim .
+
+# Window 2: Docker services
+Ctrl-Space + c
+docker-compose up
+
+# Window 3: Service logs
+Ctrl-Space + c
+docker-compose logs -f api
+
+# Window 4: Database client
+Ctrl-Space + c
+docker-compose exec postgres psql -U user -d database
+```
+
+### Container Shell Access
+
+```bash
+# Quick access to running container
+docker-compose exec service bash
+
+# Or with custom tmux keybind
+Ctrl-Space + :
+bind-key D run-shell "tmux neww docker-compose exec api bash"
+```
+
+## Performance Monitoring
+
+### Watch Resource Usage
+
+```bash
+# Separate workspace for monitoring
+SUPER + 3
+
+# System monitor
+btop
+# or
+htop
+
+# Docker stats
+docker stats
+
+# Network
+nethogs
+```
+
+## Version Control Workflow
+
+### Git in Neovim
+
+```bash
+# Quick commits
+<leader>Gs      # Git status
+-               # Stage file
+cc              # Commit
+# Write message, save, close
+
+# View changes
+<leader>GG      # Type: diff
+```
+
+### Git in Terminal
+
+```bash
+# Separate pane for git
+Ctrl-Space + s
+
+# Common operations
+git status
+git add .
+git commit -m "message"
+git push
+git pull --rebase
+```
+
+### Git with Lazygit (Optional)
+
+If you install lazygit:
+
+```bash
+# Add keybind to tmux
+bind-key g run-shell "tmux neww lazygit"
+
+# Then use
+Ctrl-Space + g
+```
+
+## Quick Notes While Coding
+
+### Brain Notes System
+
+```bash
+# In tmux
+Ctrl-Space + n       # Open note creator
+
+# Select note type:
+# - snippets: Code snippets
+# - cheatsheet: Command reference
+# - school: Study notes
+# - full_notes: Deep understanding
+
+# Takes you to neovim to write note
+```
+
+**Location**: `~/Documents/2ndBrain/`
+
+### Quick Cheat Sheet
+
+```bash
+# In tmux
+Ctrl-Space + i       # Open cheat.sh
+
+# Type command
+git commit
+curl
+docker
+```
+
+## Workflow Tips
+
+### 1. One Project Per Workspace
+
+```bash
+Workspace 1: Personal website
+Workspace 2: API backend
+Workspace 3: Data science notebook
+Workspace 4: Documentation
+```
+
+Switch with `SUPER + 1-4`.
+
+### 2. Persistent Tmux Sessions
+
+```bash
+# Start session
+tmux new -s project
+
+# Detach (keeps running)
+Ctrl-Space + d
+
+# Reattach later
+tmux attach -s project
+```
+
+### 3. Use Window Names
+
+```bash
+# Rename window
+Ctrl-Space + :
+rename-window editor
+
+# Create named window
+Ctrl-Space + :
+new-window -n tests
+```
+
+### 4. Tmux Sessionizer
+
+Use the rofi-sessionizer script:
+
+```bash
+# Add keybind in Hyprland
+bind = SUPER, P, exec, rofi-sessionizer
+
+# Quickly jump to project directories
+```
+
+### 5. Focus Mode
+
+```bash
+# Minimize distractions
+sokratos-focus-mode
+
+# Work in zen mode
+
+# Restore UI
+refresh-app-daemons
+```
+
+## Language-Specific Setups
+
+### Python
+
+```bash
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate
+
+# Or use UV (installed in sokratOS)
+uv venv
+source .venv/bin/activate
+
+# Install dependencies
+uv pip install -r requirements.txt
+```
+
+### JavaScript/TypeScript
+
+```bash
+# Start with package manager
+npm install
+npm run dev
+
+# TypeScript compiler watch
+tsc --watch
+```
+
+### Rust
+
+```bash
+# Cargo watch for auto-rebuild
+cargo watch -x run
+cargo watch -x test
+cargo watch -x clippy
+```
+
+### Go
+
+```bash
+# Hot reload with air
+air
+
+# Or manual watch
+ls *.go | entr -r go run .
+```
+
+## Troubleshooting
+
+### Terminal Feels Slow
+
+```bash
+# Check if language server is running in background
+ps aux | grep -i lsp
+
+# Restart neovim if too many LSP processes
+```
+
+### Tmux Panes Not Syncing
+
+```bash
+# Reload tmux config
+Ctrl-Space + r
+
+# Or restart tmux
+tmux kill-server
+tmux
+```
+
+### Neovim Plugins Not Working
+
+```bash
+# In neovim
+:Lazy update
+:checkhealth
+```
+
+## Next Steps
+
+- **[Window Management Workflow](window-management.md)** - Organize your workspace
+- **[Terminal Workflow](terminal-workflow.md)** - Master the terminal
+- **[Keybinds Reference](../02-keybinds/overview.md)** - All shortcuts
+- **[Scripts Reference](../05-reference/scripts.md)** - Custom utilities
+
+## Additional Resources
+
+- [Tmux for Productive Development](https://pragprog.com/titles/bhtmux2/tmux-2/)
+- [Neovim from Scratch](https://www.youtube.com/watch?v=ctH-a-1eUME)
+- [The Primeagen on YouTube](https://www.youtube.com/@ThePrimeagen) - Vim and tmux tips

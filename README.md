@@ -1,8 +1,8 @@
 # SokratOS
 
-> A biased, opinionated Arch Linux + Hyprland setup focused on aesthetics, productivity, and customization
+> A biased, opinionated Arch Linux + Hyprland setup focused on productivity, customization and aesthetics
 
-SokratOS is a comprehensive dotfiles and configuration management system for Arch Linux featuring the Hyprland compositor. It provides an elegant, functional desktop environment with dynamic theming, custom utilities, and a curated selection of tools for development and daily use.
+SokratOS is a comprehensive dotfiles and configuration system for Arch Linux featuring the Hyprland compositor. It provides an elegant, functional desktop environment with dynamic theming, custom utilities, and a curated selection of tools for development and daily use.
 
 ## ✨ Features
 
@@ -12,6 +12,15 @@ SokratOS is a comprehensive dotfiles and configuration management system for Arc
 - 🛠️ **Custom Utility Scripts**: Theme switching, focus mode, screen recording, and more
 - 🔧 **Development Ready**: Docker, development tools, and Neovim configuration included
 - 📱 **Modern UI Components**: Waybar, Rofi, SwayNC for notifications and menus
+
+## 📚 Documentation
+
+**New to sokratOS?** Start here:
+- 📖 **[Complete Documentation](docs/index.md)** - Full documentation hub
+- 🚀 **[Installation Guide](docs/01-getting-started/installation-arch.md)** - Get started
+- 🎯 **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** - Learn the basics
+- ⌨️ **[Keybinds Overview](docs/02-keybinds/overview.md)** - Essential shortcuts
+- 🔧 **[Troubleshooting](docs/90-troubleshooting/common-issues.md)** - Fix common issues
 
 ## 📸 Preview
 
@@ -23,8 +32,9 @@ SokratOS is a comprehensive dotfiles and configuration management system for Arc
 
 ### Prerequisites
 
-- Fresh or minimal Arch Linux installation
+- Install Arch
 - Internet connection
+- Go through a base archinstall (video tutorial coming soon!)
 
 ### Quick Start
 
@@ -69,11 +79,9 @@ The installation is organized into several modules:
 ### Terminal & CLI Tools
 - **Terminal**: Kitty with custom theming
 - **Shell**: Bash with custom configuration
-- **Multiplexer**: Tmux with TPM plugin manager
-- **Editor**: Neovim (from external dotfiles)
-- **File Manager**: eza (modern ls replacement)
+- **Multiplexer**: Tmux with custom configuration
+- **Editor**: Neovim with custom configuration
 - **System Monitor**: btop
-- **Audio Visualizer**: cava
 - **System Info**: fastfetch
 
 ### Development Tools
@@ -84,33 +92,13 @@ The installation is organized into several modules:
 
 ### Theming System
 - **matugen**: Material color generation from wallpapers
-- **pywal**: Application theming
 - **pywalfox**: Firefox theme integration
 - 11 pre-configured color schemes for the terminal
-
-## 🎨 Available Themes
-
-SokratOS includes 11 carefully curated color schemes:
-
-- Catppuccin
-- Cyberpunk
-- Everforest
-- Gruvbox
-- Kanagawa
-- Nightfox
-- Nord
-- Nvim Dark
-- Osaka Jade
-- Rosé Pine
-- TokyoNight
-
-Switch themes using the `sokratos-themes` command or apply a theme from a wallpaper with `sokratos-apply-theme`.
 
 ## 🛠️ Custom Utilities
 
 SokratOS provides several custom scripts in the `bin` directory:
 
-- `sokratos-apply-theme <image>`: Apply theme from wallpaper image
 - `sokratos-next-theme`: Interactive theme selector
 - `sokratos-night-mode`: Toggle night mode
 - `sokratos-focus-mode`: Minimize distractions
@@ -118,6 +106,8 @@ SokratOS provides several custom scripts in the `bin` directory:
 - `sokratos-cheat-sheet`: Quick cheat.sh utilizing curl
 - `sokratos-wf-recorder`: Screen recording helper
 - `refresh-app-daemons`: Restart UI components
+
+📖 **[Complete Scripts Reference](docs/05-reference/scripts.md)**
 
 ## ⚙️ Configuration
 
@@ -135,6 +125,8 @@ After installation, you can customize your setup by editing these files:
 The current terminal theme is symlinked at:
 - `~/.config/sokratos/current/theme/colors.conf`
 
+📖 **[File Locations Reference](docs/05-reference/file-locations.md)** | **[Theme Switcher Guide](docs/04-tweaking-and-theming/theme-switcher.md)**
+
 ## 📁 Project Structure
 
 ```
@@ -150,9 +142,7 @@ Sokratos/
 ├── themes/                # Pre-configured color schemes
 ├── default/               # Default configurations
 ├── share/                 # Shared data
-├── install.sh             # Main installation script
-├── pacman.txt             # Official repo packages list
-└── paru.txt               # AUR packages list
+└── install.sh             # Main installation script
 ```
 
 ## 🔧 Post-Installation
@@ -162,6 +152,7 @@ Sokratos/
 Edit `~/.config/hypr/monitors.conf` to configure your displays:
 
 ```conf
+# Example:
 monitor=DP-1,1920x1080@144,0x0,1
 ```
 
@@ -170,7 +161,7 @@ monitor=DP-1,1920x1080@144,0x0,1
 Add custom keybindings to `~/.config/hypr/bindings.conf`:
 
 ```conf
-bind = SUPER, T, exec, kitty
+bind = SUPER, F, exec, nautilus # File manager
 ```
 
 ### Autostart Applications
@@ -201,12 +192,24 @@ This project is open source and available for personal use. Individual component
 
 - Built for Arch Linux
 - Uses the Hyprland compositor
-- Neovim configuration from [BrouZie/dotfiles](https://github.com/BrouZie/dotfiles)
 - Inspired by the Linux ricing community and Omarchy
 
 ## 📞 Support
 
-For issues and questions, please open an issue on the GitHub repository.
+For issues and questions:
+- 📖 **[Documentation](docs/index.md)** - Complete guides
+- 🔧 **[Troubleshooting](docs/90-troubleshooting/common-issues.md)** - Common issues
+- ❓ **[FAQ](docs/90-troubleshooting/faq.md)** - Frequently asked questions
+- 🐛 **[GitHub Issues](https://github.com/BrouZie/sokratOS/issues)** - Report bugs
+
+## 🗺️ Documentation Map
+
+- **[Getting Started](docs/01-getting-started/)** - Installation and first steps
+- **[Keybinds](docs/02-keybinds/)** - Complete keyboard shortcut reference
+- **[Workflows](docs/03-workflows/)** - Efficient usage patterns
+- **[Theming](docs/04-tweaking-and-theming/)** - Customization guides
+- **[Reference](docs/05-reference/)** - Technical documentation
+- **[Troubleshooting](docs/90-troubleshooting/)** - Help and support
 
 ---
 
