@@ -23,7 +23,7 @@ env = HYPRCURSOR_SIZE,24
 
 **Purpose**: Cursor size for X11 and Hyprland
 
-###XDG Specifications
+### XDG Specifications
 
 ```conf
 env = XDG_CURRENT_DESKTOP,Hyprland
