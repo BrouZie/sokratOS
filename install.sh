@@ -50,7 +50,9 @@ cp -r "$REPO_INSTALL/configs/applications/"*.desktop \
       "~/.local/share/applications/"
 
 # Tmux and neovim dependencies
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [[ ! -e ~/.tmux ]]; then
+	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
 
 uv venv --seed ~/.venvs/nvim
 uv pip install -p ~/.venvs/nvim/bin/python \
