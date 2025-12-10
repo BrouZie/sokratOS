@@ -25,12 +25,14 @@ source "$REPO_INSTALL/xtras/all.sh"
 
 # Configs
 mkdir -p "$HOME/.config/sokratOS/current/theme" \
+	"$HOME/.config/sokratOS/env.d"
 	"$HOME/.local/share/applications" \
 	"$HOME/.config/kitty" \
 	"$HOME/Pictures/wallpaper" \
 	"$HOME/.local/bin"
 
 cp "$REPO_INSTALL/configs/bashrc" "$HOME/.bashrc"
+cp "$REPO_INSTALL/configs/fzf-dirs.sh" "$HOME/.config/sokratOS/env.d/fzf-dirs.sh"
 cp "$REPO_INSTALL/configs/kitty.conf" "$HOME/.config/kitty/kitty.conf"
 cp "$REPO_INSTALL/configs/tmux.conf" "$HOME/.tmux.conf"
 cp -r "$REPO_INSTALL/configs/bash" "$HOME/.config/bash"
