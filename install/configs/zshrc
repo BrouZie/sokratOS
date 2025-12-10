@@ -1,4 +1,4 @@
 # ~/.zshrc
-source ~/.config/zsh/rc
+source ~/.config/zsh/rc.zsh
 
 # Set up your own settings here or dive into ~/.config/zsh/.
