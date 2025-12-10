@@ -20,6 +20,7 @@ CONFIG_DIRS=(
   "kitty"
   "waybar"
   "bash"
+  "zsh"
   "matugen"
   "sokratOS"
   "fastfetch"
