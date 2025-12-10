@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+CONFIG_ROOT="$HOME/.local/share/sokratOS/install/configs"
+
+backup_path() {
+	# Given a path, move it to path.bak, path.bak1, path.bak2, ... (first free)
+	local path="$1"
+
+	# Nothing to back up
+	if [ ! -e "$path" ]; then
+		return 0
+	fi
+
+	local i=0
+	local backup=""
+
+	while :; do
+		if [ "$i" -eq 0 ]; then
+			backup="${path}.bak"
+		else
+			backup="${path}.bak${i}"
+		fi
+
+		if [ ! -e "$backup" ]; then
+			mv -- "$path" "$backup"
+			gum style --foreground 244 "Backed up $(basename "$path") -> $(basename "$backup")"
+			break
+		fi
+
+		i=$((i + 1))
+	done
+}
+
+# =================
+# REFRESH FUNCTIONS
+# =================
+
+refresh_bash() {
+	gum style --bold --foreground 51 "Refreshing bash configs…"
+
+	local src_rc="$CONFIG_ROOT/bashrc"
+	local dest_rc="$HOME/.bashrc"
+	local src_dir="$CONFIG_ROOT/bash"
+	local dest_dir="$HOME/.config/bash"
+
+	# .bashrc
+	if [ -f "$src_rc" ]; then
+		backup_path "$dest_rc"
+		cp "$src_rc" "$dest_rc"
+		gum style "Updated $dest_rc"
+	else
+		gum style --foreground 196 "Missing $src_rc, skipping .bashrc"
+	fi
+
+	# ~/.config/bash directory (if present in configs)
+	if [ -d "$src_dir" ]; then
+		mkdir -p "$HOME/.config"
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_fzf_dirs() {
+	gum style --bold --foreground 51 "Refreshing fzf-dirs.sh configs…"
+
+	local src_sh="$CONFIG_ROOT/fzf-dirs.sh"
+	local dest_sh="$HOME/.config/sokratOS/env.d/fzf-dirs.sh"
+
+	if [ -f "$src_sh" ]; then
+		mkdir -p "$(dirname "$dest_sh")" # NOTE: This is a migration
+		backup_path "$dest_sh"
+		cp "$src_sh" "$dest_sh"
+		gum style "Updated $dest_sh"
+	else
+		gum style --foreground 196 "Missing $src_sh, skipping fzf-dirs.sh"
+	fi
+}
+
+refresh_zsh() {
+	gum style --bold --foreground 51 "Refreshing zsh configs…"
+
+	local src_rc="$CONFIG_ROOT/zshrc"
+	local dest_rc="$HOME/.zshrc"
+	local src_dir="$CONFIG_ROOT/zsh"
+	local dest_dir="$HOME/.config/zsh"
+
+	# .zshrc
+	if [ -f "$src_rc" ]; then
+		backup_path "$dest_rc"
+		cp "$src_rc" "$dest_rc"
+		gum style "Updated $dest_rc"
+	else
+		gum style --foreground 196 "Missing $src_rc, skipping .zshrc"
+	fi
+
+	# ~/.config/zsh directory (if present in configs)
+	if [ -d "$src_dir" ]; then
+		mkdir -p "$HOME/.config"
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_tmux() {
+	gum style --bold --foreground 51 "Refreshing tmux config…"
+
+	local src_conf="$CONFIG_ROOT/tmux.conf"
+	local dest_conf="$HOME/.tmux.conf"
+
+	if [ -f "$src_conf" ]; then
+		backup_path "$dest_conf"
+		cp "$src_conf" "$dest_conf"
+		gum style "Updated $dest_conf"
+	else
+		gum style --foreground 196 "Missing $src_conf, skipping tmux"
+	fi
+}
+
+# ==============
+# MAIN SELECTION
+# ==============
+
+while true; do
+	choices=$(
+		gum choose \
+			--no-limit \
+			--header "k/j move  •  TAB toggle  •  ENTER confirm  •  ESC to quit" \
+			"fzf-dirs" \
+			"tmux" \
+			"bash" \
+			"zsh"
+		) || exit 0
+
+		if [ -z "${choices:-}" ]; then
+			gum style --foreground 214 "No configs selected. Try again."
+			continue
+		fi
+
+		gum style --bold --margin "1 0 1 0" --foreground 51 \
+			$'Selected:\n\n'"$choices"
+
+		if gum confirm "Proceed with these options?"; then
+			break
+		fi
+	done
+
+# ===============
+# APPLY SELECTION
+# ===============
+
+for choice in $choices; do
+	case "$choice" in
+		bash) refresh_bash ;;
+		zsh)  refresh_zsh  ;;
+		tmux) refresh_tmux ;;
+		fzf-dirs) refresh_fzf_dirs ;;
+	esac
+done
+
+gum style --bold --margin "1 0" --foreground 46 "Refresh finished!"

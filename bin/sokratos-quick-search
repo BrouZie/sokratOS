@@ -1,0 +1,46 @@
+#!/bin/bash
+# ==========================================================
+# NB: run this script with 'tmux neww sokratos-quick-search'
+# Utilize the keybind set in ~/.tmux.conf:
+#     'prefix + f' - lines 80-85
+# ==========================================================
+
+ENV_FILE="$HOME/.config/sokratOS/env.d/fzf-dirs.sh"
+
+if [[ -f "$ENV_FILE" ]]; then
+	# retrieving fzf_custom_list_dirs()
+	source "$ENV_FILE"
+else
+	echo 'sokratOS: No fzf-dirs.sh config found' >&2
+	exit 1
+fi
+navigate_to_directory() {
+	local selected="$1"
+
+	# Exit if nothing selected
+	[[ -z "$selected" ]] && exit 0
+
+	# cd and open nvim
+	cd "$selected" || exit 1
+	exec nvim .
+}
+
+# ====
+# MAIN
+# ====
+
+# If directory is provided as argument, use it directly
+if [[ $# -eq 1 ]]; then
+	navigate_to_directory "$1"
+else
+	# Use fzf to select from all found directories
+	selected=$(fzf_custom_list_dirs | fzf \
+		--preview 'eza -la --color=always {} 2>/dev/null | head -50' \
+		--preview-window=right:50%:wrap \
+		--bind 'ctrl-/:toggle-preview' \
+		--header 'Select directory (Ctrl-/ toggle preview)' \
+		--height=100% \
+		--layout=reverse)
+
+	navigate_to_directory "$selected"
+fi
