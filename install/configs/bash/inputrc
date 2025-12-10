@@ -8,6 +8,12 @@
 set editing-mode vi
 
 $if mode=vi
+	# Small indicator of (command/normal mode)
+	set show-mode-in-prompt on
+  set emacs-mode-string ""
+	set vi-ins-mode-string ""
+	set vi-cmd-mode-string \1\e[35m\2❮\1\e[0m\2
+
   # Normal mode (command mode) keybindings
   set keymap vi-command
   

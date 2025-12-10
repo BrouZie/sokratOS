@@ -208,7 +208,6 @@ __fzf_custom_cd__() {
 bind -m emacs-standard '"\C-f": "\C-u`__fzf_custom_cd__`\C-m"'
 
 # In vi mode - temporarily switch to emacs, run binding, then back
-bind -m vi-command '"\C-f": "\C-z\C-f\C-z"'
 bind -m vi-insert  '"\C-f": "\C-z\C-f\C-z"'
 
 # Let C-f still work if switching to emacs/readline
