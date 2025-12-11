@@ -37,12 +37,14 @@ SokratOS is a comprehensive dotfiles and configuration system for Arch Linux fea
 
 ### Video example
 
-https://github.com/user-attachments/assets/089656e4-bdc6-4d1f-8731-e178a967fb11
+https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
 
 ### Quick Start
 
 1. Clone the repository:
 ```bash
+sudo pacman -S git --needed
+
 git clone https://github.com/BrouZie/sokratOS.git ~/.local/share/sokratOS
 ```
 
@@ -58,15 +60,7 @@ The installer will:
 - Set up terminal tools and development environment
 - Install and configure themes
 - Set up custom utility scripts
-
-### Installation Components
-
-The installation is organized into several modules:
-
-- **Prerequisites**: AUR helper, network, graphics drivers (Intel/NVIDIA support)
-- **Terminal**: CLI tools, development environment, Docker, firewall
-- **Desktop**: Hyprland, Waybar, Rofi, audio/Bluetooth, fonts
-- **Extras**: Power management, printer support, additional utilities
+- Reboot user into Hyprland-setup
 
 ## 📦 Included Components
 
@@ -96,7 +90,6 @@ The installation is organized into several modules:
 ### Theming System
 - **matugen**: Material color generation from wallpapers
 - **pywalfox**: Firefox theme integration
-- 11 pre-configured color schemes for the terminal
 
 ## 🛠️ Custom Utilities
 
@@ -109,6 +102,7 @@ SokratOS provides several custom scripts in the `bin` directory:
 - `sokratos-cheat-sheet`: Quick cheat.sh utilizing curl
 - `sokratos-wf-recorder`: Screen recording helper
 - `refresh-app-daemons`: Restart UI components
+- `sokratos-refresh-configs`: Restore configs to default
 
 📖 **[Complete Scripts Reference](docs/05-reference/scripts.md)**
 
@@ -118,10 +112,11 @@ SokratOS provides several custom scripts in the `bin` directory:
 
 After installation, you can customize your setup by editing these files:
 
-- `~/.config/hypr/bindings.conf`: Custom keybindings
-- `~/.config/hypr/envs.conf`: Environment variables
-- `~/.config/hypr/monitors.conf`: Monitor configuration
-- `~/.config/hypr/autostart.conf`: Autostart applications
+- `~/.config/hypr/hyprland.conf`: Placeholder for all other configs!
+- `~/.config/hypr/configs/bindings.conf`: Custom keybindings
+- `~/.config/hypr/configs/envs.conf`: Environment variables
+- `~/.config/hypr/configs/monitors.conf`: Monitor configuration
+- `~/.config/hypr/configs/autostart.conf`: Autostart applications
 
 ### Theme Configuration
 
@@ -152,7 +147,7 @@ Sokratos/
 
 ### Setting Up Monitors
 
-Edit `~/.config/hypr/monitors.conf` to configure your displays:
+Edit `~/.config/hypr/configs/monitors.conf` to configure your displays:
 
 ```conf
 # Example:
@@ -161,7 +156,7 @@ monitor=DP-1,1920x1080@144,0x0,1
 
 ### Adding Keybindings
 
-Add custom keybindings to `~/.config/hypr/bindings.conf`:
+Add custom keybindings to `~/.config/hypr/configs/bindings.conf`:
 
 ```conf
 bind = SUPER, F, exec, nautilus # File manager
@@ -169,7 +164,7 @@ bind = SUPER, F, exec, nautilus # File manager
 
 ### Autostart Applications
 
-Add applications to launch at startup in `~/.config/hypr/autostart.conf`:
+Add applications to launch at startup in `~/.config/hypr/configs/autostart.conf`:
 
 ```conf
 exec-once = discord
