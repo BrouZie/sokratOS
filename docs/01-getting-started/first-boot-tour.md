@@ -16,7 +16,6 @@ After installation and reboot, you'll be automatically logged into Hyprland. Her
 2. **Waybar** - Status bar at the top showing:
    - Workspaces (1-10)
    - Window title
-   - System tray
    - Audio volume
    - Network status
    - Date and time
@@ -85,78 +84,20 @@ Here are the keybinds you'll use most often:
 | `SUPER + B` | Open Firefox |
 | `SUPER + E` | Open file manager (Nautilus) |
 
-> 💡 **Tip**: Print this table or keep it handy for your first week!
-
-## Understanding the Layout
-
-sokratOS uses Hyprland's **dwindle layout** by default. Here's how it works:
-
-### One Window
-```
-┌─────────────────────┐
-│                     │
-│   Full Screen       │
-│                     │
-└─────────────────────┘
-```
-
-### Two Windows
-```
-┌──────────┬──────────┐
-│          │          │
-│  Window  │  Window  │
-│    1     │    2     │
-└──────────┴──────────┘
-```
-
-### Three Windows
-```
-┌──────────┬──────────┐
-│          │  Window  │
-│  Window  │    2     │
-│    1     ├──────────┤
-│          │  Window  │
-│          │    3     │
-└──────────┴──────────┘
-```
-
-Each new window splits the focused space. Use:
-- `SUPER + Y` - Toggle split direction
-- `SUPER + V` - Toggle floating mode for current window
+> 💡 **Tip**: Take a picture of this table or keep it handy for your first week!
 
 ## Theme System Overview
-
-sokratOS includes 11 pre-configured themes. Let's switch themes:
-
-### Quick Theme Switch
-
-1. Press `SUPER + Shift + Space`
-2. A menu appears showing all available themes
-3. Select one with arrow keys and press Enter
-
-Your terminal colors will update immediately!
-
-### Available Themes
-
-- **Catppuccin** - Pastel warm colors
-- **Cyberpunk** - Vibrant neon colors
-- **Everforest** - Calm green forest
-- **Gruvbox** - Retro warm colors
-- **Kanagawa** - Traditional Japanese wave
-- **Nightfox** - Deep blue night
-- **Nord** - Arctic cool colors
-- **Nvim Dark** - Dark professional
-- **Osaka Jade** - Green and teal
-- **Rosé Pine** - Soft pink and purple
-- **TokyoNight** - Cyberpunk purple night
 
 ### Generating Theme from Wallpaper
 
 Want a theme that matches your wallpaper?
 
 1. Press `SUPER + Shift + Space` (to select a wallpaper)
-2. Choose a wallpaper image
+2. Choose a wallpaper image with arrow keys (`ctrl + p/n` for chads)
 3. The theme is automatically generated using **matugen**
+4. Add your own images to `~/Pictures/wallpaper/user_wallpaper.png`
+    - All images in the mentioned directory are picked up by the theme-switcher
+      script/keybind
 
 The system analyzes the wallpaper colors and picks the best matching pre-configured theme!
 
@@ -164,9 +105,11 @@ The system analyzes the wallpaper colors and picks the best matching pre-configu
 
 ### Opening Programs
 
-**Firefox**: `SUPER + B`
+**Firefox**: `SUPER + b`
 
-**File Manager**: `SUPER + E`
+**Canvas**: `SUPER + c`
+
+**File Manager**: `SUPER + e`
 
 **Any Application**: 
 1. `SUPER + Space`
@@ -210,7 +153,7 @@ Open a terminal (`SUPER + Return`) and try these commands:
 fastfetch
 
 # List files with colors and icons
-eza -la
+ls -la
 
 # System monitor with beautiful UI
 btop

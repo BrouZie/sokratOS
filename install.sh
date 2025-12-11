@@ -52,14 +52,22 @@ cp -r "$REPO_INSTALL/configs/applications/"*.desktop \
       "~/.local/share/applications/"
 
 # Tmux and neovim dependencies
-if [[ ! -e ~/.tmux ]]; then
+echo "Setting up tmux..."
+if [[ ! -e ~/.tmux/plugins/tpm ]]; then
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
+~/.tmux/plugins/tpm/bin/install_plugins
 
+echo "Setting up Neovim Python environment..."
 uv venv --seed ~/.venvs/nvim
 uv pip install -p ~/.venvs/nvim/bin/python \
     pynvim jupyter_client nbformat cairosvg pillow plotly kaleido \
     pyperclip requests websocket-client pnglatex
+
+echo "Installing Neovim plugins (this may take 2-5 minutes)..."
+nvim --headless "+Lazy! sync" +qa
+
+echo "Tmux and Neovim setup complete!"
 
 
 # Ensure wallpaper for first boot

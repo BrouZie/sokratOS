@@ -35,7 +35,6 @@ You don't need to be an expert! This documentation assumes you're new to tiling 
 
 Start here if you're new to sokratOS:
 - [Fresh Arch Installation](01-getting-started/installation-arch.md)
-- [Installing on Existing Arch](01-getting-started/installation-existing-arch.md)
 - [First Boot Tour](01-getting-started/first-boot-tour.md)
 
 ### ⌨️ [Keybinds](02-keybinds/overview.md)

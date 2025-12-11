@@ -91,14 +91,11 @@ For deep focus on code:
 # One terminal, just neovim
 tmux
 nvim .
-
-# Use neovim's built-in terminal when needed
-:terminal
 ```
 
-**Toggle terminal in neovim**:
-- Open: `:terminal`
-- Switch back: `Ctrl-\ Ctrl-n` then `Ctrl-h`
+**Toggle floating terminal in neovim**:
+- Open: `space + tt`
+- Switch back: `space + tt`
 
 ### Pattern 2: Editor + REPL
 
@@ -178,9 +175,9 @@ Enter           # Open file/directory
 
 **Telescope fuzzy finder**:
 ```bash
-<leader>ff      # Find files
-<leader>fg      # Grep text in files
-<leader>fb      # Find open buffers
+<leader>f      # Find files
+<leader>g      # Grep text in files
+<leader>#      # Find open buffers
 ```
 
 ### Editing Multiple Files
@@ -198,7 +195,6 @@ Ctrl-h/j/k/l    # Move between splits
 **Buffers**:
 ```bash
 <leader>b       # Switch to alternate buffer
-<leader>fb      # Telescope buffer picker
 :bnext          # Next buffer
 :bprev          # Previous buffer
 ```
@@ -211,7 +207,7 @@ gd              # Go to definition
 gr              # Find references
 K               # Hover documentation
 <leader>ca      # Code actions
-<leader>rn      # Rename symbol
+grn             # Group rename variable across workspace
 ```
 
 **Search**:
@@ -256,44 +252,8 @@ next
 print variable
 ```
 
-### Print Debugging
-
-For quick debugging:
-
-```python
-# Python
-print(f"DEBUG: {variable}")
-
-# JavaScript
-console.log("DEBUG:", variable);
-
-# Rust
-println!("DEBUG: {:?}", variable);
-```
-
-**View output**: In separate tmux pane running the program.
-
-### Language-Specific Tools
-
-**Python**:
-```bash
-# Interactive debugging
-python -m pdb script.py
-
 # IPython REPL
 ipython
-```
-
-**Node.js**:
-```bash
-# Node inspector
-node inspect script.js
-```
-
-**Rust**:
-```bash
-# Cargo with backtrace
-RUST_BACKTRACE=1 cargo run
 ```
 
 ## Testing Workflow
@@ -346,15 +306,15 @@ cargo watch -x test
 nvim .
 
 # Window 2: Docker services
-Ctrl-Space + c
+Ctrl-Space + enter
 docker-compose up
 
 # Window 3: Service logs
-Ctrl-Space + c
+Ctrl-Space + enter
 docker-compose logs -f api
 
 # Window 4: Database client
-Ctrl-Space + c
+Ctrl-Space + enter
 docker-compose exec postgres psql -U user -d database
 ```
 
@@ -418,18 +378,6 @@ git push
 git pull --rebase
 ```
 
-### Git with Lazygit (Optional)
-
-If you install lazygit:
-
-```bash
-# Add keybind to tmux
-bind-key g run-shell "tmux neww lazygit"
-
-# Then use
-Ctrl-Space + g
-```
-
 ## Quick Notes While Coding
 
 ### Brain Notes System
@@ -463,18 +411,7 @@ docker
 
 ## Workflow Tips
 
-### 1. One Project Per Workspace
-
-```bash
-Workspace 1: Personal website
-Workspace 2: API backend
-Workspace 3: Data science notebook
-Workspace 4: Documentation
-```
-
-Switch with `SUPER + 1-4`.
-
-### 2. Persistent Tmux Sessions
+### 1. Persistent Tmux Sessions
 
 ```bash
 # Start session
@@ -485,32 +422,12 @@ Ctrl-Space + d
 
 # Reattach later
 tmux attach -s project
+
+# Make sure tmux-plugins are installed and running
+# - sessions are automatically restored being reboot
 ```
 
-### 3. Use Window Names
-
-```bash
-# Rename window
-Ctrl-Space + :
-rename-window editor
-
-# Create named window
-Ctrl-Space + :
-new-window -n tests
-```
-
-### 4. Tmux Sessionizer
-
-Use the rofi-sessionizer script:
-
-```bash
-# Add keybind in Hyprland
-bind = SUPER, P, exec, rofi-sessionizer
-
-# Quickly jump to project directories
-```
-
-### 5. Focus Mode
+### 2. Focus Mode
 
 ```bash
 # Minimize distractions
@@ -528,45 +445,12 @@ refresh-app-daemons
 
 ```bash
 # Create virtual environment
-python -m venv venv
-source venv/bin/activate
-
-# Or use UV (installed in sokratOS)
 uv venv
-source .venv/bin/activate
+source venv/bin/activate # Or "svba" (alias)
 
 # Install dependencies
 uv pip install -r requirements.txt
-```
-
-### JavaScript/TypeScript
-
-```bash
-# Start with package manager
-npm install
-npm run dev
-
-# TypeScript compiler watch
-tsc --watch
-```
-
-### Rust
-
-```bash
-# Cargo watch for auto-rebuild
-cargo watch -x run
-cargo watch -x test
-cargo watch -x clippy
-```
-
-### Go
-
-```bash
-# Hot reload with air
-air
-
-# Or manual watch
-ls *.go | entr -r go run .
+uv sync # pyproject.toml provided in repo
 ```
 
 ## Troubleshooting

@@ -151,7 +151,7 @@ if command -v fzf >/dev/null; then
 	fi
 
 	if command -v pacman >/dev/null; then
-		alias pacmanf="pacman -Slq | fzf --multi --preview 'pacman -Sii {1}' --preview-window=down:75% | xargs -ro pacman -S"
+		alias pacmanf="sudo pacman -Slq | fzf --multi --preview 'pacman -Sii {1}' --preview-window=down:75% | xargs -ro pacman -S"
 	fi
 
 	if command -v paru >/dev/null; then

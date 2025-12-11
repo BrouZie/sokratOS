@@ -27,7 +27,7 @@ sokratOS is terminal-centric because:
 | `bash` | Shell | Default shell |
 | `tmux` | Terminal multiplexer | `tmux` |
 | `nvim` | Text editor | `nvim` |
-| `eza` | File listing | `eza -la` |
+| `ls` | File listing | `ls -la` |
 | `btop` | System monitor | `btop` |
 | `fastfetch` | System info | `fastfetch` |
 | `cava` | Audio visualizer | `cava` |
@@ -47,8 +47,6 @@ cd ~/projects/myproject
 cd -
 
 # Go home
-cd ~
-# or just
 cd
 
 # Go up one level
@@ -61,20 +59,20 @@ cd ../..
 ### Listing Files
 
 ```bash
-# Modern ls replacement
-eza
+# Modern ls replacement (aliased to eza)
+ls
 
 # List with details
-eza -la
+lsa
 
 # Tree view
-eza --tree
+lst
 
 # With git status
-eza -la --git
+lsa --git
 
 # Icons
-eza -la --icons
+lsa --icons
 ```
 
 ### Finding Files
@@ -217,6 +215,9 @@ ps aux
 ps aux | grep firefox
 # or
 pgrep firefox
+
+# Fuzzy over processes
+ps aux | fzf
 ```
 
 ### Controlling Processes
@@ -300,7 +301,7 @@ Ctrl-Space + d
 
 ```bash
 # New window
-Ctrl-Space + c
+Ctrl-Space + enter
 
 # Next window
 Alt + l
@@ -312,7 +313,7 @@ Alt + h
 Ctrl-Space + N  # where N is number
 
 # Rename window
-Ctrl-Space + :
+Ctrl-Space + %
 rename-window name
 ```
 
@@ -330,75 +331,6 @@ Ctrl-Space + h/j/k/l
 
 # Close pane
 Ctrl-q
-```
-
-## Git Workflow
-
-### Basic Operations
-
-```bash
-# Initialize repo
-git init
-
-# Clone repo
-git clone https://github.com/user/repo.git
-
-# Status
-git status
-
-# Add files
-git add .
-git add file.txt
-
-# Commit
-git commit -m "message"
-
-# Push
-git push
-
-# Pull
-git pull
-```
-
-### Branching
-
-```bash
-# Create branch
-git branch feature
-
-# Switch branch
-git checkout feature
-# or
-git switch feature
-
-# Create and switch
-git checkout -b feature
-
-# Merge branch
-git checkout main
-git merge feature
-
-# Delete branch
-git branch -d feature
-```
-
-### History
-
-```bash
-# View log
-git log
-
-# One line per commit
-git log --oneline
-
-# Graph view
-git log --graph --oneline
-
-# Show changes
-git diff
-
-# Show specific commit
-git show <commit-hash>
 ```
 
 ## Docker Workflows
@@ -702,13 +634,13 @@ N  # previous match
 ### TLDR Pages
 
 ```bash
-# Install if needed
-paru -S tldr
+# Quick tldr with common and useful commands for specified command/concept
 
 # Quick examples
-tldr tar
-tldr find
-tldr git
+tldr nvim
+tldr tmux
+tldr matugen
+tldr fd
 ```
 
 ## Troubleshooting

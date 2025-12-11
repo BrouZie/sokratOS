@@ -9,67 +9,59 @@ fi
 WALL="$1"
 CACHE_DIR="$HOME/.cache/sokratOS/theme"
 PROCESSED_IMG="$CACHE_DIR/theme-source.png"
-
 mkdir -p "$CACHE_DIR"
 
+# Process image and save to cache
 magick "$WALL" \
-  -resize 1920x1080^ \
+  -resize 1280x720^ \
   -gravity center -crop 70%x70%+0+0 +repage \
-  -resize 1920x1080 \
+  -resize 1280x720 \
   "$PROCESSED_IMG"
 
-# Set wallpaper
-swww img "$WALL" -t fade
+# Set wallpaper asynchronously (non-blocking)
+swww img "$WALL" -t fade &
 
-# Generate matugen colors
+# Analyze shade in parallel using the processed image
+SHADE=$(magick "$PROCESSED_IMG" \
+  -alpha remove -alpha off -colorspace Gray \
+  -format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}')
+
+# Generate matugen colors (can run while shade calculation completes)
 matugen image "$PROCESSED_IMG"
-
 refresh-app-daemons
+
+# Wait for shade calculation to complete
+wait $SHADE_PID
 
 # Image analysis variables
 PRIMARY_HEX=$(<~/.config/sokratOS/matugen/.primary-hex.txt)
-COLOR1=$(pastel format name $PRIMARY_HEX)
-SHADE=$(magick "$WALL" \
-  -alpha remove -alpha off -colorspace Gray \
-  -format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}'
-)
+COLOR1=$(pastel format name "$PRIMARY_HEX")
 
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
 CURRENT_THEME_DIR="$HOME/.config/sokratOS/current/theme/colors.conf"
-# CURRENT_THEME_DIR1="$HOME/.config/sokratOS/current/theme/ghostty-colors"
 
 set_theme() {
-	local theme="$1"
-	notify-send "$SHADE $COLOR1: $theme"
-	ln -nsf "$THEMES_DIR/$theme/colors.conf" "$CURRENT_THEME_DIR"
-	# ln -nsf "$THEMES_DIR/$theme/ghostty-colors" "$CURRENT_THEME_DIR1"
+    local theme="$1"
+    notify-send "$SHADE $COLOR1: $theme" &
+    ln -nsf "$THEMES_DIR/$theme/colors.conf" "$CURRENT_THEME_DIR"
 }
 
-# Change kitty pallete based on image analysis
+# Change theme based on image analysis
 case "$SHADE $COLOR1" in
   "dark lightsteelblue")  set_theme nord ;;
   "light lightsteelblue") set_theme tokyonight ;;
-	"dark sandybrown") set_theme tokyonight ;;
-	"dark mediumaquamarine") set_theme osaka-jade ;;
-
-  # Shade-agnostic: any SHADE + color
+  "dark sandybrown")      set_theme tokyonight ;;
+  "dark mediumaquamarine") set_theme osaka-jade ;;
   *" lightsalmon")        set_theme gruvbox ;;
   *" lightskyblue")       set_theme everforest ;;
   *" skyblue")            set_theme nord ;;
   *" plum")               set_theme catppuccin ;;
   *" powderblue")         set_theme everforest ;;
   *" darkkhaki")          set_theme rosepine ;;
-
-  # Different theme per shade for same color
-  "light lightpink")      set_theme rosepine ;;
-  "dark lightpink")       set_theme nightfox ;;
-
-  # Example: two different choices based on shade
+	*" lightpink")          set_theme nightfox ;;
   "light darkseagreen")   set_theme everforest ;;
   "dark darkseagreen")    set_theme gruvbox ;;
-
-  # Fallback
-  *) notify-send "$SHADE $COLOR1" && sokratos-themes &&  exit 0 ;;
+  *) notify-send "$SHADE $COLOR1" & sokratos-themes; exit 0 ;;
 esac
 
 # Refresh kitty

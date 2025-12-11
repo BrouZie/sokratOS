@@ -190,12 +190,11 @@ SUPER + P    # Pseudo-tiling (dwindle)
 ```
 1: Communication
    - Firefox (email, chat)
-   - Discord
-   - Slack
+   - Discord (vesktop)
 
 2: Development
    - Neovim
-   - 2-3 terminals
+   - Tmux
 
 3: Documentation
    - Browser (docs)
@@ -219,17 +218,6 @@ SUPER + P    # Pseudo-tiling (dwindle)
 
 # Example: Move Firefox to workspace 1
 SUPER + Shift + 1
-```
-
-**Note**: Window moves but you stay on current workspace.
-
-**Follow the window**:
-```bash
-# Move window
-SUPER + Shift + 3
-
-# Jump to that workspace
-SUPER + 3
 ```
 
 ### Workspace Navigation
@@ -333,22 +321,6 @@ SUPER + Shift + <workspace number>
 
 ## Advanced Workflows
 
-### Dynamic Workspace Switching
-
-**Quick toggle pattern**:
-```bash
-# Work on workspace 2
-SUPER + 2
-
-# Quick check workspace 1
-SUPER + 1
-
-# Back to workspace 2
-SUPER + 2
-```
-
-**Recent workspaces**: Hyprland remembers recent workspace, making toggling fast.
-
 ### Special Workspaces (Scratchpad)
 
 Enable in `~/.config/hypr/configs/bindings.conf`:
@@ -377,95 +349,6 @@ Windows stay on workspaces even when you switch away:
 - Check browser on workspace 1
 - Return to workspace 2, terminals still there
 
-### Empty Workspace Behavior
-
-Hyprland auto-removes empty workspaces:
-- Close all windows on workspace 3
-- Workspace 3 disappears
-- Workspaces renumber automatically (if configured)
-
-**Keep numbering sequential**: Set in `~/.config/hypr/hyprland.conf`
-
-## Real-World Scenarios
-
-### Scenario 1: Web Development
-
-```bash
-Workspace 1: Code
-  - Neovim (fullscreen or split)
-  - Terminal (if split)
-
-Workspace 2: Preview
-  - Browser with dev tools
-  - Another browser for mobile view
-
-Workspace 3: Reference
-  - Documentation browser
-  - Design mockups
-```
-
-**Workflow**:
-```bash
-# Write code
-SUPER + 1
-
-# Check result
-SUPER + 2
-
-# Look up docs
-SUPER + 3
-
-# Back to code
-SUPER + 1
-```
-
-### Scenario 2: Research & Writing
-
-```bash
-Workspace 1: Writing
-  - Neovim (or LibreOffice)
-  - Fullscreen, no distractions
-
-Workspace 2: Research
-  - Browser with multiple tabs
-  - PDF reader (Zathura)
-
-Workspace 3: Notes
-  - Note-taking app
-  - Mind mapping tool
-```
-
-### Scenario 3: System Administration
-
-```bash
-Workspace 1: Monitoring
-  - btop (system monitor)
-  - docker stats
-  - tail -f logs
-
-Workspace 2: Work
-  - SSH sessions to servers
-  - Configuration editing
-
-Workspace 3: Documentation
-  - Man pages
-  - Wiki/docs
-```
-
-### Scenario 4: Video Editing
-
-```bash
-Workspace 1: Editor
-  - DaVinci Resolve (fullscreen)
-
-Workspace 2: Preview
-  - Media player (test renders)
-
-Workspace 3: Assets
-  - File manager with footage
-  - Browser (music licensing)
-```
-
 ## Productivity Tips
 
 ### 1. Consistent Workspace Usage
@@ -482,6 +365,7 @@ Becomes automatic: `SUPER + 2` = code time
 Keep workspaces clean:
 ```bash
 SUPER + w    # Close window
+SUPER + SHIFT + w    # Force close window
 ```
 
 Fewer windows = easier navigation.
@@ -494,13 +378,6 @@ SUPER + F    # Fullscreen current window
 ```
 
 No distractions, just content.
-
-### 4. Float Transient Windows
-
-Don't let small windows take tiling space:
-```bash
-SUPER + V    # Toggle floating for calculator, etc.
-```
 
 ### 5. Name Your Workspaces
 
@@ -522,16 +399,6 @@ general {
 }
 ```
 
-### Change Border Colors
-
-```conf
-general {
-    col.active_border = $on_primary_container    # Active window border
-    col.inactive_border = $on_primary_fixed      # Inactive window border
-    border_size = 2                              # Border thickness
-}
-```
-
 ### Disable Borders
 
 ```conf
@@ -548,51 +415,6 @@ Default is dwindle, but you can try master:
 general {
     layout = master
 }
-```
-
-## Troubleshooting
-
-### Windows Not Tiling
-
-1. Check window is not floating:
-   ```bash
-   SUPER + V    # Toggle floating
-   ```
-
-2. Check layout is enabled:
-   ```bash
-   hyprctl getoption general:layout
-   ```
-
-### Can't Move Window
-
-1. Ensure window is focused (visible border)
-2. Use swap instead of move:
-   ```bash
-   SUPER + Shift + h/j/k/l
-   ```
-
-### Workspace Empty After Reboot
-
-Hyprland doesn't restore windows after reboot.
-
-**Solution**: Use autostart for important apps.
-
-Edit `~/.config/hypr/configs/autostart.conf`:
-```conf
-exec-once = firefox
-exec-once = kitty
-```
-
-### Window Rules Not Working
-
-Check rule syntax:
-```bash
-# View window info
-hyprctl clients
-
-# Test rule
-windowrulev2 = float, class:^(calculator)$
 ```
 
 ## Next Steps
