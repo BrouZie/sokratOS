@@ -4,6 +4,7 @@ set -e
 CFG_DIR="$HOME/.config/sokratOS"
 FLAG="$CFG_DIR/.first_login_done"
 WELCOME_MD="$CFG_DIR/WELCOME.md"
+README_PATH="$HOME/.local/share/sokratOS/docs/01-getting-started/first-boot-tour.md"
 
 mkdir -p "$CFG_DIR"
 
@@ -15,8 +16,8 @@ fi
 # Run theme switcher with a default theme
 sokratos-apply-theme ~/Pictures/wallpaper/minimal-city.png || true
 
-# Welcoming note
-sokratos-floaterminal bash -lc "glow -p '$WELCOME_MD'; echo; read -n 1 -s -r -p 'Press any key to close... '"
+# First boot documentation
+sokratos-floaterminal bash -lc "nvim '$FIRST_BOOT'"
 
 # Mark as done so this never runs again
 touch "$FLAG"
