@@ -7,7 +7,6 @@ SokratOS is a comprehensive dotfiles and configuration system for Arch Linux fea
 ## ✨ Features
 
 - 🎨 **Dynamic Theming**: Automatic color scheme generation from wallpapers using `matugen` and `pywal`
-- 🎯 **11 Pre-configured Supplimentary Themes**: Including Catppuccin, Gruvbox, TokyoNight, Nord, and more
 - 🖥️ **Hyprland Compositor**: Modern Wayland compositor with beautiful animations and tiling
 - 🛠️ **Custom Utility Scripts**: Theme switching, focus mode, screen recording, and more
 - 🔧 **Development Ready**: Docker, development tools, and Neovim configuration included
@@ -34,7 +33,11 @@ SokratOS is a comprehensive dotfiles and configuration system for Arch Linux fea
 
 - Install Arch
 - Internet connection
-- Go through a base archinstall (video tutorial coming soon!)
+- Go through a base archinstall
+
+### Video example
+
+https://github.com/user-attachments/assets/089656e4-bdc6-4d1f-8731-e178a967fb11
 
 ### Quick Start
 
