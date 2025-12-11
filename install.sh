@@ -98,6 +98,11 @@ status_msg "Configuring auto-login..."
 source "$REPO_INSTALL/autologin.sh" >> "$LOG_FILE" 2>&1
 log "Auto-login configured"
 
+# Step 1.5: Sync package databases
+status_msg "Syncing package databases..."
+run_with_retry "sudo pacman -Sy"
+log "Package databases synced"
+
 # Step 2: Bootstrap paru (this takes a while)
 status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
 log "Starting paru bootstrap"
@@ -239,7 +244,7 @@ gum style \
 log "========== sokratOS Installation Completed Successfully =========="
 
 echo ""
-if gum confirm --default=true "Reboot now to start using sokratOS"; then
+if gum confirm --default=true "Reboot now to start using sokratOS!"; then
     log "User chose to reboot"
     echo ""
     gum style --foreground 212 "Rebooting in 3 seconds..."
