@@ -101,7 +101,7 @@ run_with_retry "paru -S --noconfirm --needed gum"
 log "Gum installed"
 
 # Now we can use gum for better output!
-export GUM_SPIN_SPINNER="dot"
+export GUM_SPIN_SPINNER="line"
 export GUM_SPIN_TITLE_FOREGROUND="212"
 
 # Helper function to run commands with gum spinner
