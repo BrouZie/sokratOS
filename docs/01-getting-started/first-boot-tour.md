@@ -8,6 +8,12 @@ tags: [getting-started, tutorial, first-boot, guide]
 
 Welcome to sokratOS! This guide will walk you through your first experience and help you get oriented.
 
+## Recommended steps
+
+1. Fix your monitor setup in `~/.config/hypr/configs/monitors.conf`
+2. [Install pywalfox](https://addons.mozilla.org/en-US/firefox/addon/pywalfox/)
+3. Change wallpaper with `SUPER + SHIFT + Space`
+
 ## What to Expect on First Boot
 
 After installation and reboot, you'll be automatically logged into Hyprland. Here's what you'll see:
