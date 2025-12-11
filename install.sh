@@ -43,20 +43,20 @@ run_with_retry() {
     local max_attempts=3
     local attempt=1
     local cmd="$*"
-    
+
     while [ $attempt -le $max_attempts ]; do
         log "Attempting: $cmd (attempt $attempt/$max_attempts)"
         if eval "$cmd" >> "$LOG_FILE" 2>&1; then
             return 0
         fi
-        
+
         if [ $attempt -lt $max_attempts ]; then
             log "Failed, retrying in 5 seconds..."
             sleep 5
         fi
         attempt=$((attempt + 1))
     done
-    
+
     log "ERROR: Failed after $max_attempts attempts: $cmd"
     return 1
 }
@@ -198,7 +198,7 @@ gum style --foreground 147 "🎨 Finalizing setup..."
 
 # Step 7: Wallpaper and first login script
 gum_spin "Setting up wallpaper and welcome screen..." "
-    cp -r '$REPO_INSTALL/configs/wallpaper' '$HOME/Pictures/wallpaper'
+		cp -r "$REPO_INSTALL/configs/wallpaper/"* "$HOME/Pictures/wallpaper/"
     cp '$REPO_INSTALL/sokratos-first-login' '$HOME/.local/bin/'
     chmod +x '$HOME/.local/bin/sokratos-first-login'
     cp '$REPO_INSTALL/WELCOME.md' '$HOME/.config/sokratOS/WELCOME.md'
