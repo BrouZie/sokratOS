@@ -5,73 +5,216 @@ set -e
 
 export REPO_PATH="$HOME/.local/share/sokratOS"
 export REPO_INSTALL="$REPO_PATH/install"
+export LOG_FILE="$HOME/.config/sokratOS-install.log"
 
-# Give people a chance to retry running the installation
-catch_errors() {
-  echo -e "\n\e[31msokratOS installation failed!\e[0m"
-  echo "You can retry by running: bash $REPO_PATH/install.sh"
+# Ensure log directory exists
+mkdir -p "$(dirname "$LOG_FILE")"
+
+# Color codes for manual output (fallback when gum not available)
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Logging function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" >> "$LOG_FILE"
 }
 
-trap catch_errors ERR
+# Status message function (before gum is available)
+status_msg() {
+    echo -e "${BLUE}==>${NC} $1"
+    log "STATUS: $1"
+}
 
-# Auto-login
-source "$REPO_INSTALL/autologin.sh"
+# Error handler
+catch_errors() {
+    echo -e "\n${RED}✗ sokratOS installation failed!${NC}"
+    echo "Check the log file for details: $LOG_FILE"
+    echo "You can retry by running: bash $REPO_PATH/install.sh"
+    log "ERROR: Installation failed at line $1"
+}
 
-# Installation of key packages/programs
-source "$REPO_INSTALL/prerequisites/all.sh"
-source "$REPO_INSTALL/terminal/all.sh"
-source "$REPO_INSTALL/desktop/all.sh"
-source "$REPO_INSTALL/xtras/all.sh"
+trap 'catch_errors $LINENO' ERR
 
-# Configs
-mkdir -p "$HOME/.config/sokratOS/current/theme" \
-	"$HOME/.config/sokratOS/env.d"
-	"$HOME/.local/share/applications" \
-	"$HOME/.config/kitty" \
-	"$HOME/Pictures/wallpaper" \
-	"$HOME/.local/bin"
+# Function to run command with retries (for network operations)
+run_with_retry() {
+    local max_attempts=3
+    local attempt=1
+    local cmd="$*"
+    
+    while [ $attempt -le $max_attempts ]; do
+        log "Attempting: $cmd (attempt $attempt/$max_attempts)"
+        if eval "$cmd" >> "$LOG_FILE" 2>&1; then
+            return 0
+        fi
+        
+        if [ $attempt -lt $max_attempts ]; then
+            log "Failed, retrying in 5 seconds..."
+            sleep 5
+        fi
+        attempt=$((attempt + 1))
+    done
+    
+    log "ERROR: Failed after $max_attempts attempts: $cmd"
+    return 1
+}
 
-cp "$REPO_INSTALL/configs/bashrc" "$HOME/.bashrc"
-cp "$REPO_INSTALL/configs/fzf-dirs.sh" "$HOME/.config/sokratOS/env.d/fzf-dirs.sh"
-cp "$REPO_INSTALL/configs/kitty.conf" "$HOME/.config/kitty/kitty.conf"
-cp "$REPO_INSTALL/configs/tmux.conf" "$HOME/.tmux.conf"
-cp -r "$REPO_INSTALL/configs/bash" "$HOME/.config/bash"
-cp -r "$REPO_INSTALL/configs/colors/matugen" "$HOME/.config/sokratOS/matugen"
-cp -r "$REPO_INSTALL/configs/gtk-3.0" "$HOME/.config/gtk-3.0"
-cp -r "$REPO_INSTALL/configs/gtk-4.0" "$HOME/.config/gtk-4.0"
-cp -r "$REPO_INSTALL/configs/matugen" "$HOME/.config/matugen"
-cp -r "$REPO_INSTALL/configs/hypr" "$HOME/.config/hypr"
-cp -r "$REPO_INSTALL/configs/waybar" "$HOME/.config/waybar"
-cp -r "$REPO_INSTALL/configs/rofi" "$HOME/.config/rofi"
-cp -r "$REPO_INSTALL/configs/swaync" "$HOME/.config/swaync"
-cp -r "$REPO_INSTALL/configs/fastfetch" "$HOME/.config/fastfetch"
-cp -r "$REPO_INSTALL/configs/zathura" "$HOME/.config/zathura"
-cp -r "$REPO_INSTALL/configs/nvim" "$HOME/.config/nvim"
-cp -r "$REPO_INSTALL/configs/applications/"*.desktop \
-      "$REPO_INSTALL/configs/applications/"icons \
-      "~/.local/share/applications/"
+# Clear screen and show header
+clear
+cat << "EOF"
+╔═══════════════════════════════════════╗
+║                                       ║
+║          sokratOS Installer           ║
+║                                       ║
+╚═══════════════════════════════════════╝
 
-# Tmux and neovim dependencies
-echo "Setting up tmux..."
-if [[ ! -e ~/.tmux/plugins/tpm ]]; then
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+EOF
+
+log "========== sokratOS Installation Started =========="
+
+# Step 1: Auto-login
+status_msg "Configuring auto-login..."
+source "$REPO_INSTALL/autologin.sh" >> "$LOG_FILE" 2>&1
+log "Auto-login configured"
+
+# Step 2: Bootstrap paru (this takes a while)
+status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
+log "Starting paru bootstrap"
+
+if ! command -v paru &> /dev/null; then
+    (
+        cd /tmp
+        run_with_retry "git clone https://aur.archlinux.org/paru.git"
+        cd paru
+        makepkg -si --noconfirm
+    ) >> "$LOG_FILE" 2>&1
+    log "Paru bootstrap complete"
+else
+    log "Paru already installed, skipping bootstrap"
 fi
-~/.tmux/plugins/tpm/bin/install_plugins
 
-echo "Setting up Neovim Python environment..."
-uv venv --seed ~/.venvs/nvim
-uv pip install -p ~/.venvs/nvim/bin/python \
-    pynvim jupyter_client nbformat cairosvg pillow plotly kaleido \
-    pyperclip requests websocket-client pnglatex
+# Step 3: Install gum for better UX
+status_msg "Installing gum for enhanced output..."
+run_with_retry "paru -S --noconfirm --needed gum"
+log "Gum installed"
 
-echo "Installing Neovim plugins (this may take 2-5 minutes)..."
-nvim --headless "+Lazy! sync" +qa
+# Now we can use gum for better output!
+export GUM_SPIN_SPINNER="dot"
+export GUM_SPIN_TITLE_FOREGROUND="212"
 
-echo "Tmux and Neovim setup complete!"
+# Helper function to run commands with gum spinner
+gum_spin() {
+    local title="$1"
+    shift
+    log "Starting: $title"
+    if gum spin --title "$title" -- bash -c "$* >> '$LOG_FILE' 2>&1"; then
+        log "Completed: $title"
+        return 0
+    else
+        log "Failed: $title"
+        return 1
+    fi
+}
 
+echo ""
+gum style --foreground 212 --bold "Installation Progress"
+echo ""
 
-# Ensure wallpaper for first boot
-cp -r "$REPO_INSTALL/configs/wallpaper" "$HOME/Pictures/wallpaper"
-cp "$REPO_INSTALL/sokratos-first-login" "$HOME/.local/bin/"
-chmod +x "$HOME/.local/bin/sokratos-first-login"
-cp "$REPO_INSTALL/WELCOME.md" "$HOME/.config/sokratOS/WELCOME.md"
+# Step 4: Install all packages (the longest operation)
+gum style --foreground 147 "📦 Installing system packages..."
+gum_spin "Installing prerequisites..." "source '$REPO_INSTALL/prerequisites/all.sh'"
+gum_spin "Installing terminal tools..." "source '$REPO_INSTALL/terminal/all.sh'"
+gum_spin "Installing desktop environment..." "source '$REPO_INSTALL/desktop/all.sh'"
+gum_spin "Installing extra packages..." "source '$REPO_INSTALL/xtras/all.sh'"
+
+echo ""
+gum style --foreground 147 "⚙️  Setting up configurations..."
+
+# Step 5: Create directories and copy configs
+gum_spin "Creating directories..." "mkdir -p \
+    '$HOME/.config/sokratOS/current/theme' \
+    '$HOME/.config/sokratOS/env.d' \
+    '$HOME/.local/share/applications' \
+    '$HOME/.config/kitty' \
+    '$HOME/Pictures/wallpaper' \
+    '$HOME/.local/bin'"
+
+gum_spin "Copying configuration files..." "
+    cp '$REPO_INSTALL/configs/bashrc' '$HOME/.bashrc'
+    cp '$REPO_INSTALL/configs/fzf-dirs.sh' '$HOME/.config/sokratOS/env.d/fzf-dirs.sh'
+    cp '$REPO_INSTALL/configs/kitty.conf' '$HOME/.config/kitty/kitty.conf'
+    cp '$REPO_INSTALL/configs/tmux.conf' '$HOME/.tmux.conf'
+    cp -r '$REPO_INSTALL/configs/bash' '$HOME/.config/bash'
+    cp -r '$REPO_INSTALL/configs/colors/matugen' '$HOME/.config/sokratOS/matugen'
+    cp -r '$REPO_INSTALL/configs/gtk-3.0' '$HOME/.config/gtk-3.0'
+    cp -r '$REPO_INSTALL/configs/gtk-4.0' '$HOME/.config/gtk-4.0'
+    cp -r '$REPO_INSTALL/configs/matugen' '$HOME/.config/matugen'
+    cp -r '$REPO_INSTALL/configs/hypr' '$HOME/.config/hypr'
+    cp -r '$REPO_INSTALL/configs/waybar' '$HOME/.config/waybar'
+    cp -r '$REPO_INSTALL/configs/rofi' '$HOME/.config/rofi'
+    cp -r '$REPO_INSTALL/configs/swaync' '$HOME/.config/swaync'
+    cp -r '$REPO_INSTALL/configs/fastfetch' '$HOME/.config/fastfetch'
+    cp -r '$REPO_INSTALL/configs/zathura' '$HOME/.config/zathura'
+    cp -r '$REPO_INSTALL/configs/nvim' '$HOME/.config/nvim'
+    cp '$REPO_INSTALL/configs/applications/'*.desktop '$HOME/.local/share/applications/'
+    cp -r '$REPO_INSTALL/configs/applications/icons' '$HOME/.local/share/applications/'
+"
+
+echo ""
+gum style --foreground 147 "🔧 Setting up development tools..."
+
+# Step 6: Tmux and Neovim setup (can be parallelized)
+{
+    gum_spin "Setting up tmux plugins..." "
+        if [[ ! -e ~/.tmux/plugins/tpm ]]; then
+            git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+        fi
+        ~/.tmux/plugins/tpm/bin/install_plugins
+    "
+} &
+tmux_pid=$!
+
+{
+    gum_spin "Setting up Neovim Python environment..." "
+        uv venv --seed ~/.venvs/nvim
+        uv pip install -p ~/.venvs/nvim/bin/python \
+            pynvim jupyter_client nbformat cairosvg pillow plotly kaleido \
+            pyperclip requests websocket-client pnglatex
+    "
+} &
+python_pid=$!
+
+# Wait for both parallel operations
+wait $tmux_pid
+wait $python_pid
+
+# Neovim plugins (this is slow, so it stays separate)
+gum_spin "Installing Neovim plugins (2-5 minutes)..." "nvim --headless '+Lazy! sync' +qa"
+
+echo ""
+gum style --foreground 147 "🎨 Finalizing setup..."
+
+# Step 7: Wallpaper and first login script
+gum_spin "Setting up wallpaper and welcome screen..." "
+    cp -r '$REPO_INSTALL/configs/wallpaper' '$HOME/Pictures/wallpaper'
+    cp '$REPO_INSTALL/sokratos-first-login' '$HOME/.local/bin/'
+    chmod +x '$HOME/.local/bin/sokratos-first-login'
+    cp '$REPO_INSTALL/WELCOME.md' '$HOME/.config/sokratOS/WELCOME.md'
+"
+
+# Success message
+echo ""
+gum style \
+    --border double \
+    --border-foreground 212 \
+    --padding "1 2" \
+    --margin "1 0" \
+    "✓ sokratOS installation complete!" \
+    "" \
+    "Please reboot your system to start using sokratOS." \
+    "" \
+    "Installation log: $LOG_FILE"
+
+log "========== sokratOS Installation Completed Successfully =========="
