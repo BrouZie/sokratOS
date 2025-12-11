@@ -212,12 +212,6 @@ wait $python_pid
 # Neovim plugins (this is slow, so it stays separate)
 gum_spin "Installing Neovim plugins (1-3 minutes)..." "nvim --headless '+Lazy! sync' +qa"
 
-# Install Mason LSP servers and tools
-# Mason will auto-install on startup, we just need to keep it running long enough
-gum_spin "Installing LSP servers and tools via Mason (up to 60 seconds)..." "
-    timeout 60 nvim --headless -c 'sleep 60' -c 'qa' || true
-"
-
 echo ""
 gum style --foreground 147 "🎨 Finalizing setup..."
 
@@ -243,3 +237,16 @@ gum style \
     "Installation log: $LOG_FILE"
 
 log "========== sokratOS Installation Completed Successfully =========="
+
+echo ""
+if gum confirm --default=true "Reboot now to start using sokratOS"; then
+    log "User chose to reboot"
+    echo ""
+    gum style --foreground 212 "Rebooting in 3 seconds..."
+    sleep 3
+    sudo reboot
+else
+    log "User chose not to reboot"
+    echo ""
+    gum style --foreground 147 "Remember to reboot before launching Hyprland!"
+fi
