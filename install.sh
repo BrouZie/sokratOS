@@ -110,6 +110,8 @@ log "Starting paru bootstrap"
 if ! command -v paru &> /dev/null; then
     (
         cd /tmp
+        # Clean up any previous failed attempts
+        rm -rf paru
         run_with_retry "git clone https://aur.archlinux.org/paru.git"
         cd paru
         makepkg -si --noconfirm
