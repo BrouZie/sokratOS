@@ -1,5 +1,27 @@
-# Install printing stack
-sudo pacman -S --needed --noconfirm cups cups-filters avahi nss-mdns
+# Function to run command with retries (for network operations)
+run_with_retry() {
+    local max_attempts=3
+    local attempt=1
+    local cmd="$*"
+    
+    while [ $attempt -le $max_attempts ]; do
+        if eval "$cmd" 2>&1; then
+            return 0
+        fi
+        
+        if [ $attempt -lt $max_attempts ]; then
+            echo "Failed, retrying in 5 seconds..."
+            sleep 5
+        fi
+        attempt=$((attempt + 1))
+    done
+    
+    echo "ERROR: Failed after $max_attempts attempts: $cmd"
+    return 1
+}
+
+# Install printing stack with paru (better for VMs and network issues)
+run_with_retry "paru -S --needed --noconfirm cups cups-filters avahi nss-mdns"
 
 # Enable services
 sudo systemctl enable --now cups.service
