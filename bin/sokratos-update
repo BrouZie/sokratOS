@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+REPO_PATH="$HOME/.local/share/sokratOS"
+
+gum style \
+    --border double \
+    --border-foreground 212 \
+    --padding "1 2" \
+    --margin "1 1" \
+    "Starting sokratOS Update!"
+echo ""
+
+
+if gum confirm "Do you wish to refresh dotfiles (~/.config)"; then
+	STATE=1
+else
+	STATE=0
+fi
+
+echo ""
+gum style --foreground 147 "Updating sokratOS repo..."
+echo ""
+
+git -C "$REPO_PATH" pull --autostash
+git -C "$REPO_PATH" diff --check || git -C $REPO_PATH reset
+
+echo ""
+gum style --foreground 147 "Updating system packages..."
+
+paru -Syu
+
+# Refresh configs
+if [[ "$STATE" == 1 ]]; then
+	echo ""
+	gum style --foreground 46 "Choose configs to refresh:"
+	echo ""
+	sokratos-refresh-configs
+fi
+
+echo ""
+gum style --bold --margin "1 0" --foreground 46 "Update complete!"
+echo ""
+
+gum spin --spinner "dot" --title "Done! Press any key to close..." -- bash -c 'read -n 1 -s'

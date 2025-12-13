@@ -1,8 +1,12 @@
 # SokratOS
 
-> A biased, opinionated Arch Linux + Hyprland setup focused on productivity, customization and aesthetics
+> A biased, opinionated Arch Linux + Hyprland setup focused on productivity, customization, aesthetics and vim motions
 
 SokratOS is a comprehensive dotfiles and configuration system for Arch Linux featuring the Hyprland compositor. It provides an elegant, functional desktop environment with dynamic theming, custom utilities, and a curated selection of tools for development and daily use.
+
+> [!IMPORTANT]
+> **sokratOS is built around Vim-style navigation.** Most menus, navigation, and custom shortcuts assume `hjkl` and `Ctrl + p/n`.
+> If you’re new to Vim motions, run `vimtutor` in your terminal to get up to speed.
 
 ## ✨ Features
 
@@ -60,11 +64,12 @@ The installer will:
 - Set up terminal tools and development environment
 - Install and configure themes
 - Set up custom utility scripts
-- Reboot user into Hyprland-setup
+- Reboot the user into Hyprland-setup
 
 ## 📦 Included Components
 
 ### Desktop Environment
+
 - **Compositor**: Hyprland with custom configuration
 - **Bar**: Waybar with custom modules
 - **Launcher**: Rofi application launcher
@@ -74,6 +79,7 @@ The installer will:
 - **Wallpaper**: swww wallpaper daemon
 
 ### Terminal & CLI Tools
+
 - **Terminal**: Kitty with custom theming
 - **Shell**: Bash with custom configuration
 - **Multiplexer**: Tmux with custom configuration
@@ -82,12 +88,14 @@ The installer will:
 - **System Info**: fastfetch
 
 ### Development Tools
+
 - Docker & Docker Compose
 - Various language toolchains
 - UV (Python package manager)
 - Version control tools
 
 ### Theming System
+
 - **matugen**: Material color generation from wallpapers
 - **pywalfox**: Firefox theme integration
 
@@ -211,4 +219,7 @@ For issues and questions:
 
 ---
 
-**Note**: This is an opinionated setup. It's recommended to review the installation scripts and customize them to your preferences before running.
+> [!NOTE] 
+> 1. This is an opinionated setup
+> 1. It is recommended to review the installation script before running.
+> 1. This is NOT an operating system - sokratOS is an implementation of Arch and Hyprland

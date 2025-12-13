@@ -69,6 +69,10 @@ Now try:
 
 These vim-like keys make window navigation second nature!
 
+> [!NOTE]
+> If you are new to vim-motions start learning på typing `vimtutor` into your
+> terminal!
+
 ### 5. Close a Window (20 seconds)
 
 Press `SUPER + w` to close the currently focused window.
