@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	" Lock"
+	" Reboot"
+	"󰐥 Poweroff"
+)
+
+# Count the number of options, but cap at 8
+NUM_OPTIONS=${#OPTIONS[@]}
+if [ $NUM_OPTIONS -gt 8 ]; then
+	NUM_OPTIONS=8
+fi
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+	rofi -dmenu -i -p "Power Menu" -mesg "Power Menu" \
+	-theme-str '@import "~/.config/rofi/sokratos-run.rasi"' \
+	-theme-str "listview { lines: ${NUM_OPTIONS}; }")
+
+case "$SELECTED" in
+	*"Lock") sleep 0.1 && hyprlock ;;
+	*"Reboot") reboot ;;
+	*"Poweroff") poweroff ;;
+	*) exit ;;
+esac

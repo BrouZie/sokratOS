@@ -1,14 +1,11 @@
-/* ---- 💫 https://github.com/JaKooLit 💫 ---- */
-/* Main Config 1440p */
+/* ---- 💫 Application Launcher Configuration ---- */
 
 /* ---- Configuration ---- */
-
 configuration {
-	modi:                       "drun,run,filebrowser";
-	font:                       "JetBrainsMono Nerd Font Propo 12";
+	modi:                       "drun,filebrowser";
+	font:                       "adw-gtk3-dark 12";
     show-icons:                 true;
     display-drun:               "Apps";
-    display-run:                "Run";
     display-filebrowser:        "Files";
     display-window:             "Windows";
 	drun-display-format:        "{name}";
@@ -16,22 +13,18 @@ configuration {
 	me-select-entry:            "MouseSecondary";
     me-accept-entry:            "MousePrimary";
 	window-format:              "{w} · {c} · {t}";
-	dpi:						1;
+	dpi:                        1;
 }
 
-/* ---- Load pywal colors ---- */
-// @theme "~/.config/rofi/wallust/colors-rofi.rasi"
-
+/* ---- Load colors ---- */
 @theme "~/.config/sokratOS/matugen/rofi/colors.rasi"
 
 /* ---- Global Properties ---- */
 * {
-
-    background-alt:              @on-primary-container; // Buttons backgroundr
-    selected:                    @primary; // Button selected
-    active:                      @error; // Window activated
-    urgent:                      @on-primary-fixed; // When hovering the activated window (maybe more?)
-
+    background-alt:              @on-primary-container;
+    selected:                    @primary;
+    active:                      @error;
+    urgent:                      @on-primary-fixed;
     text-selected:               @surface-container-low;
     text-color:                  @on-surface;
     border-color:                @primary;
@@ -40,7 +33,6 @@ configuration {
 
 /* ---- Window ---- */
 window {
-    // Default
     enabled:                    true;
     fullscreen:                 false;
     transparency:               "real";
@@ -50,190 +42,187 @@ window {
     border-radius:              30px;
     location:                   center;
     anchor:                     center;
-
-    // Style Values
     width:                      40%;
     background-color:           @background;
 }
 
 /* ----- Main Box ----- */
 mainbox {
-		padding:				             15px;
-    enabled:                     true;
-    orientation:                 vertical;
-    children:                    [ "inputbar", "listbox" ];
-    background-color:            transparent;
+    padding:                    15px;
+    enabled:                    true;
+    orientation:                vertical;
+    children:                   [ "inputbar", "listbox" ];
+    background-color:           transparent;
 }
-
 
 /* ---- Inputbar ---- */
 inputbar {
-    enabled:                     true;
-    padding:                     10px 10px 100px 10px;
-    margin:                      10px;
-    background-color:            transparent;
-    border-radius:               25px;
-    orientation:                 horizontal;
-    children:                    ["entry", "dummy", "mode-switcher" ];
-    // background-image:            url("~/.cache/matugen/current-wp.png", width);
+    enabled:                    true;
+    padding:                    10px 10px 100px 10px;
+    margin:                     10px;
+    background-color:           transparent;
+    border-radius:              25px;
+    orientation:                horizontal;
+    children:                   [ "entry", "dummy", "mode-switcher" ];
 }
 
 /* ---- Entry input ---- */
 entry {
-    enabled:                     true;
-    expand:                      false;
-    width:                       18%;
-    padding:                     10px;
-    border-radius:               12px;
-    background-color:            @selected;
-    text-color:                  @text-selected;
-    cursor:                      text;
-    placeholder:                 "Search"; // << Search symbol
-    placeholder-color:           inherit;
-}
-
-/* ---- Listbox ---- */
-listbox {
-    spacing:                     10px;
-		border-radius:               10px;
-		padding:                     25px;
-    background-color:            @background;
-    orientation:                 vertical;
-    children:                    [ "message", "listview" ];
-}
-
-/* ---- Listview ---- */
-listview {
-    enabled:                     true;
-    columns:                     2;
-    lines:                       8;
-    cycle:                       true;
-    dynamic:                     true;
-    scrollbar:                   false;
-    layout:                      vertical;
-    reverse:                     false;
-    fixed-height:                false;
-    fixed-columns:               true;    
-    spacing:                     10px;
-    background-color:            transparent;
-
-//  Adapt rofi theme
-    border:                      0px;
+    enabled:                    true;
+    expand:                     false;
+    width:                      18%;
+    padding:                    10px;
+    border-radius:              12px;
+    background-color:           @selected;
+    text-color:                 @text-selected;
+    cursor:                     text;
+    placeholder:                "Search";
+    placeholder-color:          inherit;
 }
 
 /* ---- Dummy ---- */
 dummy {
-    expand:                      true;
-    background-color:            transparent;
+    expand:                     true;
+    background-color:           transparent;
 }
 
 /* ---- Mode Switcher ---- */
-mode-switcher{
-    enabled:                     true;
-    spacing:                     10px;
-    background-color:            transparent;
-}
-button {
-    width:                       110px;
-    padding:                     12px;
-    border-radius:               12px;
-    background-color:            @text-selected;
-    text-color:                  @text-color;
-    cursor:                      pointer;
-}
-button selected {
-    background-color:            @selected;
-    text-color:                  @text-selected;
+mode-switcher {
+    enabled:                    true;
+    spacing:                    10px;
+    background-color:           transparent;
 }
 
-/* ---- Scrollbar ---- */
-scrollbar {
-    width:        4px ;
-    border:       0;
-    handle-color: @border-color;
-    handle-width: 8px ;
-    padding:      0;
+button {
+    width:                      110px;
+    padding:                    12px;
+    border-radius:              12px;
+    background-color:           @text-selected;
+    text-color:                 @text-color;
+    cursor:                     pointer;
+}
+
+button selected {
+    background-color:           @selected;
+    text-color:                 @text-selected;
+}
+
+/* ---- Listbox ---- */
+listbox {
+    spacing:                    10px;
+    border-radius:              10px;
+    padding:                    25px;
+    background-color:           @background;
+    orientation:                vertical;
+    children:                   [ "message", "listview" ];
+}
+
+/* ---- Listview ---- */
+listview {
+    enabled:                    true;
+    columns:                    1;
+    lines:                      8;
+    cycle:                      true;
+    dynamic:                    true;
+    scrollbar:                  false;
+    layout:                     vertical;
+    reverse:                    false;
+    fixed-height:               false;
+    fixed-columns:              true;
+    spacing:                    10px;
+    background-color:           transparent;
+    border:                     0px;
 }
 
 /* ---- Elements ---- */
 element {
-    enabled:                     true;
-    spacing:                     10px;
-    padding:                     10px;
-    border-radius:               12px;
-    background-color:            transparent;
-    cursor:                      pointer;
+    enabled:                    true;
+    spacing:                    10px;
+    padding:                    10px;
+    border-radius:              12px;
+    background-color:           transparent;
+    cursor:                     pointer;
 }
 
 element normal.normal {
-    background-color:            inherit;
-    text-color:                  inherit;
+    background-color:           inherit;
+    text-color:                 inherit;
 }
+
 element normal.urgent {
-    background-color:            @urgent;
-    text-color:                  @foreground;
+    background-color:           @urgent;
+    text-color:                 @foreground;
 }
+
 element normal.active {
-    background-color:            @active;
-    text-color:                  @foreground;
+    background-color:           @active;
+    text-color:                 @foreground;
 }
 
 element selected.normal {
-    background-color:            @selected;
-    text-color:                  @text-selected;
+    background-color:           @selected;
+    text-color:                 @text-selected;
 }
-element selected.urgent {
-    background-color:            @urgent;
-    text-color:                  @text-selected;
-}
-element selected.active {
-    background-color:            @urgent;
-    text-color:                  @text-selected;
-}
-// Adapt rofi theme
-element alternate.normal {
-    background-color:            transparent;
-    text-color:                  inherit;
-}
-element alternate.urgent {
-    background-color:            transparent;
-    text-color:                  inherit;
-}
-element alternate.active {
-    background-color:            transparent;
-    text-color:                  inherit;
-}
-element-icon {
-    background-color:            transparent;
-    text-color:                  inherit;
-    size:                        36px;
-    cursor:                      inherit;
-}
-element-text {
-    background-color:            transparent;
-		font:                       "JetBrainsMono Nerd Font Propo 12";
-    text-color:                  inherit;
-    cursor:                      inherit;
-    vertical-align:              0.5;
-    horizontal-align:            0.0;
 
+element selected.urgent {
+    background-color:           @urgent;
+    text-color:                 @text-selected;
+}
+
+element selected.active {
+    background-color:           @urgent;
+    text-color:                 @text-selected;
+}
+
+element alternate.normal {
+    background-color:           transparent;
+    text-color:                 inherit;
+}
+
+element alternate.urgent {
+    background-color:           transparent;
+    text-color:                 inherit;
+}
+
+element alternate.active {
+    background-color:           transparent;
+    text-color:                 inherit;
+}
+
+element-icon {
+    background-color:           transparent;
+    text-color:                 inherit;
+    size:                       36px;
+    cursor:                     inherit;
+    font:                       "JetbrainsMono Nerd Font Propo 12";
+}
+
+element-text {
+    background-color:           transparent;
+    font:                       "adw-gtk3-dark 12";
+    text-color:                 inherit;
+    cursor:                     inherit;
+    vertical-align:             0.5;
+    horizontal-align:           0.0;
 }
 
 /* ---- Message ---- */
 message {
-    background-color:            transparent;
-    border:                      0px;
+    background-color:           transparent;
+    border:                     0px;
 }
+
 textbox {
-    padding:                     12px;
-    border-radius:               10px;
-    background-color:            @background-alt;
-    text-color:                  @background;
-    vertical-align:              0.5;
+    padding:                    12px;
+    border-radius:              10px;
+    background-color:           @background-alt;
+    text-color:                 @background;
+    vertical-align:             0.5;
 }
+
 error-message {
-    padding:                     12px;
-    border-radius:               20px;
-    background-color:            @background-alt;
-    text-color:                  @background;
+    padding:                    12px;
+    border-radius:              20px;
+    background-color:           @background-alt;
+    text-color:                 @background;
 }
