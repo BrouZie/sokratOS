@@ -43,20 +43,20 @@ run_with_retry() {
     local max_attempts=3
     local attempt=1
     local cmd="$*"
-    
+
     while [ $attempt -le $max_attempts ]; do
         log "Attempting: $cmd (attempt $attempt/$max_attempts)"
         if eval "$cmd" >> "$LOG_FILE" 2>&1; then
             return 0
         fi
-        
+
         if [ $attempt -lt $max_attempts ]; then
             log "Failed, retrying in 5 seconds..."
             sleep 5
         fi
         attempt=$((attempt + 1))
     done
-    
+
     log "ERROR: Failed after $max_attempts attempts: $cmd"
     return 1
 }
@@ -108,13 +108,24 @@ status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
 log "Starting paru bootstrap"
 
 if ! command -v paru &> /dev/null; then
+    # Try to install paru-bin (pre-compiled) first, fall back to building from source
     (
         cd /tmp
-        # Clean up any previous failed attempts
-        rm -rf paru
-        run_with_retry "git clone https://aur.archlinux.org/paru.git"
-        cd paru
-        makepkg -si --noconfirm
+        rm -rf paru-bin paru
+        
+        # Try paru-bin first (faster, avoids compilation issues)
+        if run_with_retry "git clone https://aur.archlinux.org/paru-bin.git"; then
+            cd paru-bin
+            makepkg -si --noconfirm
+        else
+            # Fallback to building from source
+            log "paru-bin failed, trying source build"
+            cd /tmp
+            rm -rf paru
+            run_with_retry "git clone https://aur.archlinux.org/paru.git"
+            cd paru
+            makepkg -si --noconfirm
+        fi
     ) >> "$LOG_FILE" 2>&1
     log "Paru bootstrap complete"
 else
