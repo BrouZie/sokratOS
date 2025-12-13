@@ -8,18 +8,20 @@
 set editing-mode vi
 
 $if mode=vi
-	# Small indicator of (command/normal mode)
 	set show-mode-in-prompt on
   set emacs-mode-string ""
+  # set overwrite-mode-string ""
+
 	set vi-ins-mode-string ""
 	set vi-cmd-mode-string \1\e[35m\2❮\1\e[0m\2
+  #   insert -> bar, command -> block
 
   # Normal mode (command mode) keybindings
   set keymap vi-command
-  
+
   # Unbind Alt-C to prevent conflict with FZF
   "\ec": ""
-  
+
   # Arrow keys: search history by prefix
   "\e[A": history-search-backward
   "\e[B": history-search-forward
@@ -28,7 +30,7 @@ $if mode=vi
 
   # Insert mode keybindings
   set keymap vi-insert
-  
+
   # Ctrl-P/N for history search (like vim)
   "\C-p": history-search-backward
   "\C-n": history-search-forward

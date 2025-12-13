@@ -12,6 +12,7 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 
 ```
 ~/.local/share/sokratOS/     # Repository clone (read-only reference)
+~/.local/share/sokratOS/bin  # Repository scripts (defaults)
 ~/.config/                   # User configurations (customizable)
 ~/.local/bin/                # User scripts
 ~/Documents/2ndBrain/        # Note-taking system
@@ -25,35 +26,41 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 **Location**: `~/.local/share/sokratOS/`
 
 **Contents**:
-- `bin/` - Custom utility scripts
+- `bin/` - Utility scripts
 - `install/` - Installation scripts and default configs
-- `themes/` - Pre-configured color schemes
+- `themes/` - Pre-configured color schemes for the terminal
 - `docs/` - Documentation (this site)
 
 **Important**: This is the source. Don't edit here unless you want to modify defaults.
 
 ### Custom Scripts
 
-**Location**: `~/.local/share/sokratOS/bin/`
+**Location**: `~/.local/bin`
 
 **Scripts** (referenced in `$PATH`):
-- `sokratos-apply-theme` - Apply theme from wallpaper
+
+(New section to be continued...)
+
+### sokratOS utility scripts
+
+**Location**: `~/.local/share/sokratos/bin`
+
+**Repo utilities** (referenced in `$PATH`):
 - `sokratos-next-theme` - Interactive theme + wallpaper picker
-- `sokratos-themes` - Quick theme switcher
+- `sokratos-apply-theme` - Apply theme from wallpaper
 - `sokratos-night-mode` - Toggle night light
 - `sokratos-focus-mode` - Minimal distraction mode
 - `sokratos-floaterminal` - Launch floating terminal
-- `sokratos-cheat-sheet` - Command reference
 - `sokratos-wf-recorder` - Screen recording
 - `sokratos-light-recorder` - Quick recording
+- `sokratos-cheat-sheet` - Command reference !
 - `refresh-app-daemons` - Restart UI components
-- `braincreate-tmux` - Note creation system
-- `brainsearch-tmux` - Note search
-- `rofi-sessionizer` - Project session manager
+- `braincreate-tmux` - Note creation system !
+- `brainsearch-tmux` - Note search !
 
 [See Scripts Reference for details](scripts.md)
 
-### Pre-configured Themes
+### Pre-configured Terminal Themes
 
 **Location**: `~/.local/share/sokratOS/themes/`
 
@@ -61,8 +68,7 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 ```
 themes/
 ├── catppuccin/
-│   ├── colors.conf
-│   └── ghostty-colors
+│   └── colors.conf
 ├── cyberpunk/
 ├── everforest/
 ├── gruvbox/
@@ -192,13 +198,12 @@ zathura/
 sokratOS/
 ├── current/
 │   └── theme/
-│       ├── colors.conf -> symlink to active theme
-│       └── ghostty-colors -> symlink to active theme
-├── matugen/            # Generated themes from wallpapers
+│       └── colors.conf -> symlink to active theme
+├── matugen/                    # Generated themes from wallpapers
 │   ├── hypr/colors.conf
 │   ├── kitty/mat-colors.conf
 │   ├── tmux/tmux-colors.conf
-│   └── .primary-hex.txt # Primary color for theme matching
+│   └── .primary-hex.txt        # Primary color for theme matching
 └── WELCOME.md          # First-boot message
 ```
 
@@ -226,11 +231,12 @@ Custom `.desktop` files for Rofi launcher.
 
 **Location**: `~/Pictures/wallpaper/`
 
-**Usage**: Theme switcher (`sokratos-next-theme`) looks here for wallpapers.
+**Usage**: Theme switcher (`sokratos-next-theme`) picks up wallpapers
+interactively from this location.
 
 **Add wallpapers**:
 ```bash
-cp new-wallpaper.jpg ~/Pictures/wallpaper/
+mv new-wallpaper.jpg ~/Pictures/wallpaper/ # move wallpaper to correct location
 ```
 
 ### Notes (Brain System)
@@ -442,7 +448,6 @@ If you want to change the defaults for fresh installations:
 - **[Scripts Reference](scripts.md)** - What each script does
 - **[Environment Variables](environment-variables.md)** - Env var details
 - **[Theme Switcher Guide](../04-tweaking-and-theming/theme-switcher.md)** - Theming system
-- **[Customization Guides](../04-tweaking-and-theming/waybar.md)** - UI customization
 
 ## Additional Resources
 

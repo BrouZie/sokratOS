@@ -2,7 +2,6 @@
 
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
 CURRENT_THEME_DIR="$HOME/.config/sokratOS/current/theme/colors.conf"
-CURRENT_THEME_DIR1="$HOME/.config/sokratOS/current/theme/ghostty-colors"
 
 notify-send 'Specify which colorscheme you want'
 
@@ -14,7 +13,6 @@ SELECTED_THEME=$(for theme in *; do echo -en "$theme\0icon\x1f$theme\n" ; done |
 
 if [ -n "$SELECTED_THEME" ]; then
 	ln -nsf "$THEMES_DIR"/"$SELECTED_THEME"/colors.conf "$CURRENT_THEME_DIR"
-	ln -nsf "$THEMES_DIR/$theme/ghostty-colors" "$CURRENT_THEME_DIR1"
 fi
 
 pkill -SIGUSR1 kitty

@@ -411,8 +411,6 @@ fi
 
 ## Next Steps
 
-- **[Waybar Customization](waybar.md)** - Status bar theming
-- **[Rofi Customization](rofi.md)** - Launcher theming
 - **[File Locations](../05-reference/file-locations.md)** - Where themes live
 - **[Scripts Reference](../05-reference/scripts.md)** - Theme script details
 

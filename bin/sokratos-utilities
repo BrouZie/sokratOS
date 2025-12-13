@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"󰸉 Change wallpaper"
+	"󰋱 Toggle Focus Mode"
+	"󰖔 Toggle Night Mode"
+	" Show Keybinds"
+	"󰚰 Update System"
+)
+
+# Count the number of options, but cap at 8
+NUM_OPTIONS=${#OPTIONS[@]}
+if [ $NUM_OPTIONS -gt 8 ]; then
+	NUM_OPTIONS=8
+fi
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+	rofi -dmenu -i -p "sokratOS Utilities" -mesg "Utilities" \
+	-theme-str '@import "~/.config/rofi/sokratos-run.rasi"' \
+	-theme-str "listview { lines: ${NUM_OPTIONS}; }")
+
+case "$SELECTED" in
+	*"Change wallpaper") sokratos-next-theme ;;
+	*"Toggle Focus Mode") sokratos-focus-mode ;;
+	*"Toggle Night Mode") sokratos-night-mode ;;
+	*"Update System") sokratos-floaterminal sokratos-update ;;
+	*"Show Keybinds") sokratos-show-keybinds ;;
+	*) exit ;;
+esac

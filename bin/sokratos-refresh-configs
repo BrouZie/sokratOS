@@ -4,6 +4,11 @@ set -euo pipefail
 
 CONFIG_ROOT="$HOME/.local/share/sokratOS/install/configs"
 
+abort() {
+  local code="${1:-130}"
+  return "$code" 2>/dev/null || exit "$code"
+}
+
 backup_path() {
 	# Given a path, move it to path.bak, path.bak1, path.bak2, ... (first free)
 	local path="$1"
@@ -133,10 +138,10 @@ while true; do
 			"tmux" \
 			"bash" \
 			"zsh"
-		) || exit 0
+		) || abort 130
 
 		if [ -z "${choices:-}" ]; then
-			gum style --foreground 214 "No configs selected. Try again."
+			gum style --foreground 214 "No configs selected. Use tab to select or ESC to cancel"
 			continue
 		fi
 
@@ -160,5 +165,3 @@ for choice in $choices; do
 		fzf-dirs) refresh_fzf_dirs ;;
 	esac
 done
-
-gum style --bold --margin "1 0" --foreground 46 "Refresh finished!"

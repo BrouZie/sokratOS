@@ -188,6 +188,9 @@ gum_spin "Copying configuration files..." "
     cp -r '$REPO_INSTALL/configs/applications/icons' '$HOME/.local/share/applications/'
 "
 
+# Configure keyboard layout based on system settings
+gum_spin "Configuring keyboard layout..." "source '$REPO_INSTALL/configs/configure-keyboard.sh'"
+
 echo ""
 gum style --foreground 147 "🔧 Setting up development tools..."
 

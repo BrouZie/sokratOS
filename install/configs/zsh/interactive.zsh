@@ -40,7 +40,7 @@ setopt AUTO_CD
 
 # History settings
 HISTSIZE=10000
-HISTFILE="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zsh_history"
+HISTFILE="$HOME/.zsh_history"
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 

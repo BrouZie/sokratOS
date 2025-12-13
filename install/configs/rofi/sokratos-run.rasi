@@ -1,0 +1,132 @@
+/* ---- 💫 sokratOS Script Runner Configuration ---- */
+
+/* ---- Configuration ---- */
+configuration {
+	font:                       "JetBrainsMono Nerd Font Propo 12";
+    show-icons:                 false;
+	hover-select:               true;
+	me-select-entry:            "MouseSecondary";
+    me-accept-entry:            "MousePrimary";
+	dpi:                        1;
+}
+
+/* ---- Load colors ---- */
+@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"
+
+/* ---- Global Properties ---- */
+* {
+    background-alt:              @on-primary-container;
+    selected:                    @primary;
+    active:                      @error;
+    urgent:                      @on-primary-fixed;
+    text-selected:               @surface-container-low;
+    text-color:                  @on-surface;
+    border-color:                @primary;
+    foreground:                  @on-surface;
+}
+
+/* ---- Window ---- */
+window {
+    enabled:                    true;
+    fullscreen:                 false;
+    transparency:               "real";
+    cursor:                     "default";
+    spacing:                    0px;
+    border:                     2px;
+    border-radius:              30px;
+    location:                   center;
+    anchor:                     center;
+    width:                      500px;
+    background-color:           @background;
+}
+
+/* ----- Main Box ----- */
+mainbox {
+    padding:                    15px;
+    enabled:                    true;
+    orientation:                vertical;
+    children:                   [ "inputbar", "message", "listview" ];
+    background-color:           transparent;
+}
+
+/* ---- Header/Message ---- */
+message {
+    enabled:                    true;
+    margin:                     10px 10px 60px 10px;
+    padding:                    15px;
+    border-radius:              20px;
+    background-color:           @selected;
+    text-color:                 @text-selected;
+}
+
+textbox {
+    background-color:           transparent;
+    text-color:                 inherit;
+    vertical-align:             0.5;
+    horizontal-align:           0.5;
+    font:                       "JetBrainsMono Nerd Font Propo Bold 14";
+}
+
+/* ---- Listview ---- */
+listview {
+    enabled:                    true;
+    columns:                    1;
+    lines:                      3;
+    cycle:                      true;
+    dynamic:                    false;
+    scrollbar:                  false;
+    layout:                     vertical;
+    reverse:                    false;
+    fixed-height:               true;
+    fixed-columns:              true;
+    spacing:                    15px;
+    margin:                     10px;
+    background-color:           transparent;
+    border:                     0px;
+}
+
+/* ---- Elements ---- */
+element {
+    enabled:                    true;
+    spacing:                    15px;
+    padding:                    20px;
+    border-radius:              15px;
+    background-color:           transparent;
+    text-color:                 @text-color;
+    cursor:                     pointer;
+}
+
+element normal.normal {
+    background-color:           transparent;
+    text-color:                 @text-color;
+}
+
+element selected.normal {
+    background-color:           @selected;
+    text-color:                 @text-selected;
+}
+
+element-text {
+    background-color:           transparent;
+    text-color:                 inherit;
+    font:                       "JetBrainsMono Nerd Font Propo 13";
+    cursor:                     inherit;
+    vertical-align:             0.5;
+    horizontal-align:           0.0;
+}
+
+/* ---- Input bar (invisible but functional) ---- */
+inputbar {
+    enabled:                    true;
+    children:                   [ "entry" ];
+    background-color:           transparent;
+}
+
+entry {
+    enabled:                    true;
+    padding:                    0px;
+    background-color:           transparent;
+    text-color:                 transparent;
+    cursor:                     text;
+    placeholder:                "";
+}
