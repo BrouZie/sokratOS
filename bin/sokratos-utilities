@@ -4,6 +4,7 @@ OPTIONS=(
 	"󰸉 Change wallpaper"
 	"󰋱 Toggle Focus Mode"
 	"󰖔 Toggle Night Mode"
+	" Show Keybinds"
 	"󰚰 Update System"
 )
 
@@ -23,5 +24,6 @@ case "$SELECTED" in
 	*"Toggle Focus Mode") sokratos-focus-mode ;;
 	*"Toggle Night Mode") sokratos-night-mode ;;
 	*"Update System") sokratos-floaterminal sokratos-update ;;
+	*"Show Keybinds") sokratos-show-keybinds ;;
 	*) exit ;;
 esac

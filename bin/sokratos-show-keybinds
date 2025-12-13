@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+
+# A script to display Hyprland keybindings from config files
+# using rofi for an interactive search menu.
+
+# ============================================================
+# CONFIGURATION - Update these paths to your config files
+# ============================================================
+CONFIG_FILE_1="$HOME/.config/hypr/configs/bindings.conf"
+CONFIG_FILE_2="$HOME/.config/hypr/configs/tiling.conf"
+
+declare -A KEYCODE_SYM_MAP
+
+build_keymap_cache() {
+  local keymap
+  keymap="$(xkbcli compile-keymap)" || {
+    echo "Failed to compile keymap" >&2
+    return 1
+  }
+
+  while IFS=, read -r code sym; do
+    [[ -z "$code" || -z "$sym" ]] && continue
+    KEYCODE_SYM_MAP["$code"]="$sym"
+  done < <(
+    awk '
+      BEGIN { sec = "" }
+      /xkb_keycodes/ { sec = "codes"; next }
+      /xkb_symbols/  { sec = "syms";  next }
+      sec == "codes" {
+        if (match($0, /<([A-Za-z0-9_]+)>\s*=\s*([0-9]+)\s*;/, m)) code_by_name[m[1]] = m[2]
+      }
+      sec == "syms" {
+        if (match($0, /key\s*<([A-Za-z0-9_]+)>\s*\{\s*\[\s*([^, \]]+)/, m)) sym_by_name[m[1]] = m[2]
+      }
+      END {
+        for (k in code_by_name) {
+          c = code_by_name[k]
+          s = sym_by_name[k]
+          if (c != "" && s != "" && s != "NoSymbol") print c "," s
+        }
+      }
+    ' <<<"$keymap"
+  )
+}
+
+lookup_keycode() {
+  printf '%s\n' "${KEYCODE_SYM_MAP[$1]}"
+}
+
+# Parse keybindings from config files
+config_bindings() {
+  local files=("$CONFIG_FILE_1" "$CONFIG_FILE_2")
+  
+  for file in "${files[@]}"; do
+    [[ ! -f "$file" ]] && continue
+    
+    # Parse bind lines, skip comments and empty lines
+    grep -E '^\s*(bind|bindm)' "$file" | \
+    grep -v '^\s*#' | \
+    sed -r 's/^\s*(bind[a-z]*)\s*=\s*//' | \
+    while IFS= read -r line; do
+      # Skip empty lines
+      [[ -z "$line" ]] && continue
+      
+      # Remove inline comments
+      line="${line%%#*}"
+      
+      # Parse the bind format: MODS, KEY, dispatcher, args...
+      # Split by comma, keeping everything after the third comma together
+      IFS=',' read -r mods key dispatcher args <<< "$line"
+      
+      # Trim whitespace
+      mods=$(echo "$mods" | xargs)
+      key=$(echo "$key" | xargs)
+      dispatcher=$(echo "$dispatcher" | xargs)
+      args=$(echo "$args" | xargs)
+      
+      # Build the output line
+      # Format: MODS,KEY,dispatcher,args
+      echo "${mods},${key},${dispatcher},${args}"
+    done
+  done
+}
+
+# Parse and format keybindings
+parse_bindings() {
+  while IFS=',' read -r mods key dispatcher args; do
+    # Skip empty lines
+    [[ -z "$key" ]] && continue
+    
+    # Handle code: prefix for keycodes
+    if [[ "$key" =~ ^code:([0-9]+)$ ]]; then
+      keycode="${BASH_REMATCH[1]}"
+      key=$(lookup_keycode "$keycode")
+      [[ -z "$key" ]] && key="code:$keycode"
+    fi
+    
+    # Handle mouse: prefix
+    if [[ "$key" =~ ^mouse:([0-9]+)$ ]]; then
+      mouse_code="${BASH_REMATCH[1]}"
+      case "$mouse_code" in
+        272) key="LEFT_MOUSE" ;;
+        273) key="RIGHT_MOUSE" ;;
+        274) key="MIDDLE_MOUSE" ;;
+        *) key="MOUSE_$mouse_code" ;;
+      esac
+    fi
+    
+    # Build key combination string
+    if [[ -n "$mods" ]]; then
+      key_combo="$mods + $key"
+    else
+      key_combo="$key"
+    fi
+    
+    # Build action description
+    if [[ "$dispatcher" == "exec" ]]; then
+      action="$args"
+    else
+      if [[ -n "$args" ]]; then
+        action="$dispatcher $args"
+      else
+        action="$dispatcher"
+      fi
+    fi
+    
+    # Clean up action
+    action=$(echo "$action" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+    
+    # Print formatted line
+    printf "%-30s → %s\n" "$key_combo" "$action"
+  done
+}
+
+prioritize_entries() {
+  awk '
+  {
+    line = $0
+    prio = 50
+    
+    # Application launchers
+    if (match(line, /kitty/)) prio = 0
+    if (match(line, /nautilus/)) prio = 1
+    if (match(line, /firefox/) && !match(line, /https/)) prio = 2
+    if (match(line, /rofi.*drun/)) prio = 3
+    
+    # System utilities
+    if (match(line, /hyprlock/)) prio = 10
+    if (match(line, /powermenu/)) prio = 11
+    if (match(line, /hyprpicker/)) prio = 12
+    if (match(line, /hyprshot/)) prio = 13
+    if (match(line, /recorder/)) prio = 14
+    if (match(line, /swaync/)) prio = 15
+    
+    # SokratOS utilities
+    if (match(line, /show-keybinds/)) prio = 20
+    if (match(line, /utilities/)) prio = 21
+    if (match(line, /themes/)) prio = 22
+    if (match(line, /next-theme/)) prio = 23
+    if (match(line, /refresh/)) prio = 24
+    
+    # Window management
+    if (match(line, /fullscreen/)) prio = 30
+    if (match(line, /killactive/)) prio = 31
+    if (match(line, /togglefloating/)) prio = 32
+    if (match(line, /togglesplit/)) prio = 33
+    if (match(line, /pseudo/)) prio = 34
+    
+    # Focus and movement
+    if (match(line, /movefocus/)) prio = 40
+    if (match(line, /swapwindow/)) prio = 41
+    if (match(line, /movewindow/)) prio = 42
+    if (match(line, /resizeactive/)) prio = 43
+    
+    # Workspaces
+    if (match(line, /workspace.*[0-9]/) && !match(line, /movetoworkspace/)) prio = 50
+    if (match(line, /movetoworkspace/)) prio = 51
+    if (match(line, /workspace.*e\+/)) prio = 52
+    if (match(line, /workspace.*e-/)) prio = 53
+    
+    # Web shortcuts (lower priority)
+    if (match(line, /https/)) prio = 60
+    
+    # Exit
+    if (match(line, /^exit/)) prio = 99
+    
+    printf "%d\t%s\n", prio, line
+  }' |
+  sort -k1,1n -k2,2 |
+  cut -f2-
+}
+
+# Main execution
+build_keymap_cache
+
+config_bindings |
+  parse_bindings |
+  prioritize_entries |
+  rofi -dmenu -i -p "Search in keybinds..." \
+    -theme-str 'window {width: 800px;}' \
+    -theme-str 'listview {lines: 8;}'
