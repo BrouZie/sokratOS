@@ -100,7 +100,7 @@ log "Auto-login configured"
 
 # Step 1.5: Sync package databases
 status_msg "Syncing package databases..."
-run_with_retry "sudo pacman -Sy"
+run_with_retry "sudo pacman -Syu"
 log "Package databases synced"
 
 # Step 2: Bootstrap paru (this takes a while)
@@ -134,7 +134,7 @@ fi
 
 # Step 3: Install gum for better UX
 status_msg "Installing gum for enhanced output..."
-run_with_retry "paru -S --noconfirm --needed gum"
+run_with_retry "sudo pacman -S --noconfirm --needed gum"
 log "Gum installed"
 
 # Now we can use gum for better output!
