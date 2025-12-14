@@ -54,7 +54,7 @@ The installer will automatically handle:
 The installation is organized into several modules:
 
 #### Prerequisites
-- **AUR helper** (paru) for installing AUR packages
+- **AUR helper** (yay) for installing AUR packages
 - **Network tools** (NetworkManager)
 - **Graphics drivers**:
   - Intel graphics support (automatic)
@@ -88,7 +88,7 @@ The installation is organized into several modules:
 
 ### Step 3: Installation Duration
 
-The installation typically takes **20-45 minutes** depending on:
+The installation typically takes **6-10 minutes** depending on:
 - Your internet connection speed
 - Hardware specifications
 - Whether you're installing NVIDIA drivers

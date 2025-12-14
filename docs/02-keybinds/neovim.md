@@ -231,24 +231,14 @@ These keybinds are defined by plugins installed in sokratOS neovim config:
 
 | Keybind | Action | Description |
 |---------|--------|-------------|
-| `<leader>ff` | Find files | Search files in project |
-| `<leader>fg` | Live grep | Search text in files |
-| `<leader>fb` | Find buffers | Search open buffers |
-| `<leader>fh` | Find help | Search help docs |
+| `<leader>f` | Find files | Search files in project |
+| `<leader>g` | Live grep | Search text in files |
+| `<leader>#` | Find buffers | Search open buffers |
+| `<leader>h` | Find help | Search help docs |
 | `<leader>E` | Environment vars | Browse environment variables |
 | `<leader>ts` | TODO search | Find TODO comments |
 
 **Plugin**: telescope.nvim
-
-### Todo Comments
-
-| Keybind | Action | Description |
-|---------|--------|-------------|
-| `<leader>ts` | Todo Telescope | Search all TODO comments |
-
-**Defined in**: `~/.config/nvim/lua/brouzie/core/keymaps.lua` line 6
-
-**Searches for**: `TODO:`, `FIXME:`, `HACK:`, `NOTE:`, etc.
 
 ### Terminal Mode
 

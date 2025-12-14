@@ -1,12 +1,27 @@
-# SokratOS
+# sokratOS
 
-> A biased, opinionated Arch Linux + Hyprland setup focused on productivity, customization, aesthetics and vim motions
+> An opinionated Arch Linux + Hyprland environment built for productivity, aesthetics, and Vim-style navigation.
 
-SokratOS is a comprehensive dotfiles and configuration system for Arch Linux featuring the Hyprland compositor. It provides an elegant, functional desktop environment with dynamic theming, custom utilities, and a curated selection of tools for development and daily use.
+**sokratOS** is a curated dotfiles and configuration system for Arch Linux centered around the **Hyprland** Wayland compositor. It aims to provide a cohesive, efficient desktop environment with strong keyboard-driven workflows, dynamic theming, and a carefully selected toolchain for development and daily use.
 
-> [!IMPORTANT]
-> **sokratOS is built around Vim-style navigation.** Most menus, navigation, and custom shortcuts assume `hjkl` and `Ctrl + p/n`.
-> If you’re new to Vim motions, run `vimtutor` in your terminal to get up to speed.
+This is **not** a general-purpose Linux setup — it reflects specific opinions about how a desktop *should* feel and behave.
+
+---
+
+## ⚠️ Vim-Centric Workflow
+
+> **sokratOS assumes familiarity with *vim-motions*
+
+Most menus, launchers, window navigation, and custom keybindings rely heavily on:
+
+- `hjkl` for movement  
+- `Ctrl + p / Ctrl + n` for selection
+
+If you’re new to Vim motions, it’s highly recommended to run:
+
+```bash
+vimtutor
+```
 
 ## ✨ Features
 
@@ -16,22 +31,17 @@ SokratOS is a comprehensive dotfiles and configuration system for Arch Linux fea
 - 🔧 **Development Ready**: Docker, development tools, and Neovim configuration included
 - 📱 **Modern UI Components**: Waybar, Rofi, SwayNC for notifications and menus
 
-## 📚 Documentation
-
-**New to sokratOS?** Start here:
-- 📖 **[Complete Documentation](docs/index.md)** - Full documentation hub
-- 🚀 **[Installation Guide](docs/01-getting-started/installation-arch.md)** - Get started
-- 🎯 **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** - Learn the basics
-- ⌨️ **[Keybinds Overview](docs/02-keybinds/overview.md)** - Essential shortcuts
-- 🔧 **[Troubleshooting](docs/90-troubleshooting/common-issues.md)** - Fix common issues
-
 ## 📸 Preview
 
 ![preview1](docs/images/preview4.png)
 
 ![preview2](docs/images/preview3.png)
 
-## 🚀 Installation
+## 🚀 Quick Start
+
+### Installation example
+
+https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
 
 ### Prerequisites
 
@@ -39,99 +49,30 @@ SokratOS is a comprehensive dotfiles and configuration system for Arch Linux fea
 - Internet connection
 - Go through a base archinstall
 
-### Video example
+### Installation
 
-https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
+**From a fresh archinstall**:
 
-### Quick Start
+1. Clone the repository and run the installer:
+   ```bash
+   sudo pacman -S git --needed
+   git clone https://github.com/BrouZie/sokratOS.git ~/.local/share/sokratOS
+   bash ~/.local/share/Sokratos/install.sh
+   ```
 
-1. Clone the repository:
-```bash
-sudo pacman -S git --needed
+> [!NOTE] Visit the **[Installation Guide](docs/01-getting-started/installation-arch.md)** if you are struggling with the installation steps
 
-git clone https://github.com/BrouZie/sokratOS.git ~/.local/share/sokratOS
-```
+### Post-installation
 
-2. Run the installation script:
-```bash
-bash ~/.local/share/Sokratos/install.sh
-```
+1. Configure your monitor settings:
+    ```bash
+    nvim ~/.config/hypr/configs/monitors.conf
+    ```
+2. [Install pywalfox](https://addons.mozilla.org/en-US/firefox/addon/pywalfox/)
+3. Change wallpaper with `SUPER + SHIFT + Space`
+1. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
 
-The installer will:
-- Set up auto-login configuration
-- Install all required packages (from official repos and AUR)
-- Configure Hyprland and all desktop components
-- Set up terminal tools and development environment
-- Install and configure themes
-- Set up custom utility scripts
-- Reboot the user into Hyprland-setup
-
-## 📦 Included Components
-
-### Desktop Environment
-
-- **Compositor**: Hyprland with custom configuration
-- **Bar**: Waybar with custom modules
-- **Launcher**: Rofi application launcher
-- **Notifications**: SwayNC notification daemon
-- **Lock Screen**: Hyprlock
-- **Idle Manager**: Hypridle
-- **Wallpaper**: swww wallpaper daemon
-
-### Terminal & CLI Tools
-
-- **Terminal**: Kitty with custom theming
-- **Shell**: Bash with custom configuration
-- **Multiplexer**: Tmux with custom configuration
-- **Editor**: Neovim with custom configuration
-- **System Monitor**: btop
-- **System Info**: fastfetch
-
-### Development Tools
-
-- Docker & Docker Compose
-- Various language toolchains
-- UV (Python package manager)
-- Version control tools
-
-### Theming System
-
-- **matugen**: Material color generation from wallpapers
-- **pywalfox**: Firefox theme integration
-
-## 🛠️ Custom Utilities
-
-SokratOS provides several custom scripts in the `bin` directory:
-
-- `sokratos-next-theme`: Interactive theme selector
-- `sokratos-night-mode`: Toggle night mode
-- `sokratos-focus-mode`: Minimize distractions
-- `sokratos-floaterminal`: Launch floating terminal
-- `sokratos-cheat-sheet`: Quick cheat.sh utilizing curl
-- `sokratos-wf-recorder`: Screen recording helper
-- `refresh-app-daemons`: Restart UI components
-- `sokratos-refresh-configs`: Restore configs to default
-
-📖 **[Complete Scripts Reference](docs/05-reference/scripts.md)**
-
-## ⚙️ Configuration
-
-### User Configurations
-
-After installation, you can customize your setup by editing these files:
-
-- `~/.config/hypr/hyprland.conf`: Placeholder for all other configs!
-- `~/.config/hypr/configs/bindings.conf`: Custom keybindings
-- `~/.config/hypr/configs/envs.conf`: Environment variables
-- `~/.config/hypr/configs/monitors.conf`: Monitor configuration
-- `~/.config/hypr/configs/autostart.conf`: Autostart applications
-
-### Theme Configuration
-
-The current terminal theme is symlinked at:
-- `~/.config/sokratos/current/theme/colors.conf`
-
-📖 **[File Locations Reference](docs/05-reference/file-locations.md)** | **[Theme Switcher Guide](docs/04-tweaking-and-theming/theme-switcher.md)**
+> [!NOTE] Visit the **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** for further instructions
 
 ## 📁 Project Structure
 
@@ -146,36 +87,7 @@ Sokratos/
 │   ├── terminal/          # Terminal and CLI tools
 │   └── xtras/             # Additional features
 ├── themes/                # Pre-configured color schemes
-├── default/               # Default configurations
-├── share/                 # Shared data
 └── install.sh             # Main installation script
-```
-
-## 🔧 Post-Installation
-
-### Setting Up Monitors
-
-Edit `~/.config/hypr/configs/monitors.conf` to configure your displays:
-
-```conf
-# Example:
-monitor=DP-1,1920x1080@144,0x0,1
-```
-
-### Adding Keybindings
-
-Add custom keybindings to `~/.config/hypr/configs/bindings.conf`:
-
-```conf
-bind = SUPER, F, exec, nautilus # File manager
-```
-
-### Autostart Applications
-
-Add applications to launch at startup in `~/.config/hypr/configs/autostart.conf`:
-
-```conf
-exec-once = discord
 ```
 
 ## 🎯 Hardware Support

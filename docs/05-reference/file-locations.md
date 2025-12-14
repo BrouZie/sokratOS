@@ -30,16 +30,6 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 - `themes/` - Pre-configured color schemes for the terminal
 - `docs/` - Documentation (this site)
 
-**Important**: This is the source. Don't edit here unless you want to modify defaults.
-
-### Custom Scripts
-
-**Location**: `~/.local/bin`
-
-**Scripts** (referenced in `$PATH`):
-
-(New section to be continued...)
-
 ### sokratOS utility scripts
 
 **Location**: `~/.local/share/sokratos/bin`

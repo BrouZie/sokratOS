@@ -13,6 +13,10 @@ Welcome to sokratOS! This guide will walk you through your first experience and 
 1. Fix your monitor setup in `~/.config/hypr/configs/monitors.conf`
 2. [Install pywalfox](https://addons.mozilla.org/en-US/firefox/addon/pywalfox/)
 3. Change wallpaper with `SUPER + SHIFT + Space`
+1. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
+
+> [!NOTE] I highly encourage switching ESC for Caps Lock in
+> `~/.config/hypr/configs/input.conf`
 
 ## What to Expect on First Boot
 
@@ -20,11 +24,12 @@ After installation and reboot, you'll be automatically logged into Hyprland. Her
 
 1. **Wallpaper** - A default wallpaper from `~/Pictures/wallpaper/`
 2. **Waybar** - Status bar at the top showing:
-   - Workspaces (1-10)
-   - Window title
-   - Audio volume
-   - Network status
-   - Date and time
+    - Arch logo button that opens the **utilities** menu
+    - Workspaces (1-5)
+    - Window title
+    - Audio volume
+    - Network status
+    - Date and time
 3. **Welcome Message** - A terminal window with a welcome message
 
 ## Your First 5 Minutes
@@ -44,6 +49,12 @@ Press `SUPER + Space`
 The **Rofi launcher** appears. Type "firefox" and press Enter.
 
 Firefox will open. You now know how to launch any application!
+
+### 2.5. Open the Utilities hub (20 seconds)
+
+Click the Arch logo in the Waybar (top-left) or run `sokratos-utilities` from the terminal.
+
+This menu is the quickest way to change wallpaper/theme, toggle focus or night mode, run updates, and look up keybinds. Spend a minute here so you know where these essentials live.
 
 ### 3. Navigate Workspaces (10 seconds)
 
@@ -188,6 +199,7 @@ In tmux:
 - `Ctrl-Space + s` - Split horizontally
 - `Ctrl-Space + h/j/k/l` - Navigate between panes
 - `Ctrl-Space + d` - Detach from session
+- `Ctrl-q` - Kill pane
 
 See the [Tmux Guide](../02-keybinds/tmux.md) for more!
 
@@ -235,19 +247,25 @@ Screenshots are saved to `~/Pictures/` by default.
 
 ## Accessing the Status Bar
 
-The Waybar at the top shows:
+Click or hover Waybar modules at the top:
 
 **Left Side**:
-- Workspaces (click to switch)
-- Active window title
+- Arch logo
+- Workspaces
+
+**Middle**:
+- Clock
 
 **Right Side**:
-- System tray
-- Volume (click to adjust)
-- Network (click for options)
-- Clock (shows date/time)
+- CPU
+- Memory
+- Audio
+- Bluetooth
+- Network
+- Performance
+- Powermenu
 
-**Right-click** on Waybar to reload it: `SUPER + R`
+Toggle on/off with: `SUPER + R`
 
 ## File Manager Basics
 
@@ -299,7 +317,6 @@ Now that you're familiar with the basics:
 
 ### Customize Your Setup
 - [Theme Switcher Deep Dive](../04-tweaking-and-theming/theme-switcher.md)
-- [Waybar Configuration](../04-tweaking-and-theming/waybar.md)
 - [Adding Your Own Keybinds](../05-reference/file-locations.md)
 
 ## Pro Tips

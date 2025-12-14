@@ -269,8 +269,75 @@ github-tmux
 sokratos-quick-search
 ```
 
-**What it does**: Provides quick navigation shortcuts or menu based on
-predefined directories
+**How it works**:
+- Sources directory presets from `~/.config/sokratOS/env.d/fzf-dirs.sh`
+- Opens an fzf list with previews and jumps into the selected directory
+- Launches Neovim in that location; accepts an optional path argument to skip fzf
+
+---
+
+### sokratos-show-keybinds
+
+**Purpose**: Searchable Hyprland keybind list
+
+**Usage**:
+```bash
+sokratos-show-keybinds
+```
+
+**How it works**:
+- Parses `~/.config/hypr/configs/bindings.conf` and `tiling.conf`
+- Maps Hyprland `code:` bindings to readable key names
+- Shows a Rofi menu with formatted `modifier + key → action` entries
+
+---
+
+### sokratos-utilities
+
+**Purpose**: One-stop Rofi menu for common sokratOS actions
+
+**Usage**:
+```bash
+sokratos-utilities
+```
+
+**Menu actions**:
+- Change wallpaper/theme (calls `sokratos-next-theme`)
+- Toggle focus mode or night mode
+- Show keybinds (`sokratos-show-keybinds`)
+- Update system (opens a floating terminal and runs `sokratos-update`)
+
+---
+
+### sokratos-update
+
+**Purpose**: Update sokratOS files and system packages
+
+**Usage**:
+```bash
+sokratos-update
+```
+
+**What it does**:
+- Pulls the latest repo changes from `~/.local/share/sokratOS`
+- Updates packages with `paru -Syu` (falls back to `sudo pacman -Syu`)
+- Optionally launches `sokratos-refresh-configs` to reapply dotfiles
+
+---
+
+### sokratos-refresh-configs
+
+**Purpose**: Reapply default configs with backups
+
+**Usage**:
+```bash
+sokratos-refresh-configs
+```
+
+**Features**:
+- Menu-driven selection for Bash, Zsh, tmux, Hyprland, Waybar, Rofi, Neovim, SwayNC, fzf dirs, and ROS2 docker files
+- Backs up existing files to `.bak`, `.bak1`, etc. before copying
+- Uses the curated configs from `~/.local/share/sokratOS/install/configs/`
 
 ---
 

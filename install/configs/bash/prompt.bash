@@ -13,7 +13,7 @@ COLOR_USER='\[\e[38;5;242m\]'
 COLOR_USER_ROOT='\[\e[0m\]'        # default
 COLOR_HOST='\[\e[38;5;242m\]'
 COLOR_VENV='\[\e[38;5;242m\]'
-COLOR_PROMPT_OK='\[\e[35m\]'       # magenta
+COLOR_PROMPT_OK='\[\e[34m\]'       # blue
 COLOR_PROMPT_ERROR='\[\e[31m\]'
 COLOR_CONTINUATION='\[\e[38;5;242m\]'
 
