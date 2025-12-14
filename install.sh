@@ -100,7 +100,7 @@ log "Auto-login configured"
 
 # Step 1.5: Sync package databases
 status_msg "Syncing package databases..."
-run_with_retry "sudo pacman -Syu"
+run_with_retry "sudo pacman -Sy"
 log "Package databases synced"
 
 # Step 2: Bootstrap paru (this takes a while)
@@ -108,24 +108,13 @@ status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
 log "Starting paru bootstrap"
 
 if ! command -v paru &> /dev/null; then
-    # Try to install paru-bin (pre-compiled) first, fall back to building from source
     (
         cd /tmp
-        rm -rf paru-bin paru
-        
-        # Try paru-bin first (faster, avoids compilation issues)
-        if run_with_retry "git clone https://aur.archlinux.org/paru-bin.git"; then
-            cd paru-bin
-            makepkg -si --noconfirm
-        else
-            # Fallback to building from source
-            log "paru-bin failed, trying source build"
-            cd /tmp
-            rm -rf paru
-            run_with_retry "git clone https://aur.archlinux.org/paru.git"
-            cd paru
-            makepkg -si --noconfirm
-        fi
+        # Clean up any previous failed attempts
+        rm -rf paru
+        run_with_retry "git clone https://aur.archlinux.org/paru.git"
+        cd paru
+        makepkg -si --noconfirm
     ) >> "$LOG_FILE" 2>&1
     log "Paru bootstrap complete"
 else
