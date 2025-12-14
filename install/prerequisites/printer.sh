@@ -20,7 +20,7 @@ run_with_retry() {
     return 1
 }
 
-# Install printing stack with paru (better for VMs and network issues)
+# Install printing stack with pacman (better for VMs and network issues)
 run_with_retry "sudo pacman -S --needed --noconfirm cups cups-filters avahi nss-mdns"
 
 # Enable services

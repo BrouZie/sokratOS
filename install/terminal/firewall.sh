@@ -1,5 +1,5 @@
 if ! command -v ufw &>/dev/null; then
-  paru -S --noconfirm --needed ufw ufw-docker
+  yay -S --noconfirm --needed ufw ufw-docker
 
   # Allow nothing in, everything out
   sudo ufw default deny incoming

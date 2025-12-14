@@ -1,4 +1,4 @@
-paru -S --noconfirm --needed docker docker-compose docker-buildx
+yay -S --noconfirm --needed docker docker-compose docker-buildx
 
 # Configure Docker daemon:
 # - limit log size to avoid running out of disk

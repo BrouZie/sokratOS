@@ -1,4 +1,4 @@
-paru -S --noconfirm --needed \
+yay -S --noconfirm --needed \
 	otf-font-awesome ttf-rubik-vf \
 	noto-fonts noto-fonts-emoji  noto-fonts-cjk noto-fonts-extra \
 	ttf-jetbrains-mono-nerd papirus-folders papirus-icon-theme \

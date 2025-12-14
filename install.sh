@@ -104,22 +104,22 @@ run_with_retry "sudo pacman -Syu"
 log "Package databases synced"
 
 # Step 2: Bootstrap paru (this takes a while)
-status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
-log "Starting paru bootstrap"
+# status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
+# log "Starting paru bootstrap"
 
-if ! command -v paru &> /dev/null; then
-    (
-        cd /tmp
-        # Clean up any previous failed attempts
-        rm -rf paru
-        run_with_retry "git clone https://aur.archlinux.org/paru.git"
-        cd paru
-        makepkg -si --noconfirm
-    ) >> "$LOG_FILE" 2>&1
-    log "Paru bootstrap complete"
-else
-    log "Paru already installed, skipping bootstrap"
-fi
+# if ! command -v paru &> /dev/null; then
+#     (
+#         cd /tmp
+#         # Clean up any previous failed attempts
+#         rm -rf paru
+#         run_with_retry "git clone https://aur.archlinux.org/paru.git"
+#         cd paru
+#         makepkg -si --noconfirm
+#     ) >> "$LOG_FILE" 2>&1
+#     log "Paru bootstrap complete"
+# else
+#     log "Paru already installed, skipping bootstrap"
+# fi
 
 # Step 3: Install gum for better UX
 status_msg "Installing gum for enhanced output..."

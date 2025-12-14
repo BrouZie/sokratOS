@@ -1,4 +1,4 @@
-paru -S --noconfirm --needed \
+yay -S --noconfirm --needed \
   kitty wget curl 7zip unzip pandoc-cli \
   fd eza fzf rmapi ripgrep zoxide bat jq \
   ttyper wl-clipboard fastfetch btop usbutils pastel \

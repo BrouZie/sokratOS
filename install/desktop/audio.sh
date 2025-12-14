@@ -1,3 +1,3 @@
 # Audio stack
-paru -S --needed --noconfirm \
+yay -S --needed --noconfirm \
 	pamixer wiremix playerctl cava pavucontrol alsa-utils

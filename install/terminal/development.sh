@@ -1,4 +1,4 @@
-paru -S --noconfirm --needed \
+yay -S --noconfirm --needed \
   cargo clang llvm zig jq tectonic \
   imagemagick ipython uv go npm nodejs \
   mariadb-libs github-cli xorg-xhost \
