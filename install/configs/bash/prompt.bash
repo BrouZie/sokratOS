@@ -33,52 +33,51 @@ PROMPT_GIT_DIRTY=""
 
 # Detect if inside a container (docker/podman/etc.)
 _prompt_is_inside_container() {
-	[[ -f "/.dockerenv" ]] && return 0
-	[[ -f "/run/.containerenv" ]] && return 0
-	if [[ -r /proc/1/cgroup ]] && grep -Eq '(docker|kubepods|containerd|lxc)' /proc/1/cgroup 2>/dev/null; then
-		return 0
-	fi
-	return 1
+  [[ -f "/.dockerenv" ]] && return 0
+  [[ -f "/run/.containerenv" ]] && return 0
+  if [[ -r /proc/1/cgroup ]] && grep -Eq '(docker|kubepods|containerd|lxc)' /proc/1/cgroup 2>/dev/null; then
+    return 0
+  fi
+  return 1
+}
+
+PROMPT_IN_CONTAINER=0
+if _prompt_is_inside_container; then
+  PROMPT_IN_CONTAINER=1
+fi
+
+_prompt_sanitize() {
+  # Remove ASCII control chars (incl ESC). Keep tabs and printable chars.
+  LC_ALL=C printf '%s' "$1" | tr -d '\000-\010\013\014\016-\037\177'
 }
 
 # ---------- Git info (branch + dirty only, sync) ----------
 
 _prompt_git_info() {
-	PROMPT_IN_GIT=0
-	PROMPT_GIT_BRANCH=""
-	PROMPT_GIT_DIRTY=""
+  PROMPT_IN_GIT=0
+  PROMPT_GIT_BRANCH=""
+  PROMPT_GIT_DIRTY=""
 
-	# Are we in a git repo?
-	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+	command -v git >/dev/null 2>&1 || return 0
 
-	PROMPT_IN_GIT=1
+  # Are we in a git repo?
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+  PROMPT_IN_GIT=1
 
-	# Branch name (or short SHA as fallback)
-	PROMPT_GIT_BRANCH=$(
-		git symbolic-ref --short HEAD 2>/dev/null ||
-			git rev-parse --short HEAD 2>/dev/null ||
-			echo '?'
-		)
+  # Branch name (or short SHA as fallback)
+  PROMPT_GIT_BRANCH=$(
+    git rev-parse --abbrev-ref HEAD 2>/dev/null ||
+      git rev-parse --short HEAD 2>/dev/null ||
+      echo '?'
+  )
 
-		local dirty=0
-
-		# Detect dirty status (tracked + untracked)
-		if git rev-parse --verify HEAD >/dev/null 2>&1; then
-			if ! git diff-index --quiet HEAD -- 2>/dev/null; then
-				dirty=1
-			fi
-		fi
-
-		if [[ -n "$(git status --porcelain --untracked-files=normal 2>/dev/null)" ]]; then
-			dirty=1
-		fi
-
-		if [[ $dirty -eq 1 ]]; then
-			PROMPT_GIT_DIRTY="$PURE_GIT_DIRTY"
-		else
-			PROMPT_GIT_DIRTY=""
-		fi
-	}
+  # Dirty? (tracked + untracked) — single scan
+  if [[ -n "$(GIT_OPTIONAL_LOCKS=0 GIT_PAGER=cat git status --porcelain --untracked-files=normal 2>/dev/null)" ]]; then
+    PROMPT_GIT_DIRTY="$PURE_GIT_DIRTY"
+  else
+    PROMPT_GIT_DIRTY=""
+  fi
+}
 
 # ---------- Path formatting ----------
 # - Inside git repo: show only basename (or ~ for $HOME).
@@ -105,6 +104,7 @@ _prompt_format_path() {
 		segments=( "~" )
 	elif [[ $PWD == "$HOME"/* ]]; then
 		rel=${PWD#"$HOME"/}      # e.g. ".local/share/applications"
+		local -a segments_rest
 		IFS='/' read -r -a segments_rest <<< "$rel"
 		segments=( "~" "${segments_rest[@]}" )
 	else
@@ -164,7 +164,7 @@ _prompt_userhost() {
 	host_color=$COLOR_HOST
 
 	# Show user@host if: SSH, container, or root.
-	if [[ -n $ssh ]] || _prompt_is_inside_container || (( EUID == 0 )); then
+	if [[ -n $ssh ]] || (( PROMPT_IN_CONTAINER )) || (( EUID == 0 )); then
 		out+="${user_color}\u${RESET}${host_color}@\h${RESET} "
 	fi
 
@@ -181,7 +181,7 @@ _prompt_update_prompt() {
 
 	# 2) Path string according to our rules
 	local path_str
-	path_str=$(_prompt_format_path)
+	path_str=$(_prompt_sanitize "$(_prompt_format_path)")
 
 	# 3) user@host (only when SSH/container/root)
 	local user_host
@@ -234,4 +234,8 @@ _prompt_update_prompt() {
 }
 
 # Hook our function into PROMPT_COMMAND
-PROMPT_COMMAND=_prompt_update_prompt
+if [[ -n ${PROMPT_COMMAND:-} ]]; then
+  PROMPT_COMMAND="_prompt_update_prompt; $PROMPT_COMMAND"
+else
+  PROMPT_COMMAND="_prompt_update_prompt"
+fi
