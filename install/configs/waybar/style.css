@@ -28,7 +28,7 @@ tooltip label {
 }
 
 #workspaces {
-	margin: 0.4em 2em;
+	margin: 0.4em 1em;
 }
 
 #workspaces button {
@@ -60,6 +60,7 @@ tooltip label {
     background-color: @on_error;
 }
 
+#custom-sOS,
 #clock,
 #cpu,
 #memory,
@@ -81,31 +82,28 @@ tooltip label {
 }
 
 #battery.warning {
-	color: @error;
+	background-color: @on_tertiary;
 }
 
 #battery.critical {
-	background-color: @error_container;
+	background-color: @on_error;
 }
 
 #power-profiles-daemon {
 	background-color: @surface_container;
 	padding: 0 0.9em;
 	border-radius: 1em;
-	margin: 0 0 0 0.6em;
+	margin: 0 0.6em 0 0.6em;
 }
 
 #power-profiles-daemon.performance {
-    background-color: @on_error;
-    color: #e1c365;
+  color: @error;
 }
 
 #power-profiles-daemon.balanced {
-    background-color: #2980b9;
-    color: #ffffff;
+  color: @tertiary;
 }
 
 #power-profiles-daemon.power-saver {
-    background-color: #2ecc71;
-    color: #000000;
+  color: @secondary;
 }
