@@ -100,7 +100,7 @@ log "Auto-login configured"
 
 # Step 1.5: Sync package databases
 status_msg "Syncing package databases..."
-run_with_retry "sudo pacman -Sy"
+run_with_retry "sudo pacman -Syu"
 log "Package databases synced"
 
 # Step 2: Bootstrap paru (this takes a while)
