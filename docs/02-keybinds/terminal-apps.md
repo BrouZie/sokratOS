@@ -40,13 +40,14 @@ Custom scripts that enhance your workflow:
 | Keybind | Script | Description |
 |---------|--------|-------------|
 | `SUPER + Shift + Space` | `sokratos-next-theme` | Select wallpaper and apply theme |
-| `SUPER + Shift + P` | `sokratos-themes` | Quick theme switcher menu |
+| `SUPER + Shift + P` | `sokratos-themes` | Quick terminal-color switcher |
 
 **Script locations**: `~/.local/share/sokratOS/bin/`
 
 **How they work**:
 - `sokratos-next-theme`: Opens Rofi with wallpapers, generates theme with matugen
-- `sokratos-themes`: Opens Rofi with 11 pre-configured themes
+- `sokratos-themes`: Opens Rofi with 11 well-known themes (e.g. catppuccin,
+  nord, gruvbox etc.)
 
 [Learn more: Theme Switcher Guide](../04-tweaking-and-theming/theme-switcher.md)
 
@@ -108,10 +109,6 @@ bind = $mainMod, C, exec, firefox "https://your-school-portal.edu"
 - Documentation sites
 - Your own projects
 
-## Additional Utilities (No Keybinds)
-
-These utilities don't have default keybinds but can be run from terminal:
-
 ### Focus and Productivity
 
 ```bash
@@ -123,24 +120,17 @@ sokratos-night-mode
 
 # Floating terminal (useful in scripts)
 sokratos-floaterminal
-
-# Quick command reference
-sokratos-cheat-sheet
 ```
 
 ### Development Utilities
 
 ```bash
-# Brain note-taking utilities (used with tmux keybinds)
-braincreate-tmux
-brainsearch-tmux
-brain-sort
+# Navigation inside tmux and from cli
+# Inside tmux: prefix + f
+# Inside cli: Ctrl + f
+sokratos-quick-search 
 
-# Project sessionizer (tmux sessions for projects)
-rofi-sessionizer
-
-# Session management
-session-toggle
+# Open current repo url in browser (prefix + G)
 github-tmux
 ```
 
@@ -165,7 +155,7 @@ bind = SUPER, M, exec, kitty -e ncmpcpp
 
 ### Launch in Floating Mode
 
-For apps that work better floating:
+For tuis that work better floating:
 
 ```conf
 # Use sokratos-floaterminal helper
@@ -201,27 +191,6 @@ btop                # System monitor
 htop                # Alternative system monitor
 ```
 
-### File Management
-
-```bash
-eza                 # Modern ls replacement
-eza -la             # List all files with icons
-eza --tree          # Tree view
-```
-
-### Media
-
-```bash
-cava                # Audio visualizer (play music first!)
-```
-
-### Development
-
-```bash
-docker              # Container management
-docker-compose      # Multi-container apps
-```
-
 ## Rofi Application Launcher Usage
 
 `SUPER + Space` opens Rofi, then:
@@ -230,35 +199,6 @@ docker-compose      # Multi-container apps
 2. **Arrow keys**: Navigate results
 3. **Enter**: Launch selected application
 4. **Escape**: Cancel
-
-### Rofi Tips
-
-- Type partial names: "fire" finds Firefox
-- Case insensitive: "FIREFOX" = "firefox"
-- Fuzzy matching: "frfx" might find Firefox
-- Recent apps appear first
-
-### Rofi Modes
-
-By default, Rofi shows installed applications. Access other modes:
-
-```bash
-# Show running windows
-rofi -show window
-
-# Run arbitrary command
-rofi -show run
-
-# SSH connections (if configured)
-rofi -show ssh
-```
-
-Add keybinds for these in `bindings.conf`:
-
-```conf
-bind = SUPER ALT, Space, exec, rofi -show run
-bind = SUPER, Tab, exec, rofi -show window
-```
 
 ## System Integration
 
@@ -340,5 +280,4 @@ export PATH="$HOME/.local/share/sokratOS/bin:$PATH"
 
 - **[Tmux Keybinds](tmux.md)** - Terminal multiplexer shortcuts
 - **[Scripts Reference](../05-reference/scripts.md)** - Detailed script documentation
-- **[Customization Guide](../04-tweaking-and-theming/rofi.md)** - Customize Rofi appearance
 - **[Workflow Guide](../03-workflows/terminal-workflow.md)** - Efficient terminal usage

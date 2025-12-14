@@ -252,85 +252,6 @@ next
 print variable
 ```
 
-# IPython REPL
-ipython
-```
-
-## Testing Workflow
-
-### Running Tests
-
-**Pattern**: Editor + test runner
-
-```bash
-# Pane 1: Editor
-nvim .
-
-# Pane 2: Test runner (watch mode)
-Ctrl-Space + s
-pytest --watch
-# or
-npm test -- --watch
-# or
-cargo watch -x test
-```
-
-**Workflow**:
-1. Write test in editor
-2. Save file
-3. See results in bottom pane
-4. Red → Green → Refactor
-
-### Test-Driven Development (TDD)
-
-```bash
-# Write failing test
-<leader>w       # Save
-
-# See test fail in bottom pane
-
-# Write implementation
-<leader>w       # Save
-
-# See test pass
-
-# Refactor
-```
-
-## Docker Development
-
-### Docker Compose Workflow
-
-```bash
-# Window 1: Editor
-nvim .
-
-# Window 2: Docker services
-Ctrl-Space + enter
-docker-compose up
-
-# Window 3: Service logs
-Ctrl-Space + enter
-docker-compose logs -f api
-
-# Window 4: Database client
-Ctrl-Space + enter
-docker-compose exec postgres psql -U user -d database
-```
-
-### Container Shell Access
-
-```bash
-# Quick access to running container
-docker-compose exec service bash
-
-# Or with custom tmux keybind
-Ctrl-Space + :
-bind-key D run-shell "tmux neww docker-compose exec api bash"
-```
-
-## Performance Monitoring
-
 ### Watch Resource Usage
 
 ```bash
@@ -355,7 +276,7 @@ nethogs
 
 ```bash
 # Quick commits
-<leader>Gs      # Git status
+<leader>GS      # Git status
 -               # Stage file
 cc              # Commit
 # Write message, save, close
@@ -376,37 +297,6 @@ git add .
 git commit -m "message"
 git push
 git pull --rebase
-```
-
-## Quick Notes While Coding
-
-### Brain Notes System
-
-```bash
-# In tmux
-Ctrl-Space + n       # Open note creator
-
-# Select note type:
-# - snippets: Code snippets
-# - cheatsheet: Command reference
-# - school: Study notes
-# - full_notes: Deep understanding
-
-# Takes you to neovim to write note
-```
-
-**Location**: `~/Documents/2ndBrain/`
-
-### Quick Cheat Sheet
-
-```bash
-# In tmux
-Ctrl-Space + i       # Open cheat.sh
-
-# Type command
-git commit
-curl
-docker
 ```
 
 ## Workflow Tips
@@ -431,12 +321,8 @@ tmux attach -s project
 
 ```bash
 # Minimize distractions
-sokratos-focus-mode
-
 # Work in zen mode
-
-# Restore UI
-refresh-app-daemons
+sokratos-focus-mode
 ```
 
 ## Language-Specific Setups

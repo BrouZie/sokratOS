@@ -43,7 +43,7 @@ local pop_todo = function()
 		state.floating = create_floating_window({ buf = state.floating.buf })
 		if vim.bo[state.floating.buf].buftype ~= "" then
 			-- Add your own path to a TODO-list file:
-			vim.cmd.edit("~/Documents/2ndBrain/daily/TODO.md")
+			vim.cmd.edit("~/Documents/TODO.md")
 		end
 	else
 		vim.api.nvim_win_hide(state.floating.win)

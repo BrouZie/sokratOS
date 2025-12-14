@@ -68,14 +68,94 @@ refresh_bash() {
 	fi
 }
 
+refresh_hypr() {
+	gum style --bold --foreground 51 "Refreshing hyprland configs…"
+
+	local src_dir="$CONFIG_ROOT/hypr"
+	local dest_dir="$HOME/.config/hypr"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_waybar() {
+	gum style --bold --foreground 51 "Refreshing waybar configs…"
+
+	local src_dir="$CONFIG_ROOT/waybar"
+	local dest_dir="$HOME/.config/waybar"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_rofi() {
+	gum style --bold --foreground 51 "Refreshing rofi configs…"
+
+	local src_dir="$CONFIG_ROOT/rofi"
+	local dest_dir="$HOME/.config/rofi"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_swaync() {
+	gum style --bold --foreground 51 "Refreshing swaync configs…"
+
+	local src_dir="$CONFIG_ROOT/swaync"
+	local dest_dir="$HOME/.config/swaync"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_nvim() {
+	gum style --bold --foreground 51 "Refreshing neovim configs…"
+
+	local src_dir="$CONFIG_ROOT/nvim"
+	local dest_dir="$HOME/.config/nvim"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+add_ROS2() {
+	gum style --bold --foreground 51 "Adding compose files…"
+
+	local src_dir="$CONFIG_ROOT/robotics/docker"
+	local dest_dir="$HOME/Robotics/.docker"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir" || echo "can't backup"
+		cp -r "$src_dir" "$dest_dir" || echo "can't copy"
+		gum style "Successfully added ROS2 compose files to: $dest_dir"
+	else
+		gum style --foreground 196 "Missing $src_sh, skipping..."
+	fi
+}
+
 refresh_fzf_dirs() {
 	gum style --bold --foreground 51 "Refreshing fzf-dirs.sh configs…"
 
 	local src_sh="$CONFIG_ROOT/fzf-dirs.sh"
 	local dest_sh="$HOME/.config/sokratOS/env.d/fzf-dirs.sh"
 
-	if [ -f "$src_sh" ]; then
-		mkdir -p "$(dirname "$dest_sh")" # NOTE: This is a migration
+	if [ -d "$src_sh" ]; then
+		mkdir -p "$(dirname "$dest_sh")"
 		backup_path "$dest_sh"
 		cp "$src_sh" "$dest_sh"
 		gum style "Updated $dest_sh"
@@ -135,9 +215,15 @@ while true; do
 			--no-limit \
 			--header "k/j move  •  TAB toggle  •  ENTER confirm  •  ESC to quit" \
 			"fzf-dirs" \
+			"hyprland" \
+			"waybar" \
+			"rofi" \
+			"neovim" \
+			"swaync" \
 			"tmux" \
 			"bash" \
-			"zsh"
+			"zsh" \
+			"ROS2"
 		) || abort 130
 
 		if [ -z "${choices:-}" ]; then
@@ -159,9 +245,15 @@ while true; do
 
 for choice in $choices; do
 	case "$choice" in
+		hyprland) refresh_hypr ;;
+		neovim) refresh_nvim ;;
+		swaync) refresh_swaync ;;
+		waybar) refresh_waybar ;;
+		rofi) refresh_rofi ;;
 		bash) refresh_bash ;;
 		zsh)  refresh_zsh  ;;
 		tmux) refresh_tmux ;;
+		ROS2) add_ROS2 ;;
 		fzf-dirs) refresh_fzf_dirs ;;
 	esac
 done

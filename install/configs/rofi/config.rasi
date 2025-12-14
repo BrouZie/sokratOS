@@ -194,7 +194,7 @@ element-icon {
     text-color:                 inherit;
     size:                       36px;
     cursor:                     inherit;
-    font:                       "JetbrainsMono Nerd Font Propo 12";
+    font:                       "JetBrainsMono Nerd Font Propo 12";
 }
 
 element-text {

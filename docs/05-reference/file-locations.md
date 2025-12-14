@@ -15,7 +15,6 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 ~/.local/share/sokratOS/bin  # Repository scripts (defaults)
 ~/.config/                   # User configurations (customizable)
 ~/.local/bin/                # User scripts
-~/Documents/2ndBrain/        # Note-taking system
 ~/Pictures/wallpaper/        # Wallpapers for theme generation
 ```
 
@@ -238,24 +237,6 @@ interactively from this location.
 ```bash
 mv new-wallpaper.jpg ~/Pictures/wallpaper/ # move wallpaper to correct location
 ```
-
-### Notes (Brain System)
-
-**Location**: `~/Documents/2ndBrain/`
-
-**Structure**:
-```
-2ndBrain/
-├── inbox/          # New unsorted notes
-├── snippets/       # Code snippets
-├── cheatsheet/     # Command references
-├── school/         # Study notes by subject
-├── full_notes/     # Deep-dive notes
-├── daily/          # Daily notes
-└── templates/      # Note templates
-```
-
-**Access**: `Ctrl-Space + n` in tmux
 
 ### Tmux Plugins
 
