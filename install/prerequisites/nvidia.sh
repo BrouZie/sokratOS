@@ -66,13 +66,14 @@ if [ -n "$(lspci | grep -i 'nvidia')" ]; then
 
   # Add NVIDIA environment variables to hyprland.conf
   HYPRLAND_CONF="$HOME/.config/hypr/hyprland.conf"
-  if [ -f "$HYPRLAND_CONF" ]; then
-    cat >>"$HYPRLAND_CONF" <<'EOF'
+	# Only add if not already present
+	if [ -f "$HYPRLAND_CONF" ] && ! grep -q "NVD_BACKEND" "$HYPRLAND_CONF"; then
+			cat >> "$HYPRLAND_CONF" <<'EOF'
 
-# NVIDIA environment variables
-env = NVD_BACKEND,direct
-env = LIBVA_DRIVER_NAME,nvidia
-env = __GLX_VENDOR_LIBRARY_NAME,nvidia
-EOF
-  fi
+	# NVIDIA environment variables
+	env = NVD_BACKEND,direct
+	env = LIBVA_DRIVER_NAME,nvidia
+	env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+	EOF
+	fi
 fi

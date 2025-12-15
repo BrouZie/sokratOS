@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit immediately if a command exits with a non-zero status
-set -e
+set -euo pipefail
 
 export REPO_PATH="$HOME/.local/share/sokratOS"
 export REPO_INSTALL="$REPO_PATH/install"
@@ -100,28 +100,10 @@ log "Auto-login configured"
 
 # Step 1.5: Sync package databases
 status_msg "Syncing package databases..."
-run_with_retry "sudo pacman -Syu"
+run_with_retry "sudo pacman -Syu --noconfirm"
 log "Package databases synced"
 
-# Step 2: Bootstrap paru (this takes a while)
-# status_msg "Bootstrapping paru package manager (this may take a few minutes)..."
-# log "Starting paru bootstrap"
-
-# if ! command -v paru &> /dev/null; then
-#     (
-#         cd /tmp
-#         # Clean up any previous failed attempts
-#         rm -rf paru
-#         run_with_retry "git clone https://aur.archlinux.org/paru.git"
-#         cd paru
-#         makepkg -si --noconfirm
-#     ) >> "$LOG_FILE" 2>&1
-#     log "Paru bootstrap complete"
-# else
-#     log "Paru already installed, skipping bootstrap"
-# fi
-
-# Step 3: Install gum for better UX
+# Step 2: Install gum for better UX
 status_msg "Installing gum for enhanced output..."
 run_with_retry "sudo pacman -S --noconfirm --needed gum"
 log "Gum installed"
@@ -148,7 +130,7 @@ echo ""
 gum style --foreground 212 --bold "Installation Progress"
 echo ""
 
-# Step 4: Install all packages (the longest operation)
+# Step 3: Install all packages (the longest operation)
 gum style --foreground 147 "📦 Installing system packages..."
 gum_spin "Installing prerequisites..." "source '$REPO_INSTALL/prerequisites/all.sh'"
 gum_spin "Installing terminal tools..." "source '$REPO_INSTALL/terminal/all.sh'"
@@ -158,7 +140,7 @@ gum_spin "Installing extra packages..." "source '$REPO_INSTALL/xtras/all.sh'"
 echo ""
 gum style --foreground 147 "⚙️  Setting up configurations..."
 
-# Step 5: Create directories and copy configs
+# Step 4: Create directories and copy configs
 gum_spin "Creating directories..." "mkdir -p \
     '$HOME/.config/sokratOS/current/theme' \
     '$HOME/.config/sokratOS/env.d' \
@@ -194,7 +176,7 @@ gum_spin "Configuring keyboard layout..." "source '$REPO_INSTALL/configs/configu
 echo ""
 gum style --foreground 147 "🔧 Setting up development tools..."
 
-# Step 6: Tmux and Neovim setup (can be parallelized)
+# Step 5: Tmux and Neovim setup (can be parallelized)
 {
     gum_spin "Setting up tmux plugins..." "
         if [[ ! -e ~/.tmux/plugins/tpm ]]; then
