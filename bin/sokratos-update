@@ -27,7 +27,13 @@ git -C "$REPO_PATH" diff --check || git -C $REPO_PATH reset
 echo ""
 gum style --foreground 147 "Updating system packages..."
 
-paru -Syu || sudo pacman -Syu
+if command -v paru &> /dev/null; then
+	paru -Syu || sudo pacman -Syu
+fi
+
+if command -v yay &> /dev/null; then
+	yay -Syu || sudo pacman -Syu
+fi
 
 # Refresh configs
 if [[ "$STATE" == 1 ]]; then
