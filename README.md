@@ -10,11 +10,11 @@ This is **not** a general-purpose Linux setup — it reflects specific opinions 
 
 ## ⚠️ Vim-Centric Workflow
 
-> **sokratOS assumes familiarity with *vim-motions*
+> **sokratOS** assumes familiarity with *vim-motions*
 
 Most menus, launchers, window navigation, and custom keybindings rely heavily on:
 
-- `hjkl` for movement  
+- `hjkl` for movement
 - `Ctrl + p / Ctrl + n` for selection
 
 If you’re new to Vim motions, it’s highly recommended to run:
@@ -60,7 +60,8 @@ https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
    bash ~/.local/share/Sokratos/install.sh
    ```
 
-> [!NOTE] Visit the **[Installation Guide](docs/01-getting-started/installation-arch.md)** if you are struggling with the installation steps
+> [!NOTE]
+> Visit the **[Installation Guide](docs/01-getting-started/installation-arch.md)** if you are struggling with the installation steps
 
 ### Post-installation
 
@@ -72,7 +73,8 @@ https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
 3. Change wallpaper with `SUPER + SHIFT + Space`
 1. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
 
-> [!NOTE] Visit the **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** for further instructions
+> [!NOTE]
+> Visit the **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** for further instructions
 
 ## 📁 Project Structure
 
@@ -131,7 +133,7 @@ For issues and questions:
 
 ---
 
-> [!NOTE] 
+> [!NOTE]
 > 1. This is an opinionated setup
 > 1. It is recommended to review the installation script before running.
 > 1. This is NOT an operating system - sokratOS is an implementation of Arch and Hyprland
