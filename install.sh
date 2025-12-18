@@ -222,6 +222,9 @@ sudo tee /etc/firefox/policies/policies.json >/dev/null <<'JSON'
 }
 JSON
 
+gum_spin "Checking graphics card..." "source $REPO_INSTALL/prerequisites/nvidia.sh"
+
+
 # Step 7: Wallpaper and first login script
 gum_spin "Setting up wallpaper and welcome screen..." "
     cp -r '$REPO_INSTALL/configs/wallpaper/'* '$HOME/Pictures/wallpaper/'
