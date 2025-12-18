@@ -207,6 +207,21 @@ gum_spin "Installing Neovim plugins (1-3 minutes)..." "nvim --headless '+Lazy! s
 echo ""
 gum style --foreground 147 "🎨 Finalizing setup..."
 
+# Step 6.5: Add pywalfox and vimium-c to firefox
+sudo mkdir -p /etc/firefox/policies
+sudo tee /etc/firefox/policies/policies.json >/dev/null <<'JSON'
+{
+  "policies": {
+    "Extensions": {
+      "Install": [
+        "https://addons.mozilla.org/firefox/downloads/latest/vimium-c/latest.xpi",
+        "https://addons.mozilla.org/firefox/downloads/latest/pywalfox/latest.xpi"
+      ]
+    }
+  }
+}
+JSON
+
 # Step 7: Wallpaper and first login script
 gum_spin "Setting up wallpaper and welcome screen..." "
     cp -r '$REPO_INSTALL/configs/wallpaper/'* '$HOME/Pictures/wallpaper/'
