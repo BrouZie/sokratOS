@@ -202,7 +202,7 @@ wait $tmux_pid
 wait $python_pid
 
 # Neovim plugins (this is slow, so it stays separate)
-# gum_spin "Installing Neovim plugins (1-3 minutes)..." "nvim --headless '+Lazy! sync' +qa"
+gum_spin "Installing Neovim plugins (1-3 minutes)..." "nvim --headless -c 'Lazy! sync' -c 'MasonToolsInstallSync' -c 'qa'"
 
 echo ""
 gum style --foreground 147 "🎨 Finalizing setup..."
