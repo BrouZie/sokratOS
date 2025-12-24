@@ -1,8 +1,11 @@
+#!/bin/bash
 # ==============================================================================
 # Hyprland NVIDIA Setup Script for Arch Linux
 # ==============================================================================
 # This script automates the installation and configuration of NVIDIA drivers
 # for use with Hyprland on Arch Linux, following the official Hyprland wiki.
+#
+# Updated for NVIDIA 590+ driver changes (Pascal and older require legacy AUR)
 #
 # Author: https://github.com/Kn0ax
 #
@@ -10,12 +13,36 @@
 
 # --- GPU Detection ---
 if [ -n "$(lspci | grep -i 'nvidia')" ]; then
+  GPU_INFO=$(lspci | grep -i 'nvidia')
+  
   # --- Driver Selection ---
-  # Turing (16xx, 20xx), Ampere (30xx), Ada (40xx), and newer recommend the open-source kernel modules
-  if echo "$(lspci | grep -i 'nvidia')" | grep -q -E "RTX [2-9][0-9]|GTX 16"; then
+  # Maxwell (GTX 9xx, 750/Ti) - Legacy 470xx driver
+  if echo "$GPU_INFO" | grep -qE "GTX (9[0-9]{2}|750)"; then
+    NVIDIA_DRIVER_PACKAGE="nvidia-470xx-dkms"
+    NVIDIA_UTILS="nvidia-470xx-utils"
+    LIB32_UTILS="lib32-nvidia-470xx-utils"
+    USE_AUR=true
+    
+  # Pascal (GTX 10xx) - Legacy 580xx driver
+  elif echo "$GPU_INFO" | grep -qE "GTX 10[0-9]{2}|GT 10[0-9]{2}"; then
+    NVIDIA_DRIVER_PACKAGE="nvidia-580xx-dkms"
+    NVIDIA_UTILS="nvidia-580xx-utils"
+    LIB32_UTILS="lib32-nvidia-580xx-utils"
+    USE_AUR=true
+    
+  # Turing (GTX 16xx, RTX 20xx), Ampere (30xx), Ada (40xx), and newer - Open kernel modules
+  elif echo "$GPU_INFO" | grep -qE "GTX 16[0-9]{2}|RTX [2-9][0-9]{3}"; then
     NVIDIA_DRIVER_PACKAGE="nvidia-open-dkms"
+    NVIDIA_UTILS="nvidia-utils"
+    LIB32_UTILS="lib32-nvidia-utils"
+    USE_AUR=false
+    
+  # Fallback to proprietary for unknown older cards
   else
     NVIDIA_DRIVER_PACKAGE="nvidia-dkms"
+    NVIDIA_UTILS="nvidia-utils"
+    LIB32_UTILS="lib32-nvidia-utils"
+    USE_AUR=false
   fi
 
   # Check which kernel is installed and set appropriate headers package
@@ -31,17 +58,24 @@ if [ -n "$(lspci | grep -i 'nvidia')" ]; then
   # force package database refresh
   sudo pacman -Syu --noconfirm
 
-  # Install packages
-  PACKAGES_TO_INSTALL=(
-    "${KERNEL_HEADERS}"
-    "${NVIDIA_DRIVER_PACKAGE}"
-    "nvidia-utils"
-    "lib32-nvidia-utils"
+  # Install base packages
+  sudo pacman -S --needed --noconfirm \
+    "${KERNEL_HEADERS}" \
     "egl-wayland"
-    "libva-nvidia-driver" # For VA-API hardware acceleration
-  )
 
-  sudo pacman -S --needed --noconfirm "${PACKAGES_TO_INSTALL[@]}"
+  # Install driver packages
+  if [ "$USE_AUR" = true ]; then
+    yay -S --needed --noconfirm \
+      "${NVIDIA_DRIVER_PACKAGE}" \
+      "${NVIDIA_UTILS}" \
+      "${LIB32_UTILS}"
+  else
+    sudo pacman -S --needed --noconfirm \
+      "${NVIDIA_DRIVER_PACKAGE}" \
+      "${NVIDIA_UTILS}" \
+      "${LIB32_UTILS}" \
+      "libva-nvidia-driver"
+  fi
 
   # Configure modprobe for early KMS
   echo "options nvidia_drm modeset=1" | sudo tee /etc/modprobe.d/nvidia.conf >/dev/null
@@ -70,6 +104,9 @@ if [ -n "$(lspci | grep -i 'nvidia')" ]; then
     cat >>"$HYPRLAND_CONF" <<'EOF'
 
 # NVIDIA environment variables
+cursor {
+	no_hardware_cursors = true
+}
 env = NVD_BACKEND,direct
 env = LIBVA_DRIVER_NAME,nvidia
 env = __GLX_VENDOR_LIBRARY_NAME,nvidia
