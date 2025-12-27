@@ -11,8 +11,7 @@ Welcome to sokratOS! This guide will walk you through your first experience and 
 ## Recommended steps
 
 1. Fix your monitor setup in `~/.config/hypr/configs/monitors.conf`
-2. [Install pywalfox](https://addons.mozilla.org/en-US/firefox/addon/pywalfox/)
-3. Change wallpaper with `SUPER + SHIFT + Space`
+2. Change wallpaper with `SUPER + SHIFT + Space`
 1. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
 
 > [!NOTE] I highly encourage switching ESC for Caps Lock in
