@@ -163,7 +163,7 @@ cp ~/.local/share/sokratOS/install/configs/zshrc ~/.zshrc
 cp -r ~/.local/share/sokratOS/install/configs/zshrc ~/.config/zsh
 
 # Make sure auto-login still works!
-echo '[[ $(tty) == /dev/tty1 ]] && exec Hyprland' >> ~/.zprofile
+echo '[[ $(tty) == /dev/tty1 ]] && exec start-hyprland' >> ~/.zprofile
 
 # Logout and login
 ```

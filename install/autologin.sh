@@ -19,10 +19,10 @@ PROFILE="$HOME/.bash_profile"
 
 [ -f "$PROFILE" ] || touch "$PROFILE"
 
-if ! grep -q 'exec Hyprland' "$PROFILE"; then
+if ! grep -q 'exec start-hyprland' "$PROFILE"; then
   {
     echo ''
     echo '# Auto-start Hyprland on login to tty1'
-    echo '[[ $(tty) == /dev/tty1 ]] && exec Hyprland'
+    echo '[[ $(tty) == /dev/tty1 ]] && exec start-hyprland'
   } >> "$PROFILE"
 fi
