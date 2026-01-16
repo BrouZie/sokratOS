@@ -25,9 +25,12 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       # Main workspace - where your ROS2 projects live
       - ${HOME}/Robotics/ros2_jazzy:/home/ubuntu/ros2_ws:rw
-      # tmux configuration (read-only to prevent accidental changes)
-      - ${HOME}/.tmux.conf:/home/ubuntu/.tmux.conf:ro
-      - ${HOME}/.tmux/:/home/ubuntu/.tmux:rw
+      # Neovim configuration
+      - ${HOME}/Robotics/.docker/ros2-configs/nvim:/home/ubuntu/.config/nvim:rw
+      # Clangd defaults
+      - ${HOME}/Robotics/.docker/ros2-configs/clangd:/home/ubuntu/.config/clangd:rw
+      # Colcon build options for clangd (lsp diagnostics)
+      - ${HOME}/Robotics/.docker/ros2-configs/colcon:/home/ubuntu/.colcon:rw
       # Shared resources between host and container
       - /dev/shm:/dev/shm  # Shared memory for DDS communication
     network_mode: host

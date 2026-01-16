@@ -7,8 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Essential development tools
 RUN apt-get update && apt-get install -y \
     # Terminal & editors
-    vim neovim tmux git curl wget \
-    ncurses-term less \
+    vim git curl wget unzip \
+    tmux ncurses-term less \
     # System utilities
     ca-certificates locales sudo \
     bash-completion \
@@ -57,6 +57,26 @@ RUN apt-get update && apt-get install -y \
     ros-jazzy-example-interfaces \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Neovim dependencies
+RUN apt-get update && apt-get install -y \
+    # Neovim dependencies
+    lua5.4 luarocks imagemagick \
+    python3-pip python3-venv pipx \
+    # Additional tools
+    xclip xsel \
+    libmagickwand-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Download and install Neovim 0.11.5 (using tar.gz instead of AppImage)
+RUN curl -L -o nvim-linux64.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz && \
+    tar -xzf nvim-linux64.tar.gz && \
+    mv nvim-linux-x86_64 /opt/nvim && \
+    ln -s /opt/nvim/bin/nvim /usr/bin/nvim && \
+    rm nvim-linux64.tar.gz
+
+# Install uv via pip (snap doesn't work well in Docker)
+RUN pip3 install uv --break-system-packages
+
 # Locale configuration (avoids warnings)
 RUN sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && locale-gen
@@ -64,24 +84,21 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 # Set default editor
-RUN echo 'export EDITOR=vim' > /etc/profile.d/editor.sh
+RUN echo 'export EDITOR=nvim' > /etc/profile.d/editor.sh
 
 # ROS2 setup in bashrc
 RUN echo 'source /opt/ros/jazzy/setup.bash' >> /etc/bash.bashrc && \
-    echo '# Auto-source workspace if it exists' >> /etc/bash.bashrc && \
-    echo 'if [ -f ~/ros2_ws/install/setup.bash ]; then' >> /etc/bash.bashrc && \
-    echo '    source ~/ros2_ws/install/setup.bash' >> /etc/bash.bashrc && \
-    echo 'fi' >> /etc/bash.bashrc && \
-    echo '' >> /etc/bash.bashrc && \
-    echo '# Add custom scripts to PATH' >> /etc/bash.bashrc && \
-    echo 'export PATH="$HOME/ros2_ws/bin:$PATH"' >> /etc/bash.bashrc && \
-    echo '' >> /etc/bash.bashrc && \
-    echo '# Helpful aliases' >> /etc/bash.bashrc && \
-    echo 'alias cb="cd ~/ros2_ws && colcon build --symlink-install"' >> /etc/bash.bashrc && \
-    echo 'alias cbt="cd ~/ros2_ws && colcon test"' >> /etc/bash.bashrc && \
-    echo 'alias cbp="cd ~/ros2_ws && colcon build --symlink-install --packages-select"' >> /etc/bash.bashrc && \
-    echo 'alias cws="cd ~/ros2_ws"' >> /etc/bash.bashrc && \
-    echo 'alias src="source ~/ros2_ws/install/setup.bash"' >> /etc/bash.bashrc
+    echo 'export PATH="/home/ubuntu/ros2_ws/bin:$PATH"' >> /etc/bash.bashrc
+
+# Dev tools (system-wide, works for any user)
+RUN apt-get update && apt-get install -y \
+    ripgrep \
+    fzf \
+    fd-find \
+    bat \
+  && ln -sf /usr/bin/fdfind /usr/local/bin/fd \
+  && ln -sf /usr/bin/batcat /usr/local/bin/bat \
+  && rm -rf /var/lib/apt/lists/*
 
 # Give ubuntu user passwordless sudo
 RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
@@ -89,12 +106,37 @@ RUN echo "ubuntu ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ubuntu && \
 
 # Create ubuntu home with proper ROS2 workspace structure
 RUN mkdir -p /home/ubuntu/ros2_ws/src \
+             /home/ubuntu/ros2_ws/bin \
              /home/ubuntu/.ros \
-             /home/ubuntu/.gazebo && \
+             /home/ubuntu/.gazebo \
+             /home/ubuntu/.config \
+             /home/ubuntu/.local/share \
+             /home/ubuntu/.local/state \
+             /home/ubuntu/.cache \
+             /home/ubuntu/.venvs && \
     chmod -R 777 /home/ubuntu
+
+# Node.js + npm (needed by Mason for language servers, e.g. bash-language-server)
+RUN apt-get update && apt-get install -y \
+    nodejs npm \
+  && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep (needed for dependency management)
 RUN rosdep init || true
+
+# Make sure build-time installs go into /home/ubuntu (not /root)
+ENV HOME=/home/ubuntu \
+    XDG_CONFIG_HOME=/home/ubuntu/.config \
+    XDG_DATA_HOME=/home/ubuntu/.local/share \
+    XDG_STATE_HOME=/home/ubuntu/.local/state \
+    XDG_CACHE_HOME=/home/ubuntu/.cache
+
+# COPY ROS2 Neovim config into the image
+COPY ros2-configs/nvim/ /home/ubuntu/.config/nvim/
+
+# Preinstall Lazy plugins + Mason tools INTO /home/ubuntu
+RUN nvim --headless "+Lazy! sync" "+MasonToolsInstallSync" "+qa" \
+ && chmod -R a+rwX /home/ubuntu/.local /home/ubuntu/.cache /home/ubuntu/.config
 
 # Set working directory
 WORKDIR /home/ubuntu/ros2_ws
