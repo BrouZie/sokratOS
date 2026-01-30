@@ -1,0 +1,38 @@
+/* Nord */
+* {
+  base:            #2e3440;
+  surface:         #3b4252;
+  overlay:         #4c566a;
+
+  muted:           #4c566a;
+  subtle:          #434c5e;
+  text:            #d8dee9;
+
+  accent:          #81a1c1;
+
+  red:             #bf616a;
+  green:           #a3be8c;
+  yellow:          #ebcb8b;
+  blue:            #81a1c1;
+  magenta:         #b48ead;
+  cyan:            #88c0d0;
+  orange:          #d08770;
+
+  highlight_low:   #3b4252;
+  highlight_med:   #434c5e;
+  highlight_high:  #4c566a;
+
+  border:          #4c566a;
+
+  selection_bg:    #434c5e;
+  selection_fg:    #d8dee9;
+
+  url:             #0087bd;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_med;
+  urgent:          @red;
+}

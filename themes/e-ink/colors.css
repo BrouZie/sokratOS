@@ -1,0 +1,19 @@
+/* E-Ink (UI-friendly) */
+@define-color base           #dedede;  /* paper */
+@define-color surface        #c7c7c7;  /* modules/fields */
+@define-color overlay        #b1b1b1;  /* hover/active */
+
+@define-color highlight_low  #ececec;
+@define-color highlight_med  #c7c7c7;
+@define-color highlight_high #a3a3a3;
+
+@define-color border         #9a9a9a;
+
+@define-color text           #141414;  /* much darker */
+@define-color subtle         #2a2a2a;
+@define-color muted          #6e6e6e;
+
+@define-color accent         #0a0a0a;
+
+@define-color selection_bg   #a3a3a3;
+@define-color selection_fg   #141414;

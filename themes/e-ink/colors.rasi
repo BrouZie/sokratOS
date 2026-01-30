@@ -1,0 +1,34 @@
+/* E-Ink */
+* {
+  base:            #CCCCCC;
+  surface:         #AEAEAE;
+  overlay:         #7C7C7C;
+
+  muted:           #5E5E5E;
+  subtle:          #727272;
+  text:            #474747;
+
+  accent:          #333333;
+
+  red:             #333333;
+  green:           #9A9A9A;
+  yellow:          #868686;
+  blue:            #727272;
+  magenta:         #AEAEAE;
+  cyan:            #4A4A4A;
+
+  highlight_low:   #CCCCCC;
+  highlight_med:   #AEAEAE;
+  highlight_high:  #868686;
+
+  border:          #7C7C7C;
+
+  selection_bg:    #AEAEAE;
+  selection_fg:    #474747;
+
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_high;
+  urgent:          @accent;
+}

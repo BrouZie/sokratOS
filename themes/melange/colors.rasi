@@ -1,0 +1,36 @@
+/* Melange (dark) */
+* {
+  base:            #292522;
+  surface:         #34302C;
+  overlay:         #403A36;
+
+  muted:           #867462;
+  subtle:          #C1A78E;
+  text:            #ECE1D7;
+
+  accent:          #A3A9CE;
+
+  red:             #D47766;
+  green:           #85B695;
+  yellow:          #EBC06D;
+  blue:            #A3A9CE;
+  magenta:         #CF9BC2;
+  cyan:            #89B3B6;
+  orange:          #E49B5D;
+
+  highlight_low:   #34302C;
+  highlight_med:   #403A36;
+  highlight_high:  #867462;
+
+  border:          #867462;
+
+  selection_bg:    #403A36;
+  selection_fg:    #ECE1D7;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_med;
+  urgent:          @red;
+}

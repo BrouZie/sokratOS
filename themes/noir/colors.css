@@ -1,0 +1,29 @@
+/* Noir Mono (strict grayscale) */
+@define-color base           #0F0F10;
+@define-color surface        #191A1B;
+@define-color overlay        #242526;
+
+@define-color muted          #6D6E71;
+@define-color subtle         #C7C8CB;
+@define-color text           #E5E6E8;
+
+@define-color accent         #B5B6B8;
+
+/* semantic colors (kept grayscale intentionally) */
+@define-color red            #2A2B2D;
+@define-color green          #3A3B3E;
+@define-color yellow         #4A4B4F;
+@define-color blue           #5A5B60;
+@define-color magenta        #7A7B81;
+@define-color cyan           #9A9BA0;
+
+@define-color highlight_low  #191A1B;
+@define-color highlight_med  #242526;
+@define-color highlight_high #2F3032;
+
+@define-color border         #242526;
+
+@define-color selection_bg   #242526;
+@define-color selection_fg   #E5E6E8;
+
+@define-color url            #B5B6B8;

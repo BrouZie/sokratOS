@@ -1,0 +1,37 @@
+/* Tokyo Night Moon */
+* {
+  base:            #222436;
+  surface:         #1e2030;
+  overlay:         #2f334d;
+
+  muted:           #545c7e;
+  subtle:          #828bb8;
+  text:            #c8d3f5;
+
+  accent:          #82aaff;
+
+  red:             #ff757f;
+  green:           #c3e88d;
+  yellow:          #ffc777;
+  blue:            #82aaff;
+  magenta:         #c099ff;
+  cyan:            #86e1fc;
+
+  highlight_low:   #1b1d2b;
+  highlight_med:   #2d3f76;
+  highlight_high:  #444a73;
+
+  border:          @overlay;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_med;
+  urgent:          @red;
+
+  /* Optional extras:
+  orange:          #ff966c;
+  url:             #4fd6be;
+  */
+}

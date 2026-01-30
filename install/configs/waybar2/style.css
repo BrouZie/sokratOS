@@ -1,0 +1,148 @@
+/* Waybar configuration from left to right! */
+
+@import url("../sokratOS/current/theme/colors.css");
+
+* {
+	border: none;
+	border-radius: 0px;
+	font-family:
+	"Rubik", "JetBrainsMono Nerd Font Propo", "Noto Sans CJK JP",
+	"Noto Sans CJK JP";
+	font-size: 10pt;
+	min-height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.modules-center {
+	background: linear-gradient(@base, @surface) border-box;
+	padding: 6px 12px;
+	border-radius: 28px;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.3);
+}
+
+window#waybar {
+	background: transparent;
+}
+
+tooltip {
+	background: linear-gradient(@base, @highlight_med) border-box;
+	border-radius: 14px;
+	margin: 20px;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.9);
+}
+
+tooltip label {
+	color: @text;
+	padding: 6px;
+}
+
+#custom-sOS,
+#clock {
+	padding: 0 6px;
+	margin: 0 2px;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+}
+
+#custom-sOS {
+	color: @subtle;
+}
+
+#custom-sOS:hover {
+	color: @text;
+}
+
+#clock {
+	font-size: 12pt;
+}
+
+#workspaces {
+	background: transparent;
+	padding: 0;
+	margin: 0 10px 0 10px;
+	border: none;
+	box-shadow: none;
+}
+
+#workspaces button {
+	padding: 0px 6px;
+	margin: 0px 2px;
+	color: @muted;
+	border-radius: 12px;
+	background: transparent;
+	transition: all 0.1s ease-in-out;
+}
+
+#workspaces button.active {
+	background: @text;
+	color: @surface;
+	min-width: 40px;
+	transition: all 0.1s ease-in-out;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+#workspaces button:hover {
+	background: @text;
+	color: @surface;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+#workspaces button.urgent {
+	background: @red;
+	color: @surface;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+/* Group module styling with better spacing */
+#battery,
+#custom-expand-settings,
+#custom-expand-hardware,
+#custom-power {
+	padding: 0 6px;
+	margin: 0 5px;
+	color: @text;
+}
+
+#custom-expand-settings:hover,
+#custom-expand-hardware:hover,
+#custom-power:hover {
+	color: @subtle;
+}
+
+/* Settings group children */
+.settings-group #network,
+.settings-group #pulseaudio,
+.settings-group #bluetooth,
+.settings-group #custom-keybinds,
+.hardware-group #cpu,
+.hardware-group #memory,
+.hardware-group #power-profiles-daemon {
+	padding: 0 6px;
+	margin: 0 4px;
+	color: @subtle;
+	font-weight: bold;
+}
+
+.settings-group #network:hover,
+.settings-group #pulseaudio:hover,
+.settings-group #bluetooth:hover,
+.settings-group #custom-keybinds:hover,
+.hardware-group #cpu:hover,
+.hardware-group #memory:hover,
+.hardware-group #power-profiles-daemon:hover {
+	color: @text;
+}
+
+#battery {
+	color: @subtle;
+}
+
+#battery.warning {
+	color: alpha(@yellow, 0.7);
+}
+
+#battery.critical {
+	color: @red;
+}

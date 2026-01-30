@@ -1,0 +1,27 @@
+/* Catppuccin Mocha */
+@define-color base           #1E1E2E;
+@define-color surface        #181825;
+@define-color overlay        #45475A;
+
+@define-color muted          #6C7086;
+@define-color subtle         #BAC2DE;
+@define-color text           #CDD6F4;
+
+@define-color accent         #B4BEFE;
+
+@define-color red            #F38BA8;
+@define-color green          #A6E3A1;
+@define-color yellow         #F9E2AF;
+@define-color blue           #89B4FA;
+@define-color magenta        #F5C2E7;
+@define-color cyan           #94E2D5;
+
+@define-color highlight_low  #11111B;
+@define-color highlight_med  #181825;
+@define-color highlight_high #585B70;
+
+@define-color border         #6C7086;
+
+/* text selection semantics */
+@define-color selection_bg   #F5E0DC;
+@define-color selection_fg   #1E1E2E;

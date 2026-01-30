@@ -1,0 +1,37 @@
+/* Noir Mono (strict grayscale) */
+* {
+  base:            #0F0F10;
+  surface:         #191A1B;
+  overlay:         #242526;
+
+  muted:           #6D6E71;
+  subtle:          #C7C8CB;
+  text:            #E5E6E8;
+
+  accent:          #B5B6B8;
+
+  red:             #2A2B2D;
+  green:           #3A3B3E;
+  yellow:          #4A4B4F;
+  blue:            #5A5B60;
+  magenta:         #7A7B81;
+  cyan:            #9A9BA0;
+
+  highlight_low:   #191A1B;
+  highlight_med:   #242526;
+  highlight_high:  #2F3032;
+
+  border:          #242526;
+
+  selection_bg:    #242526;
+  selection_fg:    #E5E6E8;
+
+  url:             #B5B6B8;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_med;
+  urgent:          @highlight_high;
+}

@@ -1,0 +1,23 @@
+/* Ethereal */
+@define-color base           #060B1E;
+@define-color surface        #0E1326;
+@define-color overlay        #161B2E;
+
+@define-color muted          #6d7db6;
+@define-color subtle         #a3bfd1;
+@define-color text           #ffcead;
+
+@define-color accent         #7d82d9;
+
+@define-color red            #ED5B5A;
+@define-color green          #92a593;
+@define-color yellow         #E9BB4F;
+@define-color blue           #7d82d9;
+@define-color magenta        #c89dc1;
+@define-color cyan           #a3bfd1;
+
+@define-color highlight_low  #0E1326;
+@define-color highlight_med  #161B2E;
+@define-color highlight_high #1E2336;
+
+@define-color border         @overlay;

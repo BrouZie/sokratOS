@@ -1,0 +1,38 @@
+/* Catppuccin Mocha */
+* {
+  base:            #1E1E2E;
+  surface:         #181825;
+  overlay:         #45475A;
+
+  muted:           #6C7086;
+  subtle:          #BAC2DE;
+  text:            #CDD6F4;
+
+  accent:          #B4BEFE;
+
+  red:             #F38BA8;
+  green:           #A6E3A1;
+  yellow:          #F9E2AF;
+  blue:            #89B4FA;
+  magenta:         #F5C2E7;
+  cyan:            #94E2D5;
+
+  highlight_low:   #11111B;
+  highlight_med:   #181825;
+  highlight_high:  #585B70;
+
+  border:          #6C7086;
+
+  selection_bg:    #F5E0DC;
+  selection_fg:    #1E1E2E;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_high;
+  urgent:          @red;
+
+  orange:          #FAB387;
+  url:             #F5E0DC;
+}

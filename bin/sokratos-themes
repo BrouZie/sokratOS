@@ -1,20 +1,34 @@
 #!/usr/bin/env bash
 
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
-CURRENT_THEME_DIR="$HOME/.config/sokratOS/current/theme/colors.conf"
+CURRENT_LINK="$HOME/.config/sokratOS/current/theme"
 
 notify-send 'Specify which colorscheme you want'
 
-CWD="$(pwd)"
+mkdir -p "$HOME/.config/sokratOS/current"
+cd "$THEMES_DIR" || exit 1
 
-cd $THEMES_DIR || exit 1
+SELECTED_THEME=$(
+  for theme in */; do
+    theme="${theme%/}"
+    echo -en "$theme\0icon\x1f$theme\n"
+  done | rofi -dmenu -p "Theme"
+)
 
-SELECTED_THEME=$(for theme in *; do echo -en "$theme\0icon\x1f$theme\n" ; done | rofi -dmenu -p "")
+if [[ -n "${SELECTED_THEME:-}" ]]; then
+  TARGET="$THEMES_DIR/$SELECTED_THEME"
+  [[ -d "$TARGET" ]] || exit 1
 
-if [ -n "$SELECTED_THEME" ]; then
-	ln -nsf "$THEMES_DIR"/"$SELECTED_THEME"/colors.conf "$CURRENT_THEME_DIR"
+  # Create new symlink and move into place (prevents partial state)
+  TMP_LINK="${CURRENT_LINK}.new"
+  ln -sfn "$TARGET" "$TMP_LINK"
+  mv -Tf "$TMP_LINK" "$CURRENT_LINK"
+
+	# Restart applications
+	refresh-app-daemons
+	tmux source-file ~/.tmux.conf
+  pkill -SIGUSR1 kitty
+	hyprctl reload
+
+  notify-send "Theme set: $SELECTED_THEME"
 fi
-
-pkill -SIGUSR1 kitty
-
-cd "$CWD" || exit 1

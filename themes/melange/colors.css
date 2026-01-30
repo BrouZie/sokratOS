@@ -1,0 +1,27 @@
+/* Melange (dark) */
+@define-color base           #292522;
+@define-color surface        #34302C;
+@define-color overlay        #403A36;
+
+@define-color muted          #867462;
+@define-color subtle         #C1A78E;
+@define-color text           #ECE1D7;
+
+@define-color accent         #A3A9CE;
+
+@define-color red            #D47766;
+@define-color green          #85B695;
+@define-color yellow         #EBC06D;
+@define-color blue           #A3A9CE;
+@define-color magenta        #CF9BC2;
+@define-color cyan           #89B3B6;
+@define-color orange         #E49B5D;
+
+@define-color highlight_low  #34302C;
+@define-color highlight_med  #403A36;
+@define-color highlight_high #867462;
+
+@define-color border         #867462;
+
+@define-color selection_bg   #403A36;
+@define-color selection_fg   #ECE1D7;

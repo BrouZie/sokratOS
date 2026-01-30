@@ -1,0 +1,32 @@
+/* Ethereal */
+* {
+  base:            #060B1E;
+  surface:         #0E1326;
+  overlay:         #161B2E;
+
+  muted:           #6d7db6;
+  subtle:          #a3bfd1;
+  text:            #ffcead;
+
+  accent:          #7d82d9;
+
+  red:             #ED5B5A;
+  green:           #92a593;
+  yellow:          #E9BB4F;
+  blue:            #7d82d9;
+  magenta:         #c89dc1;
+  cyan:            #a3bfd1;
+
+  highlight_low:   #0E1326;
+  highlight_med:   #161B2E;
+  highlight_high:  #1E2336;
+
+  border:          @overlay;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlight_med;
+  urgent:          @red;
+}

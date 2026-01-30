@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+import json
+import re
+from pathlib import Path
+
+THEME_DIR = Path.home() / ".config" / "sokratOS" / "current" / "theme"
+SRC = THEME_DIR / "colors.css"          # parse @define-color ...
+WAL_DIR = Path.home() / ".cache" / "wal"
+OUT_COLORS = WAL_DIR / "colors"
+OUT_JSON = WAL_DIR / "colors.json"
+
+DEFINE_RE = re.compile(r"@define-color\s+([a-zA-Z0-9_-]+)\s+(#[0-9a-fA-F]{6})\s*;")
+
+def parse_colors_css(path: Path) -> dict[str, str]:
+    text = path.read_text(encoding="utf-8")
+    out: dict[str, str] = {}
+    for name, hexv in DEFINE_RE.findall(text):
+        out[name] = hexv.lower()
+    return out
+
+def pick(c: dict[str, str], key: str, fallback: str) -> str:
+    return c.get(key, fallback)
+
+def main() -> None:
+    if not SRC.exists():
+        raise SystemExit(f"Missing {SRC}. (Need colors.css with @define-color base/surface/...)")
+
+    c = parse_colors_css(SRC)
+
+    # Required semantic roles (fallbacks keep things working even if a theme is missing one)
+    base   = pick(c, "base", "#111111")
+    text   = pick(c, "text", "#eeeeee")
+    surface = pick(c, "surface", pick(c, "highlight_low", base))
+    overlay = pick(c, "overlay", pick(c, "highlight_med", surface))
+    muted  = pick(c, "muted", pick(c, "border", overlay))
+    subtle = pick(c, "subtle", text)
+    hl_low  = pick(c, "highlight_low", surface)
+    hl_med  = pick(c, "highlight_med", overlay)
+    hl_high = pick(c, "highlight_high", muted)
+    accent  = pick(c, "accent", hl_high)
+
+    # Build a *subtle* 16-color set (mostly neutrals + a light touch of accent)
+    # This intentionally avoids pushing bright reds/greens into Firefox UI.
+    colors16 = [
+        base,        # 0
+        surface,     # 1
+        overlay,     # 2
+        hl_low,      # 3
+        hl_med,      # 4
+        hl_high,     # 5
+        muted,       # 6
+        text,        # 7  <-- IMPORTANT (foreground/text slot)
+
+        surface,     # 8
+        overlay,     # 9
+        muted,       # 10
+        subtle,      # 11
+        accent,      # 12
+        accent,      # 13
+        text,        # 14
+        text,        # 15 <-- IMPORTANT (bright foreground slot)
+    ]
+
+    WAL_DIR.mkdir(parents=True, exist_ok=True)
+
+    # ~/.cache/wal/colors : one hex per line in order 0-15 :contentReference[oaicite:3]{index=3}
+    OUT_COLORS.write_text("\n".join(colors16) + "\n", encoding="utf-8")
+
+    # ~/.cache/wal/colors.json structure used by pywal ecosystem :contentReference[oaicite:4]{index=4}
+    data = {
+        "wallpaper": "",
+        "alpha": "100",
+        "special": {
+            "background": base,
+            "foreground": text,
+            "cursor": text,   # keep it neutral; you can change to subtle if you prefer
+        },
+        "colors": {f"color{i}": colors16[i] for i in range(16)},
+    }
+    OUT_JSON.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+if __name__ == "__main__":
+    main()

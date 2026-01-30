@@ -2,8 +2,8 @@
 
 # Check if the user provided an argument
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <path_to_image>"
-    exit 1
+	echo "Usage: $0 <path_to_image>"
+	exit 1
 fi
 
 WALL="$1"
@@ -13,18 +13,18 @@ mkdir -p "$CACHE_DIR"
 
 # Process image and save to cache
 magick "$WALL" \
-  -resize 1280x720^ \
-  -gravity center -crop 70%x70%+0+0 +repage \
-  -resize 1280x720 \
-  "$PROCESSED_IMG"
+	-resize 1280x720^ \
+	-gravity center -crop 70%x70%+0+0 +repage \
+	-resize 1280x720 \
+	"$PROCESSED_IMG"
 
 # Set wallpaper asynchronously (non-blocking)
 swww img "$WALL" -t fade &
 
 # Analyze shade in parallel using the processed image
 SHADE=$(magick "$PROCESSED_IMG" \
-  -alpha remove -alpha off -colorspace Gray \
-  -format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}')
+	-alpha remove -alpha off -colorspace Gray \
+	-format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}')
 
 # Generate matugen colors (can run while shade calculation completes)
 matugen image "$PROCESSED_IMG"
@@ -38,30 +38,36 @@ PRIMARY_HEX=$(<~/.config/sokratOS/matugen/.primary-hex.txt)
 COLOR1=$(pastel format name "$PRIMARY_HEX")
 
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
-CURRENT_THEME_DIR="$HOME/.config/sokratOS/current/theme/colors.conf"
+CURRENT_LINK="$HOME/.config/sokratOS/current/theme"
 
 set_theme() {
-    local theme="$1"
-    notify-send "$SHADE $COLOR1: $theme" &
-    ln -nsf "$THEMES_DIR/$theme/colors.conf" "$CURRENT_THEME_DIR"
+	local theme="$1"
+	notify-send "$SHADE $COLOR1: $theme" &
+  TMP_LINK="${CURRENT_LINK}.new"
+
+	# If "theme" exists as a directory, remove it. NOTE: Remove me later
+	[[ -d "$CURRENT_LINK" && ! -L "$CURRENT_LINK" ]] && rm -rf -- "$CURRENT_LINK"
+
+  ln -sfn "$TARGET" "$TMP_LINK"
+  mv -Tf "$TMP_LINK" "$CURRENT_LINK"
 }
 
 # Change theme based on image analysis
 case "$SHADE $COLOR1" in
-  "dark lightsteelblue")  set_theme nord ;;
-  "light lightsteelblue") set_theme tokyonight ;;
-  "dark sandybrown")      set_theme tokyonight ;;
-  "dark mediumaquamarine") set_theme osaka-jade ;;
-  *" lightsalmon")        set_theme gruvbox ;;
-  *" lightskyblue")       set_theme everforest ;;
-  *" skyblue")            set_theme nord ;;
-  *" plum")               set_theme catppuccin ;;
-  *" powderblue")         set_theme everforest ;;
-  *" darkkhaki")          set_theme rosepine ;;
+	"dark lightsteelblue")  set_theme nord ;;
+	"light lightsteelblue") set_theme tokyonight ;;
+	"dark sandybrown")      set_theme tokyonight ;;
+	"dark mediumaquamarine") set_theme osaka-jade ;;
+	*" lightsalmon")        set_theme gruvbox ;;
+	*" lightskyblue")       set_theme everforest ;;
+	*" skyblue")            set_theme nord ;;
+	*" plum")               set_theme catppuccin ;;
+	*" powderblue")         set_theme everforest ;;
+	*" darkkhaki")          set_theme rosepine ;;
 	*" lightpink")          set_theme nightfox ;;
-  "light darkseagreen")   set_theme everforest ;;
-  "dark darkseagreen")    set_theme gruvbox ;;
-  *) notify-send "$SHADE $COLOR1" & sokratos-themes; exit 0 ;;
+	"light darkseagreen")   set_theme everforest ;;
+	"dark darkseagreen")    set_theme gruvbox ;;
+	*) notify-send "$SHADE $COLOR1" & sokratos-themes; exit 0 ;;
 esac
 
 # Refresh kitty
