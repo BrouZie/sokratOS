@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+THEMES_DIR="$HOME/.local/share/sokratOS/themes"
+CURRENT_LINK="$HOME/.config/sokratOS/current/theme"
+
+notify-send 'Specify which colorscheme you want'
+
+mkdir -p "$HOME/.config/sokratOS/current"
+cd "$THEMES_DIR" || exit 1
+
+SELECTED_THEME=$(
+  for theme in */; do
+    theme="${theme%/}"
+    echo -en "$theme\0icon\x1f$theme\n"
+  done | rofi -dmenu -p "Themes" -no-show-icons
+)
+
+if [[ -n "${SELECTED_THEME:-}" ]]; then
+  TARGET="$THEMES_DIR/$SELECTED_THEME"
+  [[ -d "$TARGET" ]] || exit 1
+
+  # Create new symlink and move into place (prevents partial state)
+  TMP_LINK="${CURRENT_LINK}.new"
+  ln -sfn "$TARGET" "$TMP_LINK"
+  mv -Tf "$TMP_LINK" "$CURRENT_LINK"
+
+	# Restart applications
+	sokratos-export-wal
+	refresh-app-daemons
+	pywalfox update
+	pkill -SIGUSR1 kitty
+	tmux source-file ~/.tmux.conf
+	hyprctl reload
+
+  notify-send "Theme set: $SELECTED_THEME"
+fi

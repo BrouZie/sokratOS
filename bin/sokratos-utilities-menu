@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"󰀻    Applications"
+	"    Settings"
+	"󰸉    Appearance"
+	"󰂚    Notifications"
+	"    Keybindings"
+	"    Exit System"
+	"󰚰    Update System"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+	rofi -dmenu -i -p "sokratOS" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Applications") rofi -show drun -replace -i ;;
+	*"Settings") notify-send 'Opening settings...' ;;
+	*"Appearance") sokratos-appearance-menu ;;
+	*"Notifications") swaync-client -t -sw ;;
+	*"Keybindings") sokratos-keybind-menu ;;
+	*"Exit System") sokratos-power-menu ;;
+	*"Update System") sokratos-floaterminal sokratos-update ;;
+	*) exit ;;
+esac

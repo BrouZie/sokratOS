@@ -1,6 +1,5 @@
 {
-  "name": "gruvbox-material-dark-hard",
-  "variant": "dark",
+  "name": "gruvbox",
   "palette": [
     "#1d2021",
     "#d4be98",

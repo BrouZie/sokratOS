@@ -1,0 +1,38 @@
+/* Everforest Dark Hard */
+* {
+  base:            #272e33;
+  surface:         #2e383c;
+  overlay:         #374145;
+
+  muted:           #4f5b58;
+  subtle:          #9da9a0;
+  text:            #d3c6aa;
+
+  accent:          #a7c080;
+
+  red:             #e67e80;
+  green:           #a7c080;
+  yellow:          #dbbc7f;
+  blue:            #7fbbb3;
+  magenta:         #d699b6;
+  cyan:            #83c092;
+  orange:          #e69875;
+
+  highlightlow:   #343f44;
+  highlightmed:   #374145;
+  highlighthigh:  #868d80;
+
+  border:          #4f5b58;
+
+  selectionbg:    #464e53;
+  selectionfg:    #9da9a0;
+
+  url:             #7fbbb3;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlightmed;
+  urgent:          @red;
+}

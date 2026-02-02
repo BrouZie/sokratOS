@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"    Lock" # Would like fonts to be "icon" and not part of text/name
+	"    Reboot"
+	"󰤄    Suspend"
+	"󰐥    Poweroff"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+  rofi -dmenu -i -p "Power Menu" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Lock") sleep 0.1 && hyprlock ;;
+	*"Reboot") reboot ;;
+	*"Poweroff") poweroff ;;
+	*"Suspend") systemctl suspend && hyprlock ;; 
+	*) exit 0;;
+esac

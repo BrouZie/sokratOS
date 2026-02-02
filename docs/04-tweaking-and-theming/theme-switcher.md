@@ -43,7 +43,7 @@ sokratOS includes 11 themes:
 
 **Command**:
 ```bash
-sokratos-themes
+sokratos-theme-menu
 ```
 
 **Workflow**:
@@ -69,7 +69,7 @@ sokratos-themes
 
 **Command**:
 ```bash
-sokratos-next-theme
+sokratos-wallpaper-menu
 ```
 
 **Workflow**:
@@ -402,10 +402,10 @@ hour=$(date +%H)
 
 if [ $hour -lt 6 ] || [ $hour -gt 18 ]; then
   # Night theme
-  sokratos-themes <<< "nord"
+  sokratos-theme-menu <<< "nord"
 else
   # Day theme
-  sokratos-themes <<< "everforest"
+  sokratos-theme-menu <<< "everforest"
 fi
 ```
 

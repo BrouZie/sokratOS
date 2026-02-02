@@ -26,7 +26,7 @@
 	"custom/sOS": {
 		"format": "󰣇",
 		"tooltip": false,
-		"on-click": "sokratos-utilities"
+		"on-click": "sokratos-utilities-menu"
 	},
 	"clock": {
 		"interval": 60,
@@ -120,6 +120,6 @@
 	},
 	"custom/power": {
 		"format": "⏻",
-		"on-click": "sokratos-powermenu"
+		"on-click": "sokratos-power-menu"
 	}
 }

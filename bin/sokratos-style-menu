@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"󰝤    Sharp"
+	"    Rounded"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+  rofi -dmenu -i -p "Styles" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Rounded") notify-send "Switching to round layout" ;;
+	*"Sharp") notify-send "Switching to sharp layout" ;;
+	*) exit 0;;
+esac

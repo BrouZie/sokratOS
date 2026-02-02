@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# Wallpaper selection via rofi -dmenu
+
+# Directory containing wallpapers
+WALL_DIR="$HOME/Pictures/wallpaper"
+
+# Current directory (to cd back to)
+CWD="$(pwd)"
+
+cd "$WALL_DIR" || exit
+
+# Handle spaces in filenames
+IFS=$'\n'
+
+# Grab the user-selected wallpaper
+SELECTED_WALL=$(for a in *.jpg *.png *.jpeg; do echo -en "$a\0icon\x1f$a\n" ; done | rofi -dmenu -p "Wallpapers")
+
+# If not empty, pass to walset-backend
+if [ -n "$SELECTED_WALL" ]; then
+    swww img "$SELECTED_WALL" -t fade --transition-step 170
+fi

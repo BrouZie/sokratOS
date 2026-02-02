@@ -51,7 +51,7 @@ Firefox will open. You now know how to launch any application!
 
 ### 2.5. Open the Utilities hub (20 seconds)
 
-Click the Arch logo in the Waybar (top-left) or run `sokratos-utilities` from the terminal.
+Click the Arch logo in the Waybar (top-left) or run `sokratos-utilities-menu` from the terminal.
 
 This menu is the quickest way to change wallpaper/theme, toggle focus or night mode, run updates, and look up keybinds. Spend a minute here so you know where these essentials live.
 
@@ -262,7 +262,7 @@ Click or hover Waybar modules at the top:
 - Bluetooth
 - Network
 - Performance
-- Powermenu
+- Power-menu
 
 Toggle on/off with: `SUPER + R`
 
@@ -276,8 +276,8 @@ Navigate your files with a familiar GUI interface.
 
 sokratOS includes several custom scripts:
 
-- `sokratos-themes` - Interactive theme selector
-- `sokratos-next-theme` - Pick wallpaper and generate theme
+- `sokratos-theme-menu` - Interactive theme selector
+- `sokratos-wallpaper-menu` - Pick wallpaper and generate theme
 - `sokratos-focus-mode` - Minimal distraction mode
 - `sokratos-night-mode` - Toggle night light
 - `sokratos-floaterminal` - Floating terminal window

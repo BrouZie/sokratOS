@@ -1,0 +1,38 @@
+/* Cyberpunk */
+* {
+  base:            #0A0B10;
+  surface:         #101116;
+  overlay:         #120B10;
+
+  muted:           #777777;
+  subtle:          #EEFFFF;
+  text:            #EEFFFF;
+
+  accent:          #FF0055;
+
+  red:             #FF0055;
+  green:           #00FF9C;
+  yellow:          #FFFC58;
+  blue:            #76C1FF;
+  magenta:         #D57BFF;
+  cyan:            #00FFC8;
+  orange:          #FF4081;
+
+  highlightlow:   #101116;
+  highlightmed:   #120B10;
+  highlighthigh:  #1A1320;
+
+  border:          #777777;
+
+  selectionbg:    #120B10;
+  selectionfg:    #EEFFFF;
+
+  url:             #FFFC58;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlighthigh;
+  urgent:          @red;
+}

@@ -39,14 +39,14 @@ Custom scripts that enhance your workflow:
 
 | Keybind | Script | Description |
 |---------|--------|-------------|
-| `SUPER + Shift + Space` | `sokratos-next-theme` | Select wallpaper and apply theme |
-| `SUPER + Shift + P` | `sokratos-themes` | Quick terminal-color switcher |
+| `SUPER + Shift + Space` | `sokratos-wallpaper-menu` | Select wallpaper and apply theme |
+| `SUPER + Shift + P` | `sokratos-theme-menu` | Quick terminal-color switcher |
 
 **Script locations**: `~/.local/share/sokratOS/bin/`
 
 **How they work**:
-- `sokratos-next-theme`: Opens Rofi with wallpapers, generates theme with matugen
-- `sokratos-themes`: Opens Rofi with 11 well-known themes (e.g. catppuccin,
+- `sokratos-wallpaper-menu`: Opens Rofi with wallpapers, generates theme with matugen
+- `sokratos-theme-menu`: Opens Rofi with 11 well-known themes (e.g. catppuccin,
   nord, gruvbox etc.)
 
 [Learn more: Theme Switcher Guide](../04-tweaking-and-theming/theme-switcher.md)

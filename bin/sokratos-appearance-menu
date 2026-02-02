@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"󰸉   Wallpapers"
+	"󰏘   Themes"
+	"   Styles"
+	"󰋱   Toggle Focus Mode"
+	"󰖔   Toggle Night Mode"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+  rofi -dmenu -i -p "Appearance" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Themes") sokratos-theme-menu ;;
+	*"Wallpapers") sokratos-wallpaper-menu ;;
+	*"Styles") sokratos-style-menu ;;
+	*"Toggle Focus Mode") sokratos-focus-mode ;;
+	*"Toggle Night Mode") sokratos-night-mode ;;
+	*) exit 0;;
+esac

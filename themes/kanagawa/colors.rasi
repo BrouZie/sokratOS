@@ -18,14 +18,14 @@
   cyan:            #6A9589;
   orange:          #FFA066;
 
-  highlight_low:   #16161D;
-  highlight_med:   #2A2A37;
-  highlight_high:  #363646;
+  highlightlow:   #16161D;
+  highlightmed:   #2A2A37;
+  highlighthigh:  #363646;
 
   border:          #54546D;
 
-  selection_bg:    #223249;
-  selection_fg:    #DCD7BA;
+  selectionbg:    #223249;
+  selectionfg:    #DCD7BA;
 
   url:             #72a7bc;
 
@@ -33,6 +33,6 @@
   background:      @base;
   background-alt:  @surface;
   foreground:      @text;
-  selected:        @highlight_high;
+  selected:        @highlighthigh;
   urgent:          @red;
 }

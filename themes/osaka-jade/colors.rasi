@@ -17,14 +17,14 @@
   magenta:         #D2689C;
   cyan:            #2DD5B7;
 
-  highlight_low:   #23372B;
-  highlight_med:   #2a4234;
-  highlight_high:  #53685B;
+  highlightlow:   #23372B;
+  highlightmed:   #2a4234;
+  highlighthigh:  #53685B;
 
   border:          #23372B;
 
-  selection_bg:    #23372B;
-  selection_fg:    #C1C497;
+  selectionbg:    #23372B;
+  selectionfg:    #C1C497;
 
   url:             #ACD4CF;
 
@@ -32,6 +32,6 @@
   background:      @base;
   background-alt:  @surface;
   foreground:      @text;
-  selected:        @highlight_med;
+  selected:        @highlightmed;
   urgent:          @red;
 }

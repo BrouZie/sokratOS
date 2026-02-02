@@ -345,12 +345,12 @@ sudo pacman -Rns $(pacman -Qtdq)
 
 3. **Manually set theme**:
    ```bash
-   sokratos-themes
+   sokratos-theme-menu
    ```
 
 ### Wallpaper Won't Change
 
-**Symptom**: `sokratos-next-theme` doesn't update wallpaper
+**Symptom**: `sokratos-wallpaper-menu` doesn't update wallpaper
 
 **Solutions**:
 

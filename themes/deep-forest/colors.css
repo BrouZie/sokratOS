@@ -1,0 +1,27 @@
+/* Deep Forest */
+@define-color base           #06110b;
+@define-color surface        #0c1b12;
+@define-color overlay        #12261a;
+
+@define-color muted          #7c827a;
+@define-color subtle         #b6ab93;
+@define-color text           #d3c6aa;
+
+@define-color accent         #8fb57a;
+
+@define-color red            #d96f72;
+@define-color green          #8fb57a;
+@define-color yellow         #c7a96f;
+@define-color blue           #6fa9a2;
+@define-color magenta        #c68dac;
+@define-color cyan           #76ad86;
+@define-color orange         #d08869;
+
+@define-color highlight_low  #0c1b12;
+@define-color highlight_med  #12261a;
+@define-color highlight_high #183222;
+
+@define-color border         #1b3a27;
+
+@define-color selection_bg   #12261a;
+@define-color selection_fg   #d3c6aa;

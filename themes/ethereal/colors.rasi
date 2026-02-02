@@ -17,9 +17,9 @@
   magenta:         #c89dc1;
   cyan:            #a3bfd1;
 
-  highlight_low:   #0E1326;
-  highlight_med:   #161B2E;
-  highlight_high:  #1E2336;
+  highlightlow:   #0E1326;
+  highlightmed:   #161B2E;
+  highlighthigh:  #1E2336;
 
   border:          @overlay;
 
@@ -27,6 +27,6 @@
   background:      @base;
   background-alt:  @surface;
   foreground:      @text;
-  selected:        @highlight_med;
+  selected:        @highlightmed;
   urgent:          @red;
 }

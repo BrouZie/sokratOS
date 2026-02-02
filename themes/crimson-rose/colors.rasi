@@ -1,0 +1,35 @@
+/* Crimson Rose */
+* {
+  base:            #0f0406;
+  surface:         #18080b;
+  overlay:         #231014;
+
+  muted:           #8d85a6;
+  subtle:          #b9b1d3;
+  text:            #e0def4;
+
+  accent:          #d16a85;
+
+  red:             #d16a85;
+  green:           #2f6b7f;
+  yellow:          #d5ab6b;
+  blue:            #7fb0b8;
+  magenta:         #b194d1;
+  cyan:            #8fc3cb;
+  orange:          #d8aba9;
+
+  highlightlow:   #18080b;
+  highlightmed:   #231014;
+  highlighthigh:  #2f161c;
+
+  border:          #351a20;
+
+  selectionbg:    #231014;
+  selectionfg:    #e0def4;
+
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlighthigh;
+  urgent:          @red;
+}

@@ -35,7 +35,7 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 **Location**: `~/.local/share/sokratos/bin`
 
 **Repo utilities** (referenced in `$PATH`):
-- `sokratos-next-theme` - Interactive theme + wallpaper picker
+- `sokratos-wallpaper-menu` - Interactive theme + wallpaper picker
 - `sokratos-apply-theme` - Apply theme from wallpaper
 - `sokratos-night-mode` - Toggle night light
 - `sokratos-focus-mode` - Minimal distraction mode
@@ -198,7 +198,7 @@ sokratOS/
 
 **Active theme symlink**: `~/.config/sokratOS/current/theme/colors.conf`
 - Points to one of the themes in `~/.local/share/sokratOS/themes/`
-- Updated by `sokratos-themes` and `sokratos-next-theme`
+- Updated by `sokratos-theme-menu` and `sokratos-wallpaper-menu`
 
 ### GTK Configuration
 
@@ -220,7 +220,7 @@ Custom `.desktop` files for Rofi launcher.
 
 **Location**: `~/Pictures/wallpaper/`
 
-**Usage**: Theme switcher (`sokratos-next-theme`) picks up wallpapers
+**Usage**: Theme switcher (`sokratos-wallpaper-menu`) picks up wallpapers
 interactively from this location.
 
 **Add wallpapers**:

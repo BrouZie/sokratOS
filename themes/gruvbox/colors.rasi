@@ -18,22 +18,22 @@
   cyan:            #89b482;
   orange:          #e78a4e;
 
-  highlight_low:   #282828;
-  highlight_med:   #3c3836;
-  highlight_high:  #504945;
+  highlightlow:   #282828;
+  highlightmed:   #3c3836;
+  highlighthigh:  #504945;
 
   border:          #504945;
 
   /* text selection semantics (not necessarily used by rofi) */
-  selection_bg:    #d4be98;
-  selection_fg:    #1d2021;
+  selectionbg:    #d4be98;
+  selectionfg:    #1d2021;
 
   /* rofi conventional aliases */
   background:      @base;
   background-alt:  @surface;
   foreground:      @text;
 
-  /* key fix: selected should be DARK, not your bright selection_bg */
-  selected:        @highlight_med;
+  /* key fix: selected should be DARK, not your bright selectionbg */
+  selected:        @highlightmed;
   urgent:          @red;
 }

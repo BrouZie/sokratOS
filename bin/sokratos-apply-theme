@@ -67,7 +67,7 @@ case "$SHADE $COLOR1" in
 	*" lightpink")          set_theme nightfox ;;
 	"light darkseagreen")   set_theme everforest ;;
 	"dark darkseagreen")    set_theme gruvbox ;;
-	*) notify-send "$SHADE $COLOR1" & sokratos-themes; exit 0 ;;
+	*) notify-send "$SHADE $COLOR1" & sokratos-theme-menu; exit 0 ;;
 esac
 
 # Refresh kitty
