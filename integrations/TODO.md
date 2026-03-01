@@ -1,18 +1,15 @@
 # TODO
 
-1. Figure out waybar + swaync layout (what modules)
-1. Style swaync (simple, but clean)
-1. Resolve rofi-menus (create additionals)
-1. Make matugen read similar colornames
-1. Remove unecessary colors from `themes/` dir
-1. Create matugen vs. manual script
+- [ ] Focusmode for hyprland (looknfeel.conf) (proper sourcing)
+- [ ] Bruke ~/.config/sokratOS/current og matugen
+- [ ] Cleanup av waybar
+- [ ] Cleanup av matugen
+- [ ] Simple focus config for waybar + rofi
+- [x] Fix gtk3-4 for preconf. palettes
+- [ ] Fix color sourcing for .css applications
 
-**Aftermath:**
+**Før merge:**
 
-- Verify/test backend switcher (correct colors are read++)
-- Move config files (waybar, swaync, hypr and rofi into place)
-- Ensure correct paths for install.sh setup ain't it hard keeping it so hard
-
-**Extras:**
-
-- Update neovim config
+- [ ] Move config files (waybar, swaync, hypr, mat and rofi into place)
+- [ ] Ensure correct paths in install.sh setup
+- [ ] Test in VM if possible!

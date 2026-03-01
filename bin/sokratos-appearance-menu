@@ -6,6 +6,7 @@ OPTIONS=(
 	"   Styles"
 	"󰋱   Toggle Focus Mode"
 	"󰖔   Toggle Night Mode"
+	"󰏘   Toggle Auto-coloring"
 )
 
 SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
@@ -18,5 +19,6 @@ case "$SELECTED" in
 	*"Styles") sokratos-style-menu ;;
 	*"Toggle Focus Mode") sokratos-focus-mode ;;
 	*"Toggle Night Mode") sokratos-night-mode ;;
+	*"Toggle Auto-coloring") sokratos-switch-color-backend ;;
 	*) exit 0;;
 esac

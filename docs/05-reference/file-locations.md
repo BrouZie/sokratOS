@@ -36,7 +36,7 @@ Complete reference for where sokratOS stores configurations, scripts, and data.
 
 **Repo utilities** (referenced in `$PATH`):
 - `sokratos-wallpaper-menu` - Interactive theme + wallpaper picker
-- `sokratos-apply-theme` - Apply theme from wallpaper
+- `sokratos-mat-theme` - Apply theme from wallpaper
 - `sokratos-night-mode` - Toggle night light
 - `sokratos-focus-mode` - Minimal distraction mode
 - `sokratos-floaterminal` - Launch floating terminal

@@ -27,7 +27,7 @@ SHADE=$(magick "$PROCESSED_IMG" \
 	-format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}')
 
 # Generate matugen colors (can run while shade calculation completes)
-matugen image "$PROCESSED_IMG"
+matugen image "$PROCESSED_IMG" -m dark --source-color-index 0
 refresh-app-daemons
 
 # Wait for shade calculation to complete
@@ -44,6 +44,7 @@ set_theme() {
 	local theme="$1"
 	notify-send "$SHADE $COLOR1: $theme" &
   TMP_LINK="${CURRENT_LINK}.new"
+  TARGET="$THEMES_DIR/$theme"
 
 	# If "theme" exists as a directory, remove it. NOTE: Remove me later
 	[[ -d "$CURRENT_LINK" && ! -L "$CURRENT_LINK" ]] && rm -rf -- "$CURRENT_LINK"
@@ -63,8 +64,8 @@ case "$SHADE $COLOR1" in
 	*" skyblue")            set_theme nord ;;
 	*" plum")               set_theme catppuccin ;;
 	*" powderblue")         set_theme everforest ;;
-	*" darkkhaki")          set_theme rosepine ;;
-	*" lightpink")          set_theme nightfox ;;
+	*" darkkhaki")          set_theme rose-pine ;;
+	*" lightpink")          set_theme rose-pine ;;
 	"light darkseagreen")   set_theme everforest ;;
 	"dark darkseagreen")    set_theme gruvbox ;;
 	*) notify-send "$SHADE $COLOR1" & sokratos-theme-menu; exit 0 ;;

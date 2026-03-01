@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+# Toggle color sourcing between matugen (auto-generated) and preconfigured themes.
+# State is persisted in ~/.config/sokratOS/.color-backend
+
+STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+
+# Read current state (default to matugen)
+if [[ -f "$STATE_FILE" ]]; then
+	CURRENT=$(<"$STATE_FILE")
+else
+	CURRENT="matugen"
+fi
+
+# Toggle
+if [[ "$CURRENT" == "matugen" ]]; then
+	NEW="preconfigured"
+else
+	NEW="matugen"
+fi
+
+# --- Substitution helpers ---
+
+to_preconfigured() {
+	# kitty: comment out matugen include (leave the theme include untouched)
+	sed -i 's|^include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|# include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|' \
+		~/.config/kitty/kitty.conf
+
+	# hyprland
+	sed -i 's|^source = ~/.config/sokratOS/matugen/hypr/colors.conf|source = ~/.config/sokratOS/current/theme/hcolors.conf|' \
+		~/.config/hypr/hyprland.conf
+
+	# waybar
+	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+		~/.config/waybar/style.css
+
+	# swaync
+	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+		~/.config/swaync/style.css
+
+	# gtk-3
+	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+		~/.config/gtk-3.0/gtk.css
+	
+	# gtk-4
+	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+		~/.config/gtk-4.0/gtk.css
+
+	# rofi
+	sed -i 's|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|@theme "~/.config/sokratOS/current/theme/colors.rasi"|' \
+		~/.config/rofi/config.rasi
+
+	# tmux
+	sed -i 's|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|' \
+		~/.tmux.conf
+}
+
+to_matugen() {
+	# kitty: uncomment matugen include
+	sed -i 's|^# include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|' \
+		~/.config/kitty/kitty.conf
+
+	# hyprland
+	sed -i 's|^source = ~/.config/sokratOS/current/theme/hcolors.conf|source = ~/.config/sokratOS/matugen/hypr/colors.conf|' \
+		~/.config/hypr/hyprland.conf
+
+	# waybar
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+		~/.config/waybar/style.css
+
+	# swaync
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+		~/.config/swaync/style.css
+
+	# gtk-3
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+		~/.config/gtk-3.0/gtk.css
+	
+	# gtk-4
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+		~/.config/gtk-4.0/gtk.css
+
+	# rofi
+	sed -i 's|@theme "~/.config/sokratOS/current/theme/colors.rasi"|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|' \
+		~/.config/rofi/config.rasi
+
+	# tmux
+	sed -i 's|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|' \
+		~/.tmux.conf
+}
+
+# --- Apply ---
+
+if [[ "$NEW" == "preconfigured" ]]; then
+	to_preconfigured
+else
+	to_matugen
+fi
+
+# Persist new state
+echo "$NEW" > "$STATE_FILE"
+
+# Reload apps
+pkill -SIGUSR1 kitty
+hyprctl reload
+tmux source-file ~/.tmux.conf 2>/dev/null
+refresh-app-daemons
+
+notify-send "Color backend" "Switched to $NEW"

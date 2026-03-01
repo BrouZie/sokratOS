@@ -14,13 +14,13 @@ These scripts are in your `$PATH` and can be run from anywhere.
 
 ## Theme Management
 
-### sokratos-apply-theme
+### sokratos-mat-theme
 
 **Purpose**: Generate and apply theme from a wallpaper image
 
 **Usage**:
 ```bash
-sokratos-apply-theme /path/to/wallpaper.jpg
+sokratos-mat-theme /path/to/wallpaper.jpg
 ```
 
 **What it does**:
@@ -53,7 +53,7 @@ sokratos-wallpaper-menu
 **How it works**:
 1. Shows Rofi menu with wallpapers from `~/Pictures/wallpaper/`
 2. Select wallpaper
-3. Automatically calls `sokratos-apply-theme`
+3. Automatically calls `sokratos-mat-theme`
 
 **Keybind**: `SUPER + Shift + Space`
 

@@ -16,7 +16,15 @@ IFS=$'\n'
 # Grab the user-selected wallpaper
 SELECTED_WALL=$(for a in *.jpg *.png *.jpeg; do echo -en "$a\0icon\x1f$a\n" ; done | rofi -dmenu -p "Wallpapers")
 
-# If not empty, pass to walset-backend
+# If not empty, apply wallpaper based on color backend
 if [ -n "$SELECTED_WALL" ]; then
-    swww img "$SELECTED_WALL" -t fade --transition-step 170
+    STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+    BACKEND="matugen"
+    [[ -f "$STATE_FILE" ]] && BACKEND=$(<"$STATE_FILE")
+
+    if [[ "$BACKEND" == "matugen" ]]; then
+        sokratos-mat-theme "$WALL_DIR/$SELECTED_WALL"
+    else
+        swww img "$SELECTED_WALL" -t fade --transition-step 170
+    fi
 fi
