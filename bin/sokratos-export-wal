@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
 from __future__ import annotations
 import json
 import re
@@ -34,32 +35,27 @@ def main() -> None:
     surface = pick(c, "surface", pick(c, "highlight_low", base))
     overlay = pick(c, "overlay", pick(c, "highlight_med", surface))
     muted  = pick(c, "muted", pick(c, "border", overlay))
-    subtle = pick(c, "subtle", text)
-    hl_low  = pick(c, "highlight_low", surface)
-    hl_med  = pick(c, "highlight_med", overlay)
     hl_high = pick(c, "highlight_high", muted)
     accent  = pick(c, "accent", hl_high)
 
-    # Build a *subtle* 16-color set (mostly neutrals + a light touch of accent)
-    # This intentionally avoids pushing bright reds/greens into Firefox UI.
     colors16 = [
-        base,        # 0
-        surface,     # 1
-        overlay,     # 2
-        hl_low,      # 3
-        hl_med,      # 4
-        hl_high,     # 5
-        muted,       # 6
-        text,        # 7  <-- IMPORTANT (foreground/text slot)
+        base,   # 0
+        "",     # 1
+        "",     # 2
+        "",     # 3
+        "",     # 4
+        "",     # 5
+        "",     # 6
+        "",     # 7
 
-        surface,     # 8
-        overlay,     # 9
-        muted,       # 10
-        subtle,      # 11
-        accent,      # 12
-        accent,      # 13
-        text,        # 14
-        text,        # 15 <-- IMPORTANT (bright foreground slot)
+        "",     # 8
+        "",     # 9
+        muted,  # 10
+        "",     # 11
+        "",     # 12
+        accent, # 13
+        "",     # 14
+        text,   # 15
     ]
 
     WAL_DIR.mkdir(parents=True, exist_ok=True)

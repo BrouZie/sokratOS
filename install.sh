@@ -168,6 +168,9 @@ gum_spin "Copying configuration files..." "
     cp -r '$REPO_INSTALL/configs/nvim' '$HOME/.config/nvim'
     cp '$REPO_INSTALL/configs/applications/'*.desktop '$HOME/.local/share/applications/'
     cp -r '$REPO_INSTALL/configs/applications/icons' '$HOME/.local/share/applications/'
+
+		ln -sf '$HOME/.config/waybar/styles/round/config.jsonc' '$HOME/.config/waybar/config.jsonc'
+		ln -sf '$HOME/.config/waybar/styles/round/style.css' '$HOME/.config/waybar/style.css'
 "
 
 # Configure keyboard layout based on system settings

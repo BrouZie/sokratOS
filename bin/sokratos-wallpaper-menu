@@ -5,9 +5,6 @@
 # Directory containing wallpapers
 WALL_DIR="$HOME/Pictures/wallpaper"
 
-# Current directory (to cd back to)
-CWD="$(pwd)"
-
 cd "$WALL_DIR" || exit
 
 # Handle spaces in filenames
@@ -18,13 +15,13 @@ SELECTED_WALL=$(for a in *.jpg *.png *.jpeg; do echo -en "$a\0icon\x1f$a\n" ; do
 
 # If not empty, apply wallpaper based on color backend
 if [ -n "$SELECTED_WALL" ]; then
-    STATE_FILE="$HOME/.config/sokratOS/.color-backend"
-    BACKEND="matugen"
-    [[ -f "$STATE_FILE" ]] && BACKEND=$(<"$STATE_FILE")
+	STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+	BACKEND="matugen"
+	[[ -f "$STATE_FILE" ]] && BACKEND=$(<"$STATE_FILE")
 
-    if [[ "$BACKEND" == "matugen" ]]; then
-        sokratos-mat-theme "$WALL_DIR/$SELECTED_WALL"
-    else
-        swww img "$SELECTED_WALL" -t fade --transition-step 170
-    fi
+	if [[ "$BACKEND" == "matugen" ]]; then
+		sokratos-mat-theme "$WALL_DIR/$SELECTED_WALL"
+	else
+		swww img "$SELECTED_WALL" -t fade --transition-step 170
+	fi
 fi

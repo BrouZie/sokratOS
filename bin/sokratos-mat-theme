@@ -31,7 +31,7 @@ matugen image "$PROCESSED_IMG" -m dark --source-color-index 0
 refresh-app-daemons
 
 # Wait for shade calculation to complete
-wait $SHADE_PID
+wait "$SHADE_PID"
 
 # Image analysis variables
 PRIMARY_HEX=$(<~/.config/sokratOS/matugen/.primary-hex.txt)
@@ -53,22 +53,25 @@ set_theme() {
   mv -Tf "$TMP_LINK" "$CURRENT_LINK"
 }
 
-# Change theme based on image analysis
+# Change kitty terminal colors based on analysis
 case "$SHADE $COLOR1" in
-	"dark lightsteelblue")  set_theme nord ;;
-	"light lightsteelblue") set_theme tokyonight ;;
-	"dark sandybrown")      set_theme tokyonight ;;
+	"dark lightsteelblue")   set_theme nord ;;
+	"light lightsteelblue")  set_theme tokyonight ;;
+	"dark sandybrown")       set_theme tokyonight ;;
+	"light sandybrown")      set_theme melange ;;
 	"dark mediumaquamarine") set_theme osaka-jade ;;
-	*" lightsalmon")        set_theme gruvbox ;;
-	*" lightskyblue")       set_theme everforest ;;
-	*" skyblue")            set_theme nord ;;
-	*" plum")               set_theme catppuccin ;;
-	*" powderblue")         set_theme everforest ;;
-	*" darkkhaki")          set_theme rose-pine ;;
-	*" lightpink")          set_theme rose-pine ;;
-	"light darkseagreen")   set_theme everforest ;;
-	"dark darkseagreen")    set_theme gruvbox ;;
-	*) notify-send "$SHADE $COLOR1" & sokratos-theme-menu; exit 0 ;;
+	*" burlywood")           set_theme melange ;;
+	*" lightsalmon")         set_theme gruvbox ;;
+	*" lightskyblue")        set_theme everforest ;;
+	*" skyblue")             set_theme nord ;;
+	*" plum")                set_theme catppuccin ;;
+	*" powderblue")          set_theme everforest ;;
+	*" darkkhaki")           set_theme rose-pine ;;
+	*" lightpink")           set_theme rose-pine ;;
+	"light darkseagreen")    set_theme everforest ;;
+	"dark darkseagreen")     set_theme gruvbox ;;
+	*) notify-send "New image shade discovered!" "Using catppuccin for now..."
+		 set_theme catppuccin ;;
 esac
 
 # Refresh kitty

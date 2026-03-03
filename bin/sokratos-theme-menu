@@ -1,9 +1,28 @@
 #!/usr/bin/env bash
 
+# Check colorbackend!
+STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+
+# Read current state (default to matugen)
+if [[ -f "$STATE_FILE" ]]; then
+	CURRENT=$(<"$STATE_FILE")
+else
+	CURRENT="matugen"
+fi
+
+# EXITING EARLY ON MATUGEN BACKEND!
+if [[ "$CURRENT" == "matugen" ]]; then
+	notify-send \
+		--urgency=critical \
+		--expire-time=10000 \
+		"NB!" "✦ Auto-Colorizer-Mode must be disabled!"
+	exit 0;
+fi
+
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
 CURRENT_LINK="$HOME/.config/sokratOS/current/theme"
 
-notify-send 'Specify which colorscheme you want'
+notify-send "Choose the desired colorscheme!"
 
 mkdir -p "$HOME/.config/sokratOS/current"
 cd "$THEMES_DIR" || exit 1
@@ -32,5 +51,5 @@ if [[ -n "${SELECTED_THEME:-}" ]]; then
 	tmux source-file ~/.tmux.conf
 	hyprctl reload
 
-  notify-send "Theme set: $SELECTED_THEME"
+  notify-send "Theme $SELECTED_THEME selected!"
 fi

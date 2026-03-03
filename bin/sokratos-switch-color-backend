@@ -31,19 +31,19 @@ to_preconfigured() {
 		~/.config/hypr/hyprland.conf
 
 	# waybar
-	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
 		~/.config/waybar/style.css
 
 	# swaync
-	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
 		~/.config/swaync/style.css
 
 	# gtk-3
-	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
 		~/.config/gtk-3.0/gtk.css
 	
 	# gtk-4
-	sed -i 's|@import url("../sokratOS/matugen/swaybar/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
 		~/.config/gtk-4.0/gtk.css
 
 	# rofi
@@ -65,19 +65,19 @@ to_matugen() {
 		~/.config/hypr/hyprland.conf
 
 	# waybar
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
 		~/.config/waybar/style.css
 
 	# swaync
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
 		~/.config/swaync/style.css
 
 	# gtk-3
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
 		~/.config/gtk-3.0/gtk.css
 	
 	# gtk-4
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/swaybar/colors.css");|' \
+	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
 		~/.config/gtk-4.0/gtk.css
 
 	# rofi

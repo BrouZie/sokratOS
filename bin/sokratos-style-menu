@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 OPTIONS=(
-	"󰝤    Sharp"
-	"    Rounded"
+	"󰧞    Round"
+	"    Sharp"
 )
 
 SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
@@ -10,7 +10,7 @@ SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
 	-no-show-icons)
 
 case "$SELECTED" in
-	*"Rounded") notify-send "Switching to round layout" ;;
-	*"Sharp") notify-send "Switching to sharp layout" ;;
+	*"Round") sokratos-switch-style round ;;
+	*"Sharp") sokratos-switch-style sharp ;;
 	*) exit 0;;
 esac

@@ -3,7 +3,6 @@
 OPTIONS=(
 	"󰀻    Applications"
 	"    Settings"
-	"󰸉    Appearance"
 	"󰂚    Notifications"
 	"    Keybindings"
 	"    Exit System"
@@ -16,8 +15,7 @@ SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
 
 case "$SELECTED" in
 	*"Applications") rofi -show drun -replace -i ;;
-	*"Settings") notify-send 'Opening settings...' ;;
-	*"Appearance") sokratos-appearance-menu ;;
+	*"Settings") sokratos-settings-menu ;;
 	*"Notifications") swaync-client -t -sw ;;
 	*"Keybindings") sokratos-keybind-menu ;;
 	*"Exit System") sokratos-power-menu ;;

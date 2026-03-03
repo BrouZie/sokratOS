@@ -86,7 +86,7 @@
 				},
 				{
 					"label": "",
-					"command": "swaync-client -cp ; bash -c sokratos-appearance-menu"
+					"command": "swaync-client -cp ; bash -c sokratos-settings-menu"
 				},
 				{
 					"label": "",
