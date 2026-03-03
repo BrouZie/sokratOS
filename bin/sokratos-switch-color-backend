@@ -13,38 +13,29 @@ else
 fi
 
 # Toggle
-if [[ "$CURRENT" == "matugen" ]]; then
-	NEW="preconfigured"
-else
-	NEW="matugen"
-fi
+[[ "$CURRENT" == "matugen" ]] && NEW="preconfigured" || NEW="matugen"
 
-# --- Substitution helpers ---
+# CSS files that all share the same import pattern
+CSS_FILES=(
+	~/.config/waybar/style.css
+	~/.config/swaync/style.css
+	~/.config/gtk-3.0/gtk.css
+	~/.config/gtk-4.0/gtk.css
+)
 
-to_preconfigured() {
-	# kitty: comment out matugen include (leave the theme include untouched)
+MAT_CSS='@import url("../sokratOS/matugen/shared/colors.css");'
+PRE_CSS='@import url("../sokratOS/current/theme/colors.css");'
+
+# --- Apply substitutions ---
+
+if [[ "$NEW" == "preconfigured" ]]; then
+	# kitty: comment out matugen include
 	sed -i 's|^include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|# include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|' \
 		~/.config/kitty/kitty.conf
 
 	# hyprland
 	sed -i 's|^source = ~/.config/sokratOS/matugen/hypr/colors.conf|source = ~/.config/sokratOS/current/theme/hcolors.conf|' \
 		~/.config/hypr/hyprland.conf
-
-	# waybar
-	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
-		~/.config/waybar/style.css
-
-	# swaync
-	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
-		~/.config/swaync/style.css
-
-	# gtk-3
-	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
-		~/.config/gtk-3.0/gtk.css
-	
-	# gtk-4
-	sed -i 's|@import url("../sokratOS/matugen/shared/colors.css");|@import url("../sokratOS/current/theme/colors.css");|' \
-		~/.config/gtk-4.0/gtk.css
 
 	# rofi
 	sed -i 's|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|@theme "~/.config/sokratOS/current/theme/colors.rasi"|' \
@@ -53,9 +44,12 @@ to_preconfigured() {
 	# tmux
 	sed -i 's|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|' \
 		~/.tmux.conf
-}
 
-to_matugen() {
+	# CSS files (waybar, swaync, gtk-3, gtk-4)
+	for f in "${CSS_FILES[@]}"; do
+		sed -i "s|$MAT_CSS|$PRE_CSS|" "$f"
+	done
+else
 	# kitty: uncomment matugen include
 	sed -i 's|^# include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|' \
 		~/.config/kitty/kitty.conf
@@ -64,22 +58,6 @@ to_matugen() {
 	sed -i 's|^source = ~/.config/sokratOS/current/theme/hcolors.conf|source = ~/.config/sokratOS/matugen/hypr/colors.conf|' \
 		~/.config/hypr/hyprland.conf
 
-	# waybar
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
-		~/.config/waybar/style.css
-
-	# swaync
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
-		~/.config/swaync/style.css
-
-	# gtk-3
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
-		~/.config/gtk-3.0/gtk.css
-	
-	# gtk-4
-	sed -i 's|@import url("../sokratOS/current/theme/colors.css");|@import url("../sokratOS/matugen/shared/colors.css");|' \
-		~/.config/gtk-4.0/gtk.css
-
 	# rofi
 	sed -i 's|@theme "~/.config/sokratOS/current/theme/colors.rasi"|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|' \
 		~/.config/rofi/config.rasi
@@ -87,23 +65,34 @@ to_matugen() {
 	# tmux
 	sed -i 's|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|' \
 		~/.tmux.conf
-}
 
-# --- Apply ---
-
-if [[ "$NEW" == "preconfigured" ]]; then
-	to_preconfigured
-else
-	to_matugen
+	# CSS files (waybar, swaync, gtk-3, gtk-4)
+	for f in "${CSS_FILES[@]}"; do
+		sed -i "s|$PRE_CSS|$MAT_CSS|" "$f"
+	done
 fi
 
 # Persist new state
 echo "$NEW" > "$STATE_FILE"
 
 # Reload apps
-pkill -SIGUSR1 kitty
-hyprctl reload
-tmux source-file ~/.tmux.conf 2>/dev/null
-refresh-app-daemons
+if [[ "$NEW" == "matugen" ]]; then
+	# Get current wallpaper from swww and regenerate colors
+	WALL=$(swww query | grep -o 'image: .*' | head -1 | cut -d' ' -f2)
+	if [[ -n "$WALL" ]]; then
+		sokratos-mat-theme "$WALL"
+	else
+		# Fallback: reload manually if swww can't report wallpaper
+		pkill -SIGUSR1 kitty
+		hyprctl reload
+		tmux source-file ~/.tmux.conf 2>/dev/null
+		refresh-app-daemons
+	fi
+else
+	pkill -SIGUSR1 kitty
+	hyprctl reload
+	tmux source-file ~/.tmux.conf 2>/dev/null
+	refresh-app-daemons
+fi
 
 notify-send "Color backend" "Switched to $NEW"
