@@ -8,13 +8,18 @@
 - [x] Fix gtk3-4 for preconf. palettes
 - [x] Fix color sourcing for .css applications
 
-- [ ] MATUGEN FIX
+- [x] MATUGEN FIX
 - [ ] INSTRUCTIONS IN HYPRCONF
 - [ ] COPY OVER EVERYTHIN!!! (BARE DE SOM TRENGS)
-- [ ] HUSK WAYBAR INITIALIZES MED SYMLINK
-- [ ] ADD SESSION SCRIPTS!!! (DE MÅ FIKSES LITT - PATH)
+- [x] HUSK WAYBAR INITIALIZES MED SYMLINK
+- [ ] ADD SESSION SCRIPTS!!! (DE MÅ FIKSES LITT - PATH, STATE)
 
 - [ ] SKAL JEG HA ROFI SHARP OGSÅ???????????
+
+- [ ] git diff main vs revamp
+    - alle applications man trenger (flere lagt til siden sist + brukes aktivt?)
+    - er alle dirs laget? Sjekk:
+        - Alle nye script, mat-theme, switch-color-backend etc.
 
 **Før merge:**
 

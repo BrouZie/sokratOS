@@ -17,7 +17,8 @@ fi
 
 # CSS files that all share the same import pattern
 CSS_FILES=(
-	~/.config/waybar/style.css
+	~/.config/waybar/styles/round/style.css
+	~/.config/waybar/styles/sharp/style.css
 	~/.config/swaync/style.css
 	~/.config/gtk-3.0/gtk.css
 	~/.config/gtk-4.0/gtk.css
