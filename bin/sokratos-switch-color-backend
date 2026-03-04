@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Toggle color sourcing between matugen (auto-generated) and preconfigured themes.
-# State is persisted in ~/.config/sokratOS/.color-backend
+# State is persisted in ~/.local/state/sokratOS/.color-backend
 
-STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+STATE_FILE="$HOME/.local/state/sokratOS/.color-backend"
 
 # Read current state (default to matugen)
 if [[ -f "$STATE_FILE" ]]; then

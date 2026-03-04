@@ -5,7 +5,7 @@ set -euo pipefail
 
 export REPO_PATH="$HOME/.local/share/sokratOS"
 export REPO_INSTALL="$REPO_PATH/install"
-export LOG_FILE="$HOME/.config/sokratOS-install.log"
+export LOG_FILE="$HOME/.cache/sokratOS-install.log"
 
 # Ensure log directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -144,6 +144,7 @@ gum style --foreground 147 "⚙️  Setting up configurations..."
 gum_spin "Creating directories..." "mkdir -p \
     '$HOME/.config/sokratOS/current/theme' \
     '$HOME/.config/sokratOS/env.d' \
+    '$HOME/.local/state/sokratOS' \
     '$HOME/.local/share/applications' \
     '$HOME/.config/kitty' \
     '$HOME/Pictures/wallpaper' \

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Check colorbackend!
-STATE_FILE="$HOME/.config/sokratOS/.color-backend"
+STATE_FILE="$HOME/.local/state/sokratOS/.color-backend"
 
 # Read current state (default to matugen)
 if [[ -f "$STATE_FILE" ]]; then
