@@ -45,8 +45,8 @@ if [[ -n "${SELECTED_THEME:-}" ]]; then
 
 	# Restart applications
 	sokratos-export-wal
-	refresh-app-daemons
 	pywalfox update
+	refresh-app-daemons
 	pkill -SIGUSR1 kitty
 	tmux source-file ~/.tmux.conf
 	hyprctl reload

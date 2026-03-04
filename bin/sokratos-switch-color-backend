@@ -93,6 +93,8 @@ else
 	pkill -SIGUSR1 kitty
 	hyprctl reload
 	tmux source-file ~/.tmux.conf 2>/dev/null
+	sokratos-export-wal
+	pywalfox update
 	refresh-app-daemons
 fi
 
