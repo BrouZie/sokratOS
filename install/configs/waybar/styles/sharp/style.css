@@ -1,0 +1,136 @@
+/* Waybar configuration from left to right! */
+
+@import url("../sokratOS/matugen/shared/colors.css");
+
+* {
+	border: none;
+	border-radius: 0px;
+	font-family:
+	"Rubik", "JetBrainsMono Nerd Font Propo", "Noto Sans CJK JP",
+	"Noto Sans CJK JP";
+	font-size: 10pt;
+	min-height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+window#waybar {
+	background: @base;
+}
+
+.modules-left {
+	margin-left: 8px;
+}
+
+.modules-right {
+	margin-right: 8px;
+}
+
+tooltip {
+	background: @base;
+	border-radius: 14px;
+	margin: 20px;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+tooltip label {
+	color: @text;
+	padding: 6px;
+}
+
+#custom-sOS,
+#clock {
+	color: @text;
+	padding: 0 6px;
+	margin: 0 2px;
+	border-radius: 0;
+	border: none;
+	box-shadow: none;
+}
+
+#custom-sOS:hover {
+	color: @subtle;
+}
+
+#clock {
+	font-size: 12pt;
+}
+
+#workspaces {
+	background: transparent;
+	padding: 0;
+	margin: 0 10px 0 10px;
+	border: none;
+	box-shadow: none;
+}
+
+#workspaces button {
+	padding: 0px 6px;
+	margin: 3px 2px;
+	color: @muted;
+	border-radius: 2px;
+	background: transparent;
+	transition: all 0.1s ease-in-out;
+}
+
+#workspaces button.active {
+	background: @text;
+	color: @surface;
+	min-width: 35px;
+	transition: all 0.1s ease-in-out;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+#workspaces button:hover {
+	background: @text;
+	color: @surface;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+#workspaces button.urgent {
+	background: @red;
+	color: @surface;
+	box-shadow: inset 1px 2px 2px rgba(255, 255, 255, 0.7);
+}
+
+#network,
+#pulseaudio,
+#bluetooth,
+#custom-settings,
+#battery,
+#custom-power {
+	padding: 0 6px;
+	margin: 0 5px;
+	color: @text;
+}
+
+#network:hover,
+#pulseaudio:hover,
+#bluetooth:hover,
+#custom-settings:hover,
+#custom-power:hover {
+	color: @subtle;
+}
+
+#cpu,
+#memory,
+#power-profiles-daemon {
+	padding: 0 6px;
+	margin: 0 4px;
+	color: @text;
+	font-weight: bold;
+}
+
+#cpu:hover,
+#memory:hover,
+#power-profiles-daemon:hover {
+	color: @subtle;
+}
+
+#battery.warning {
+	color: alpha(@yellow, 0.7);
+}
+
+#battery.critical {
+	color: @red;
+}

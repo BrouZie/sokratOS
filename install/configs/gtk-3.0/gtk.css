@@ -1,58 +1,113 @@
-/* Material You colors */
+/*
+ * ~/.config/gtk-3.0/gtk.css
+ * Variables only + minimal widget fixes. Libadwaita handles the rest.
+ */
 
-/* * { */
-/*   font-weight: 500; */
-/*   font-family: "Rubik", sans-serif; */
-/* } */
-/**/
-@define-color accent_color #acc7ff;
-@define-color accent_bg_color #2a4677;
-@define-color accent_fg_color #d7e2ff;
-@define-color destructive_color #ffb4ab;
-@define-color destructive_bg_color #93000a;
-@define-color destructive_fg_color #ffdad6;
-@define-color success_color #bec6dc;
-@define-color success_bg_color #3f4759;
-@define-color success_fg_color #dae2f9;
-@define-color warning_color #ddbcdf;
-@define-color warning_bg_color #573e5b;
-@define-color warning_fg_color #fbd7fc;
-@define-color window_bg_color #111318;
-@define-color window_fg_color #e2e2e9;
-@define-color view_bg_color #111318;
-@define-color view_fg_color #e2e2e9;
-@define-color headerbar_bg_color @window_bg_color;
-@define-color headerbar_fg_color @window_fg_color;
+@import url("../sokratOS/matugen/shared/colors.css");
+
+/* ── Accent — @muted survives alpha() dilution on dark bg ──────── */
+@define-color accent_color          @subtle;
+@define-color accent_bg_color       @muted;
+@define-color accent_fg_color       @text;
+
+/* ── Destructive ───────────────────────────────────────────────── */
+@define-color destructive_color     @muted;
+@define-color destructive_bg_color  @muted;
+@define-color destructive_fg_color  @text;
+
+/* ── Success ───────────────────────────────────────────────────── */
+@define-color success_color         @muted;
+@define-color success_bg_color      @muted;
+@define-color success_fg_color      @text;
+
+/* ── Warning ───────────────────────────────────────────────────── */
+@define-color warning_color         @muted;
+@define-color warning_bg_color      @muted;
+@define-color warning_fg_color      @text;
+
+/* ── Window ────────────────────────────────────────────────────── */
+@define-color window_bg_color       @base;
+@define-color window_fg_color       @text;
+
+/* ── Views ─────────────────────────────────────────────────────── */
+@define-color view_bg_color         @base;
+@define-color view_fg_color         @text;
+
+/* ── Headerbar — flush with window ─────────────────────────────── */
+@define-color headerbar_bg_color    @window_bg_color;
+@define-color headerbar_fg_color    @window_fg_color;
 @define-color headerbar_border_color @window_bg_color;
 @define-color headerbar_backdrop_color @window_bg_color;
 @define-color headerbar_shade_color @window_bg_color;
-@define-color card_bg_color #282a2f;
-@define-color card_fg_color #e2e2e9;
-@define-color card_shade_color rgba(0, 0, 0, 0.07);
-@define-color dialog_bg_color @card_bg_color;
-@define-color dialog_fg_color @card_fg_color;
-@define-color popover_bg_color @card_bg_color;
-@define-color popover_fg_color @card_fg_color;
-@define-color scrollbar_bg_color rgba(0, 0, 0, 0.36);
-@define-color scrollbar_outline_color rgba(139, 145, 152, 0.5);
-@define-color sidebar_bg_color #1a1b20;
-@define-color sidebar_fg_color @window_fg_color;
+
+/* ── Cards ─────────────────────────────────────────────────────── */
+@define-color card_bg_color         @surface;
+@define-color card_fg_color         @text;
+@define-color card_shade_color      rgba(0, 0, 0, 0.07);
+
+/* ── Dialogs ───────────────────────────────────────────────────── */
+@define-color dialog_bg_color       @card_bg_color;
+@define-color dialog_fg_color       @card_fg_color;
+
+/* ── Popovers / menus ──────────────────────────────────────────── */
+@define-color popover_bg_color      @card_bg_color;
+@define-color popover_fg_color      @card_fg_color;
+
+/* ── Scrollbar ─────────────────────────────────────────────────── */
+@define-color scrollbar_bg_color    rgba(0, 0, 0, 0.36);
+@define-color scrollbar_outline_color rgba(0, 0, 0, 0.5);
+
+/* ── Sidebar ───────────────────────────────────────────────────── */
+@define-color sidebar_bg_color      @surface;
+@define-color sidebar_fg_color      @window_fg_color;
 @define-color sidebar_backdrop_color @sidebar_bg_color;
 @define-color secondary_sidebar_backdrop_color @sidebar_bg_color;
 
+/* ── Legacy selection tokens ───────────────────────────────────── */
+@define-color theme_selected_bg_color @muted;
+@define-color theme_selected_fg_color @text;
+
+/* ── Text selection — !important to beat theme specificity ──────── */
+selection,
+*:selected,
+entry selection,
+.view selection,
+textview text selection,
+label selection,
+treeview.view:selected,
+treeview.view:selected:focus,
+row:selected,
+row:selected:focus {
+  background-color: @muted !important;
+  color: @text !important;
+}
+
+/* ── Menubar hover — !important to beat theme specificity ──────── */
+menubar > menuitem:hover {
+  background-color: @highlight_high !important;
+  border-radius: 6px;
+}
+
+/* Dropdown menu items */
+menu menuitem:hover,
+.context-menu menuitem:hover {
+  background-color: @highlight_high !important;
+}
+
+/* ── Headerbar buttons ─────────────────────────────────────────── */
+headerbar button.flat:hover,
+headerbar button.image-button:hover,
+headerbar button.titlebutton:hover {
+  background-color: @overlay !important;
+}
+
+/* ── Navigation sidebar ────────────────────────────────────────── */
 .navigation-sidebar {
   background-color: @sidebar_bg_color;
   color: @window_fg_color;
 }
 
-headerbar.default-decoration {
-  /* You may need to tweak these values depending on your GTK theme */
-  margin-bottom: 50px;
-  margin-top: -100px;
-}
-
-/* rm -rf window shadows */
-window.csd, /* gtk4? */
-window.csd decoration /* gtk3 */ {
+/* ── Remove CSD shadows (Hyprland handles these) ───────────────── */
+window.csd decoration {
   box-shadow: none;
 }

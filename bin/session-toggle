@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+TMP_DIR="$HOME/.cache/sokratOS"
+STATE_FILE="$TMP_DIR/state/session-state.txt"
+DB_FILE="$HOME/.local/state/sokratOS/database/sessions.db"
+
+mkdir -p "$TMP_DIR"
+mkdir -p "$(dirname "$DB_FILE")"
+mkdir -p "$(dirname "$STATE_FILE")"
+
+if [[ ! -f "$DB_FILE" ]]; then
+	sqlite3 "$DB_FILE" "CREATE TABLE IF NOT EXISTS sessions(
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		session_type TEXT NOT NULL,
+		duration INTEGER NOT NULL,
+		start_time TEXT NOT NULL,
+		end_time TEXT NOT NULL
+	);"
+fi
+
+if [[ -e "$STATE_FILE" ]]; then
+	STATE=1
+else
+	STATE=0
+fi
+
+SESSIONS=$(sqlite3 "$DB_FILE" "SELECT DISTINCT session_type FROM sessions;" 2>/dev/null)
+
+start_session() {
+	local out usr_choice
+
+	out=$(printf "%s\n" "$SESSIONS" | fzf --print-query \
+		--layout=reverse --height=40% --border --prompt='Start Session > ' \
+	|| true)
+
+	[[ -z $out ]] && exit 0
+
+	if [ "$(printf "%s\n" "$out" | wc -l)" -gt 1 ]; then
+			usr_choice=$(printf "%s\n" "$out" | sed -n '2p')
+	else
+			usr_choice="$out"
+	fi
+
+	echo "$usr_choice|$(date +%s)" > "$STATE_FILE"
+	notify-send "Starting $usr_choice session!"
+}
+
+end_session() {
+	local session_name start_time_unix end_time_unix duration
+	local start_time_readable end_time_readable
+
+	IFS='|' read -r session_name start_time_unix < "$STATE_FILE"
+	end_time_unix=$(date +%s)
+	duration=$((end_time_unix - start_time_unix))
+
+	start_time_readable=$(date -d "@$start_time_unix" '+%Y-%m-%d %H:%M:%S')
+	end_time_readable=$(date '+%Y-%m-%d %H:%M:%S')
+
+	local escaped_name="${session_name//\'/\'\'}"
+
+	# Check PB before inserting so the new record doesn't skew the query
+	local prev_best
+	prev_best=$(sqlite3 "$DB_FILE" \
+		"SELECT MAX(duration) FROM sessions WHERE session_type='$escaped_name';" 2>/dev/null)
+
+	sqlite3 "$DB_FILE" <<EOF
+	INSERT INTO sessions (session_type, duration, start_time, end_time)
+	VALUES ('$escaped_name', $duration, '$start_time_readable', '$end_time_readable');
+EOF
+
+	rm -f "$STATE_FILE"
+
+	local hours=$((duration / 3600))
+	local minutes=$(((duration % 3600) / 60))
+	local seconds=$((duration % 60))
+
+	local duration_str=""
+	[[ $hours   -gt 0 ]] && duration_str="${hours}h "
+	[[ $minutes -gt 0 ]] && duration_str="${duration_str}${minutes}m "
+	duration_str="${duration_str}${seconds}s"
+
+	local pb_line=""
+	if [[ -z "$prev_best" || "$duration" -gt "$prev_best" ]]; then
+		pb_line=$'\n'$'\n''<span color="#FFA500">✦ <b>Personal Best</b> ✦ </span>'
+	fi
+
+	notify-send \
+		--urgency=critical \
+		--expire-time=10000 \
+		"Ended '$session_name' session!" \
+		"Duration: ${duration_str} ${pb_line}"
+}
+
+case "$STATE" in
+	0)
+		start_session
+		;;
+	1)
+    end_session
+		;;
+esac

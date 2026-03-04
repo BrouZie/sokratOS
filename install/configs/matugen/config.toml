@@ -28,21 +28,10 @@ input_path = '~/.config/matugen/templates/pywalfox-colors.json'
 output_path = '~/.cache/wal/colors.json'
 post_hook = 'pywalfox update'
 
-[templates.gtk3]
-input_path = '~/.config/matugen/templates/matugen-gtk.css'
-output_path = '~/.config/gtk-3.0/gtk.css'
-
-[templates.gtk4]
-input_path = '~/.config/matugen/templates/matugen-gtk.css'
-output_path = '~/.config/gtk-4.0/gtk.css'
-
-[templates.waybar]
+# Shared between gtk-3/4, swaync and waybar
+[templates.shared]
 input_path = '~/.config/matugen/templates/colors.css'
-output_path = '~/.config/waybar/colors.css'
-
-[templates.swaync]
-input_path = '~/.config/matugen/templates/colors.css'
-output_path = '~/.config/swaync/matugen/colors.css'
+output_path = '~/.config/sokratOS/matugen/shared/colors.css'
 
 [templates.vesktop]
 input_path = '~/.config/matugen/templates/midnight-discord.css'
