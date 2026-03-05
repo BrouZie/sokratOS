@@ -12,9 +12,9 @@ configuration {
 @theme "~/.config/sokratOS/matugen/rofi/colors.rasi"
 
 * {
-	outer-radius: 5px;
-	middle-radius: 2px;
-	inner-radius:  0px;
+	outer-radius: 28px;
+	middle-radius: 18px;
+	inner-radius:  14px;
 
 	background-color: transparent;
 	text-color: @text;

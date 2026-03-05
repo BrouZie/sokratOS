@@ -4,5 +4,5 @@ yay -S --noconfirm --needed \
   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
   xdg-terminal-exec xdg-utils xdg-user-dirs \
   brightnessctl wl-clip-persist nautilus ffmpegthumbnailer \
-  slurp matugen-bin qt5-wayland qt6-wayland \
+  slurp matugen qt5-wayland qt6-wayland \
   mpv zathura zathura-pdf-mupdf imv firefox python-pywal16 python-pywalfox

@@ -15,6 +15,7 @@
 
 - [ ] INSTRUCTIONS IN HYPRCONF
 - [ ] ADD SESSION SCRIPTS!!! (DE MÅ FIKSES LITT - PATH, STATE)
+- [ ] SJEKK NOTATER!!
 
 - [ ] git diff main vs revamp
     - alle applications man trenger (flere lagt til siden sist + brukes aktivt?)
