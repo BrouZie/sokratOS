@@ -27,7 +27,7 @@ SHADE=$(magick "$PROCESSED_IMG" \
 	-format "%[fx:mean]" info: | awk '{print ($1<0.35)?"dark":"light"}')
 
 # Generate matugen colors (can run while shade calculation completes)
-matugen image "$PROCESSED_IMG" -m dark --source-color-index 0
+matugen image "$PROCESSED_IMG" -m dark
 refresh-app-daemons
 
 # Wait for shade calculation to complete
