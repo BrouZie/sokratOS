@@ -41,6 +41,8 @@ if [[ "$STATE" == 1 ]]; then
 	gum style --foreground 46 "Choose configs to refresh:"
 	echo ""
 	sokratos-refresh-configs
+	# Set a default wallpaper and colorscheme (ensure colors are generated)
+	sokratos-mat-theme "$HOME/.local/share/sokratOS/install/configs/wallpaper/morning.png"
 fi
 
 echo ""

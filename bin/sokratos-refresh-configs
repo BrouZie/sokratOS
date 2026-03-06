@@ -81,6 +81,19 @@ refresh_hypr() {
 	fi
 }
 
+refresh_matugen() {
+	gum style --bold --foreground 51 "Refreshing hyprland configs…"
+
+	local src_dir="$CONFIG_ROOT/matugen"
+	local dest_dir="$HOME/.config/matugen"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
 refresh_waybar() {
 	gum style --bold --foreground 51 "Refreshing waybar configs…"
 
@@ -219,6 +232,7 @@ while true; do
 			--header "k/j move  •  TAB toggle  •  ENTER confirm  •  ESC to quit" \
 			"fzf-dirs" \
 			"hyprland" \
+			"matugen" \
 			"waybar" \
 			"rofi" \
 			"neovim" \
@@ -249,6 +263,7 @@ while true; do
 for choice in $choices; do
 	case "$choice" in
 		hyprland) refresh_hypr ;;
+		matugen) refresh_matugen ;;
 		neovim) refresh_nvim ;;
 		swaync) refresh_swaync ;;
 		waybar) refresh_waybar ;;
