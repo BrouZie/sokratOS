@@ -82,10 +82,23 @@ refresh_hypr() {
 }
 
 refresh_matugen() {
-	gum style --bold --foreground 51 "Refreshing hyprland configs…"
+	gum style --bold --foreground 51 "Refreshing matugen configs…"
 
 	local src_dir="$CONFIG_ROOT/matugen"
 	local dest_dir="$HOME/.config/matugen"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_kitty() {
+	gum style --bold --foreground 51 "Refreshing kitty configs…"
+
+	local src_dir="$CONFIG_ROOT/kitty"
+	local dest_dir="$HOME/.config/kitty"
 
 	if [ -d "$src_dir" ]; then
 		backup_path "$dest_dir"
@@ -233,6 +246,7 @@ while true; do
 			"fzf-dirs" \
 			"hyprland" \
 			"matugen" \
+			"kitty" \
 			"waybar" \
 			"rofi" \
 			"neovim" \
@@ -264,6 +278,7 @@ for choice in $choices; do
 	case "$choice" in
 		hyprland) refresh_hypr ;;
 		matugen) refresh_matugen ;;
+		kitty) refresh_kitty ;;
 		neovim) refresh_nvim ;;
 		swaync) refresh_swaync ;;
 		waybar) refresh_waybar ;;
