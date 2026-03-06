@@ -5,11 +5,22 @@
 
 STATE_FILE="$HOME/.local/state/sokratOS/.color-backend"
 
-# Read current state (default to matugen)
-if [[ -f "$STATE_FILE" ]]; then
-	CURRENT=$(<"$STATE_FILE")
-else
-	CURRENT="matugen"
+# If missing state file - default to matugen
+if [[ ! -f "$STATE_FILE" ]]; then
+	mkdir -p "$(dirname "$STATE_FILE")"
+	printf '%s\n' "matugen" > "$STATE_FILE"
+fi
+
+CURRENT=$(<"$STATE_FILE")
+
+# Check for existing symlinked directory (for preconfigured themes)
+THEME_SYMLINK="$HOME/.config/sokratOS/current/theme"
+DEFAULT_THEME="$HOME/.local/share/sokratOS/themes/gruvbox"
+
+if [[ ! -L "$THEME_SYMLINK" ]]; then
+	rm -rf -- "$THEME_SYMLINK"
+	ln -sfn "$DEFAULT_THEME" "${THEME_SYMLINK}.new"
+	mv -Tf "${THEME_SYMLINK}.new" "$THEME_SYMLINK"
 fi
 
 # Toggle

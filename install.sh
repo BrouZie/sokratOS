@@ -142,7 +142,7 @@ gum style --foreground 147 "⚙️  Setting up configurations..."
 
 # Step 4: Create directories and copy configs
 gum_spin "Creating directories..." "mkdir -p \
-    '$HOME/.config/sokratOS/current/theme' \
+    '$HOME/.config/sokratOS/current' \
     '$HOME/.config/sokratOS/env.d' \
     '$HOME/.local/state/sokratOS' \
     '$HOME/.local/share/applications' \
@@ -171,6 +171,8 @@ gum_spin "Copying configuration files..." "
 
 		ln -sf '$HOME/.config/waybar/styles/round/config.jsonc' '$HOME/.config/waybar/config.jsonc'
 		ln -sf '$HOME/.config/waybar/styles/round/style.css' '$HOME/.config/waybar/style.css'
+
+		ln -sf '$HOME/.local/share/sokratOS/themes/gruvbox' '$HOME/.config/sokratOS/current/theme'
 "
 
 # Configure keyboard layout based on system settings
