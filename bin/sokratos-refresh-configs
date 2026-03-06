@@ -95,15 +95,17 @@ refresh_matugen() {
 }
 
 refresh_kitty() {
-	gum style --bold --foreground 51 "Refreshing kitty configs…"
+	gum style --bold --foreground 51 "Refreshing kitty config…"
 
-	local src_dir="$CONFIG_ROOT/kitty"
-	local dest_dir="$HOME/.config/kitty"
+	local src_conf="$CONFIG_ROOT/kitty.conf"
+	local dest_conf="$HOME/.config/kitty/kitty.conf"
 
-	if [ -d "$src_dir" ]; then
-		backup_path "$dest_dir"
-		cp -r "$src_dir" "$dest_dir"
-		gum style "Updated $dest_dir"
+	if [ -f "$src_conf" ]; then
+		backup_path "$dest_conf"
+		cp "$src_conf" "$dest_conf"
+		gum style "Updated $dest_conf"
+	else
+		gum style --foreground 196 "Missing $src_conf, skipping kitty"
 	fi
 }
 
