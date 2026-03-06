@@ -156,7 +156,6 @@ gum_spin "Copying configuration files..." "
     cp '$REPO_INSTALL/configs/kitty.conf' '$HOME/.config/kitty/kitty.conf'
     cp '$REPO_INSTALL/configs/tmux.conf' '$HOME/.tmux.conf'
     cp -r '$REPO_INSTALL/configs/bash' '$HOME/.config/bash'
-    cp -r '$REPO_INSTALL/configs/colors/matugen' '$HOME/.config/sokratOS/matugen'
     cp -r '$REPO_INSTALL/configs/gtk-3.0' '$HOME/.config/gtk-3.0'
     cp -r '$REPO_INSTALL/configs/gtk-4.0' '$HOME/.config/gtk-4.0'
     cp -r '$REPO_INSTALL/configs/matugen' '$HOME/.config/matugen'

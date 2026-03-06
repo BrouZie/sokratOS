@@ -30,48 +30,49 @@ SHADE=$(magick "$PROCESSED_IMG" \
 matugen image "$PROCESSED_IMG" -m dark
 refresh-app-daemons
 
-# Wait for shade calculation to complete
-wait "$SHADE_PID"
-
 # Image analysis variables
 PRIMARY_HEX=$(<~/.config/sokratOS/matugen/.primary-hex.txt)
 COLOR1=$(pastel format name "$PRIMARY_HEX")
 
 THEMES_DIR="$HOME/.local/share/sokratOS/themes"
-CURRENT_LINK="$HOME/.config/sokratOS/current/theme"
+MAT_COLORS="$HOME/.config/sokratOS/matugen/kitty/mat-colors.conf" # Built by matugen
 
-set_theme() {
-	local theme="$1"
-	notify-send "$SHADE $COLOR1: $theme" &
-  TMP_LINK="${CURRENT_LINK}.new"
-  TARGET="$THEMES_DIR/$theme"
+set_kitty_colors() {
+	local partial_theme="$THEMES_DIR/$1/colors.conf"
+	local build_file
 
-	# If "theme" exists as a directory, remove it. NOTE: Remove me later
-	[[ -d "$CURRENT_LINK" && ! -L "$CURRENT_LINK" ]] && rm -rf -- "$CURRENT_LINK"
+	build_file=$(mktemp)
 
-  ln -sfn "$TARGET" "$TMP_LINK"
-  mv -Tf "$TMP_LINK" "$CURRENT_LINK"
+	cat "$partial_theme" "$MAT_COLORS" > "$build_file"
+	mv "$build_file" "$MAT_COLORS"
+
+	notify-send "$SHADE $COLOR1: $1"
 }
 
 # Change kitty terminal colors based on analysis
 case "$SHADE $COLOR1" in
-	"dark lightsteelblue")   set_theme nord ;;
-	"light lightsteelblue")  set_theme tokyonight ;;
-	"dark sandybrown")       set_theme tokyonight ;;
-	"light sandybrown")      set_theme melange ;;
-	"dark mediumaquamarine") set_theme osaka-jade ;;
-	*" burlywood")           set_theme melange ;;
-	*" lightsalmon")         set_theme gruvbox ;;
-	*" lightskyblue")        set_theme everforest ;;
-	*" skyblue")             set_theme nord ;;
-	*" plum")                set_theme catppuccin ;;
-	*" powderblue")          set_theme everforest ;;
-	*" darkkhaki")           set_theme rose-pine ;;
-	*" lightpink")           set_theme rose-pine ;;
-	"light darkseagreen")    set_theme everforest ;;
-	"dark darkseagreen")     set_theme gruvbox ;;
-	*) notify-send "New image shade discovered!" "Using catppuccin for now..."
-		 set_theme catppuccin ;;
+	"light lightsteelblue")   set_kitty_colors catppuccin ;;
+	"dark lightsteelblue")    set_kitty_colors nord ;;
+	"light sandybrown")       set_kitty_colors melange ;;
+	"dark sandybrown")        set_kitty_colors tokyonight ;;
+	"dark mediumaquamarine")  set_kitty_colors deep-forest ;;
+	"light mediumaquamarine") set_kitty_colors everforest ;;
+	"light burlywood")        set_kitty_colors kanagawa ;;
+	"dark burlywood")         set_kitty_colors melange ;;
+	"light darkkhaki")        set_kitty_colors everforest ;;
+	"dark darkkhaki")         set_kitty_colors deep-forest ;;
+	"light lightsalmon")      set_kitty_colors melange ;;
+	"dark lightsalmon")       set_kitty_colors gruvbox ;;
+	"light lightskyblue")     set_kitty_colors everforest ;;
+	"dark lightskyblue")      set_kitty_colors nord ;;
+	*" skyblue")              set_kitty_colors nord ;;
+	*" plum")                 set_kitty_colors catppuccin ;;
+	*" powderblue")           set_kitty_colors everforest ;;
+	*" lightpink")            set_kitty_colors tokyonight ;;
+	"light darkseagreen")     set_kitty_colors everforest ;;
+	"dark darkseagreen")      set_kitty_colors everforest ;;
+	*) notify-send "New image shade discovered!" "Using nord for now..."
+		 set_kitty_colors nord ;;
 esac
 
 # Refresh kitty
