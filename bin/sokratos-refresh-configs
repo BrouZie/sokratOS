@@ -90,6 +90,9 @@ refresh_waybar() {
 	if [ -d "$src_dir" ]; then
 		backup_path "$dest_dir"
 		cp -r "$src_dir" "$dest_dir"
+		ln -sf "$dest_dir/styles/round/config.jsonc" "$dest_dir/config.jsonc"
+		ln -sf "$dest_dir/styles/round/style.css" "$dest_dir/style.css"
+
 		gum style "Updated $dest_dir"
 	fi
 }
