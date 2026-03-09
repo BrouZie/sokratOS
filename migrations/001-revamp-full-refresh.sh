@@ -12,6 +12,12 @@ sudo pacman -S matugen
 
 revamp() {
 	local src="$1" dest="$2"
+	local backup
+	if [[ -e "$dest" ]]; then
+		backup="$HOME/.config/backups/$(basename "$dest")"
+		mkdir -p "$HOME/.config/backups"
+		mv "$dest" "$backup"
+	fi
 	if [[ -d "$src" ]]; then
 		cp -r "$src" "$dest"
 	elif [[ -f "$src" ]]; then
@@ -51,4 +57,4 @@ ln -sf "$HOME/.config/waybar/styles/round/style.css"    "$HOME/.config/waybar/st
 # Regenerate colors with default wallpaper
 sokratos-mat-theme "$HOME/.local/share/sokratOS/install/configs/wallpaper/elden-purple.jpg"
 
-echo "All configs refreshed. Old configs saved with .pre-revamp suffix."
+echo "All configs refreshed. Old configs backed up to ~/.config/backups/"
