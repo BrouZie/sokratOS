@@ -1,0 +1,30 @@
+/* Matte Black */
+@define-color base           #121212;
+@define-color surface        #333333;
+@define-color overlay        #595959;
+
+@define-color muted          #8a8a8d;
+@define-color subtle         #eaeaea;
+@define-color text           #bebebe;
+
+@define-color accent         #595959;
+
+@define-color red            #D35F5F;
+@define-color green          #FFC107;
+@define-color yellow         #f59e0b;
+@define-color blue           #bebebe;
+@define-color magenta        #D35F5F;
+@define-color cyan           #eaeaea;
+@define-color orange         #f59e0b;
+
+@define-color highlight_low  #333333;
+@define-color highlight_med  #404040;
+@define-color highlight_high #595959;
+
+@define-color border         #595959;
+
+/* text selection semantics */
+@define-color selection_bg   #333333;
+@define-color selection_fg   #121212;
+
+@define-color url            #bebebe;

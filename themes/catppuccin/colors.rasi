@@ -1,0 +1,32 @@
+/* Catppuccin */
+* {
+  base:           #1E1E2E;
+  surface:        #181825;
+  overlay:        #45475A;
+                         
+  muted:          #6C7086;
+  subtle:         #BAC2DE;
+  text:           #CDD6F4;
+                         
+  accent:         #B4BEFE;
+                         
+  red:            #F38BA8;
+  green:          #A6E3A1;
+  yellow: 				#F9E2AF;
+  blue:           #89B4FA;
+  magenta:        #F5C2E7;
+  cyan:           #94E2D5;
+
+                 
+  highlightlow:  #11111B;
+  highlightmed:  #181825;
+  highlighthigh: #585B70;
+                 
+  border:        #6C7086;
+
+  selectionbg:   #F5E0DC;
+  selectionfg:   #1E1E2E;
+
+  bg: @base;
+  fg: @text;
+}

@@ -1,0 +1,32 @@
+/* Gotham */
+* {
+  base:           #0c1014;
+  surface:        #11151c;
+  overlay:        #091f2e;
+
+  muted:          #4e5166;
+  subtle:         #1a3d48;
+  text:           #d3ebe9;
+
+  accent:         #2aa889;
+
+  red:            #c23127;
+  green:          #2aa889;
+  yellow:         #edb443;
+  orange:         #d26937;
+  blue:           #599cab;
+  magenta:        #888ca6;
+  cyan:           #33859E;
+
+  highlightlow:  #11151c;
+  highlightmed:  #091f2e;
+  highlighthigh: #0a3749;
+
+  border:         #0a3749;
+
+  selectionbg:   #0a3749;
+  selectionfg:   #d3ebe9;
+
+  bg: @base;
+  fg: @text;
+}

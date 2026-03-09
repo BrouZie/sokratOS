@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+OPTIONS=(
+	"󰧞    Round"
+	"    Sharp"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+  rofi -dmenu -i -p "Styles" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Round") sokratos-switch-style round ;;
+	*"Sharp") sokratos-switch-style sharp ;;
+	*) exit 0;;
+esac

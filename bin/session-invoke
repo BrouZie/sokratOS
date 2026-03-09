@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# session-dispatcher
+
+STATE_FILE="$HOME/.cache/sokratOS/state/session-state.txt"
+
+if [[ -e "$STATE_FILE" ]]; then
+    # Session is active → end it. No interactivity needed, skipping terminal.
+    session-toggle
+else
+    # No active session → start one. fzf interactivity/cli.
+    sokratos-floaterminal session-toggle
+fi

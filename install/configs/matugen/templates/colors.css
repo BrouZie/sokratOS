@@ -5,3 +5,15 @@
 <* for name, value in colors *>
     @define-color {{name}} {{value.default.hex}};
 <* endfor *>
+
+@define-color base {{colors.surface_container.default.hex}};
+@define-color surface {{colors.surface_container_highest.default.hex}};
+
+@define-color muted {{colors.outline.default.hex}};
+@define-color subtle {{colors.on_surface_variant.default.hex}};
+@define-color text {{colors.on_background.default.hex}};
+
+@define-color yellow {{colors.on_error_container.default.hex}};
+@define-color red {{colors.error_container.default.hex}};
+
+@define-color highlight_med {{colors.on_surface_variant.default.hex}};

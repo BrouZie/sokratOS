@@ -1,0 +1,565 @@
+#!/usr/bin/env python
+"""
+Session Dashboard — a single-page, auto-refreshing terminal dashboard
+for the session-tracker SQLite database.
+
+Usage:  python session-dashboard.py [path/to/database.db]
+        Press 'q' or Ctrl-C to quit.  Refreshes every 5 seconds.
+"""
+
+import curses
+import sqlite3
+import os
+import sys
+import time
+from datetime import datetime, timedelta
+
+# ── Config ────────────────────────────────────────────────────────────
+DB_PATH = os.path.expanduser(sys.argv[1] if len(sys.argv) > 1 else "~/.local/state/sokratOS/database/sessions.db")
+REFRESH_SECS = 5
+
+# ── Color pairs (id, fg, bg) ─────────────────────────────────────────
+C_HEADER    = 1
+C_ACCENT    = 2
+C_DIM       = 3
+C_BAR       = 4
+C_GOLD      = 5
+C_GREEN     = 6
+C_RED       = 7
+C_CYAN      = 8
+C_BORDER    = 9
+C_TITLE_BG  = 10
+C_STREAK    = 11
+
+# ── Helpers ───────────────────────────────────────────────────────────
+
+def fmt_dur(secs):
+    """Format seconds into a human-readable string."""
+    if secs is None or secs == 0:
+        return "0s"
+    h, rem = divmod(int(secs), 3600)
+    m, s = divmod(rem, 60)
+    parts = []
+    if h: parts.append(f"{h}h")
+    if m: parts.append(f"{m}m")
+    if s or not parts: parts.append(f"{s}s")
+    return " ".join(parts)
+
+def fmt_dur_short(secs):
+    """Compact duration: 2h12m or 45m or 30s."""
+    if secs is None or secs == 0:
+        return "0s"
+    h, rem = divmod(int(secs), 3600)
+    m, s = divmod(rem, 60)
+    if h:
+        return f"{h}h{m:02d}m"
+    if m:
+        return f"{m}m{s:02d}s"
+    return f"{s}s"
+
+def safe_addstr(win, y, x, text, attr=0, max_x=None):
+    """Write text clamped to window bounds.
+    Always reserves 1 col to prevent cursor-wrap at the right edge.
+    For single characters at the last column, use safe_addch instead.
+    """
+    h, w = win.getmaxyx()
+    if max_x is not None:
+        w = min(w, max_x)
+    if y < 0 or y >= h or x >= w:
+        return
+    avail = w - x - 1
+    if avail <= 0:
+        return
+    try:
+        win.addnstr(y, x, text, avail, attr)
+    except curses.error:
+        pass
+
+def safe_addch(win, y, x, ch, attr=0):
+    """Write a single character, safe at any position including the last column.
+    Uses insstr which does not advance the cursor, avoiding wrap issues.
+    """
+    h, w = win.getmaxyx()
+    if y < 0 or y >= h or x < 0 or x >= w:
+        return
+    try:
+        win.insstr(y, x, ch, attr)
+    except curses.error:
+        pass
+
+def draw_box(win, y, x, h, w, attr=0, title=""):
+    """Draw a unicode box with optional title."""
+    maxy, maxx = win.getmaxyx()
+    if y >= maxy or x >= maxx:
+        return
+    # Corners and edges
+    tl, tr, bl, br = "╭", "╮", "╰", "╯"
+    hz, vt = "─", "│"
+    # Top border: draw left side + horizontals via addstr, then right corner via addch
+    top_inner = tl + hz * (w - 2)
+    safe_addstr(win, y, x, top_inner, attr)
+    safe_addch(win, y, x + w - 1, tr, attr)
+    if title:
+        safe_addstr(win, y, x + 2, f" {title} ", attr | curses.A_BOLD)
+    # Sides: left via addstr, right via insstr to handle last-column safely
+    for row in range(1, h - 1):
+        safe_addstr(win, y + row, x, vt, attr)
+        safe_addch(win, y + row, x + w - 1, vt, attr)
+    # Bottom border: same approach
+    bot_inner = bl + hz * (w - 2)
+    safe_addstr(win, y + h - 1, x, bot_inner, attr)
+    safe_addch(win, y + h - 1, x + w - 1, br, attr)
+
+def draw_hbar(win, y, x, width, fill_ratio, attr):
+    """Draw a horizontal bar with block characters."""
+    blocks = " ░▒▓█"
+    full = int(fill_ratio * width)
+    frac = (fill_ratio * width) - full
+    bar = "█" * full
+    if frac > 0.75:
+        bar += "▓"
+    elif frac > 0.5:
+        bar += "▒"
+    elif frac > 0.25:
+        bar += "░"
+    bar = bar[:width]
+    safe_addstr(win, y, x, bar, attr)
+
+
+# ── Data Queries ──────────────────────────────────────────────────────
+
+def query_db(db_path):
+    """Run all dashboard queries and return a data dict."""
+    data = {}
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    week_start = (datetime.now() - timedelta(days=datetime.now().weekday())).strftime("%Y-%m-%d")
+
+    # Lifetime totals
+    row = c.execute("SELECT COUNT(*) as cnt, COALESCE(SUM(duration),0) as total, "
+                    "COALESCE(AVG(duration),0) as avg, COALESCE(MAX(duration),0) as mx "
+                    "FROM sessions").fetchone()
+    data["total_sessions"] = row["cnt"]
+    data["total_time"] = row["total"]
+    data["avg_duration"] = row["avg"]
+    data["longest_ever"] = row["mx"]
+
+    # Today
+    row = c.execute("SELECT COUNT(*) as cnt, COALESCE(SUM(duration),0) as total "
+                    "FROM sessions WHERE date(start_time) = ?", (today,)).fetchone()
+    data["today_sessions"] = row["cnt"]
+    data["today_time"] = row["total"]
+
+    # This week
+    row = c.execute("SELECT COUNT(*) as cnt, COALESCE(SUM(duration),0) as total "
+                    "FROM sessions WHERE date(start_time) >= ?", (week_start,)).fetchone()
+    data["week_sessions"] = row["cnt"]
+    data["week_time"] = row["total"]
+
+    # Last week
+    last_week_start = (datetime.now() - timedelta(days=datetime.now().weekday() + 7)).strftime("%Y-%m-%d")
+    last_week_end = (datetime.now() - timedelta(days=datetime.now().weekday() + 1)).strftime("%Y-%m-%d")
+    row = c.execute("SELECT COUNT(*) as cnt, COALESCE(SUM(duration),0) as total "
+                    "FROM sessions WHERE date(start_time) >= ? AND date(start_time) <= ?",
+                    (last_week_start, last_week_end)).fetchone()
+    data["last_week_sessions"] = row["cnt"]
+    data["last_week_time"] = row["total"]
+
+    # Per-type stats (including the date when the PB was set)
+    types = c.execute(
+        "SELECT s.session_type, COUNT(*) as cnt, SUM(s.duration) as total, "
+        "AVG(s.duration) as avg, MAX(s.duration) as best, "
+        "COUNT(DISTINCT date(s.start_time)) as days, "
+        "(SELECT date(s2.start_time) FROM sessions s2 "
+        " WHERE s2.session_type = s.session_type "
+        " ORDER BY s2.duration DESC LIMIT 1) as best_date "
+        "FROM sessions s GROUP BY s.session_type ORDER BY total DESC"
+    ).fetchall()
+    data["types"] = [dict(r) for r in types]
+
+    # Recent sessions (last 8)
+    recents = c.execute(
+        "SELECT session_type, duration, start_time FROM sessions "
+        "ORDER BY id DESC LIMIT 8"
+    ).fetchall()
+    data["recents"] = [dict(r) for r in recents]
+
+    # Streak: consecutive days with at least one session ending today
+    all_days = c.execute(
+        "SELECT DISTINCT date(start_time) as d FROM sessions ORDER BY d DESC"
+    ).fetchall()
+    days_set = {row["d"] for row in all_days}
+    streak = 0
+    check = datetime.now().date()
+    # Allow streak to start from today or yesterday
+    if check.strftime("%Y-%m-%d") not in days_set:
+        check -= timedelta(days=1)
+    while check.strftime("%Y-%m-%d") in days_set:
+        streak += 1
+        check -= timedelta(days=1)
+    data["streak"] = streak
+
+    # Daily totals for last 14 days (for heatmap)
+    fourteen_ago = (datetime.now() - timedelta(days=13)).strftime("%Y-%m-%d")
+    daily = c.execute(
+        "SELECT date(start_time) as d, SUM(duration) as total "
+        "FROM sessions WHERE date(start_time) >= ? "
+        "GROUP BY d ORDER BY d", (fourteen_ago,)
+    ).fetchall()
+    data["daily_14"] = {row["d"]: row["total"] for row in daily}
+
+    # Active session?
+    state_file = os.path.expanduser("~/test/state/session-state.txt")
+    data["active"] = None
+    if os.path.exists(state_file):
+        try:
+            with open(state_file) as f:
+                parts = f.read().strip().split("|")
+                if len(parts) == 2:
+                    name, ts = parts[0], int(parts[1])
+                    elapsed = int(time.time()) - ts
+                    data["active"] = {"name": name, "elapsed": elapsed}
+        except Exception:
+            pass
+
+    conn.close()
+    return data
+
+
+# ── Drawing Sections ──────────────────────────────────────────────────
+
+def draw_title_bar(win, w, data):
+    """Top title bar with clock and active session."""
+    attr = curses.color_pair(C_TITLE_BG) | curses.A_BOLD
+    bar = " " * (w - 1)
+    safe_addstr(win, 0, 0, bar, attr)
+    safe_addch(win, 0, w - 1, " ", attr)  # fill last column
+    safe_addstr(win, 0, 2, "⣿ SESSION DASHBOARD", attr)
+    clock = datetime.now().strftime("%H:%M:%S")
+    safe_addstr(win, 0, w - len(clock) - 2, clock, attr)
+
+    if data["active"]:
+        a = data["active"]
+        pulse = "●" if int(time.time()) % 2 == 0 else "○"
+        msg = f" {pulse} LIVE: {a['name']} ({fmt_dur_short(a['elapsed'])}) "
+        mid = (w - len(msg)) // 2
+        safe_addstr(win, 0, mid, msg, curses.color_pair(C_RED) | curses.A_BOLD)
+
+
+def draw_lifetime(win, y, x, bw, data):
+    """Lifetime stats panel."""
+    draw_box(win, y, x, 7, bw, curses.color_pair(C_BORDER), "LIFETIME")
+    r = y + 1
+    safe_addstr(win, r, x+2, "Total sessions", curses.color_pair(C_DIM))
+    safe_addstr(win, r, x+bw-2-len(str(data['total_sessions'])),
+                str(data['total_sessions']), curses.color_pair(C_ACCENT) | curses.A_BOLD)
+    r += 1
+    safe_addstr(win, r, x+2, "Total time", curses.color_pair(C_DIM))
+    v = fmt_dur(data['total_time'])
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_ACCENT) | curses.A_BOLD)
+    r += 1
+    safe_addstr(win, r, x+2, "Average", curses.color_pair(C_DIM))
+    v = fmt_dur(data['avg_duration'])
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_CYAN))
+    r += 1
+    safe_addstr(win, r, x+2, "Longest", curses.color_pair(C_DIM))
+    v = fmt_dur(data['longest_ever'])
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_GOLD) | curses.A_BOLD)
+    r += 1
+    # Streak
+    s = data['streak']
+    flame = "🔥" if s >= 3 else "⚡" if s >= 1 else "·"
+    label = f"Streak {flame}"
+    safe_addstr(win, r, x+2, label, curses.color_pair(C_DIM))
+    v = f"{s} day{'s' if s != 1 else ''}"
+    safe_addstr(win, r, x+bw-2-len(v), v,
+                curses.color_pair(C_STREAK) | curses.A_BOLD)
+
+
+def draw_today_week(win, y, x, bw, data):
+    """Today / This week panel."""
+    draw_box(win, y, x, 7, bw, curses.color_pair(C_BORDER), "TODAY / WEEK")
+    r = y + 1
+    safe_addstr(win, r, x+2, "Today sessions", curses.color_pair(C_DIM))
+    v = str(data['today_sessions'])
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_GREEN) | curses.A_BOLD)
+    r += 1
+    safe_addstr(win, r, x+2, "Today time", curses.color_pair(C_DIM))
+    v = fmt_dur(data['today_time'])
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_GREEN) | curses.A_BOLD)
+    r += 1
+    safe_addstr(win, r, x+2, "This week", curses.color_pair(C_DIM))
+    v = f"{data['week_sessions']}x  {fmt_dur(data['week_time'])}"
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_CYAN))
+    r += 1
+    safe_addstr(win, r, x+2, "Last week", curses.color_pair(C_DIM))
+    v = f"{data['last_week_sessions']}x  {fmt_dur(data['last_week_time'])}"
+    safe_addstr(win, r, x+bw-2-len(v), v, curses.color_pair(C_DIM))
+    r += 1
+    # Week-over-week delta
+    if data['last_week_time'] > 0:
+        delta = ((data['week_time'] - data['last_week_time']) / data['last_week_time']) * 100
+        sign = "▲" if delta >= 0 else "▼"
+        c = C_GREEN if delta >= 0 else C_RED
+        v = f"{sign} {abs(delta):.0f}% vs last week"
+    else:
+        v = "— no last week data"
+        c = C_DIM
+    safe_addstr(win, r, x+2, v, curses.color_pair(c))
+
+
+TYPE_COLORS = [C_BAR, C_CYAN, C_GREEN, C_GOLD, C_RED, C_ACCENT]
+
+def draw_types(win, y, x, bw, h, data):
+    """Session types with bar chart."""
+    draw_box(win, y, x, h, bw, curses.color_pair(C_BORDER), "SESSION TYPES")
+    types = data["types"]
+    if not types:
+        safe_addstr(win, y+1, x+2, "No sessions yet.", curses.color_pair(C_DIM))
+        return
+    max_total = max(t["total"] for t in types) if types else 1
+    # Dynamic name width: fit longest name, cap at ~35% of box inner width
+    inner = bw - 4          # usable chars between left padding and right border
+    raw_max = max(len(t["session_type"]) for t in types)
+    name_w = min(raw_max, max(10, inner * 35 // 100))
+
+    # Pre-compute labels to find the widest one
+    labels = []
+    for t in types:
+        d = t.get("days", t["cnt"])
+        lbl = f" {fmt_dur_short(t['total'])} ({d}d)"
+        labels.append(lbl)
+    max_label = max(len(l) for l in labels)
+
+    # bar gets whatever space remains:  inner = name_w + 1(gap) + bar_w + label_w
+    bar_w = inner - name_w - 1 - max_label
+    bar_w = max(bar_w, 2)
+
+    for i, t in enumerate(types):
+        if i >= h - 2:
+            break
+        r = y + 1 + i
+        # Name
+        name = t["session_type"][:name_w].ljust(name_w)
+        ci = TYPE_COLORS[i % len(TYPE_COLORS)]
+        safe_addstr(win, r, x+2, name, curses.color_pair(ci) | curses.A_BOLD)
+        # Bar
+        ratio = t["total"] / max_total if max_total else 0
+        draw_hbar(win, r, x + 2 + name_w + 1, bar_w, ratio, curses.color_pair(ci))
+        # Duration + days label (right-aligned to fill max_label width)
+        safe_addstr(win, r, x + 2 + name_w + 1 + bar_w,
+                    labels[i].ljust(max_label), curses.color_pair(C_DIM))
+
+
+def draw_recents(win, y, x, bw, h, data):
+    """Recent sessions list."""
+    draw_box(win, y, x, h, bw, curses.color_pair(C_BORDER), "RECENT SESSIONS")
+    recents = data["recents"]
+    if not recents:
+        safe_addstr(win, y+1, x+2, "No sessions yet.", curses.color_pair(C_DIM))
+        return
+    # Dynamic name width based on actual data, cap at ~40% of box
+    raw_max = max(len(s["session_type"]) for s in recents)
+    name_w = min(raw_max, max(12, (bw - 6) * 2 // 5))
+    for i, s in enumerate(recents):
+        if i >= h - 2:
+            break
+        r = y + 1 + i
+        name = s["session_type"][:name_w].ljust(name_w)
+        dur = fmt_dur_short(s["duration"]).rjust(7)
+        # Relative day label
+        day = s["start_time"][:10]
+        today = datetime.now().strftime("%Y-%m-%d")
+        yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+        if day == today:
+            day_label = "today"
+        elif day == yesterday:
+            day_label = "yesterday"
+        else:
+            day_label = day[5:]  # MM-DD
+        line = f" {name} {dur}  {day_label}"
+        ci = C_ACCENT if day == today else C_DIM
+        safe_addstr(win, r, x+2, line, curses.color_pair(ci))
+
+
+def draw_heatmap(win, y, x, bw, data):
+    """14-day activity heatmap with block shading."""
+    draw_box(win, y, x, 5, bw, curses.color_pair(C_BORDER), "14-DAY ACTIVITY")
+    daily = data["daily_14"]
+    max_daily = max(daily.values()) if daily else 1
+    blocks = " ░▒▓█"
+    day_names = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su",
+                 "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+    r = y + 1
+    dates_line = ""
+    blocks_line = ""
+    hours_line = ""
+    today = datetime.now().date()
+    cell_w = max(3, min(6, (bw - 4) // 14))
+
+    for i in range(14):
+        d = (today - timedelta(days=13 - i)).strftime("%Y-%m-%d")
+        total = daily.get(d, 0)
+        ratio = total / max_daily if max_daily else 0
+        bi = min(4, int(ratio * 4.99)) if total > 0 else 0
+        block_char = blocks[bi]
+
+        day_d = today - timedelta(days=13 - i)
+        dn = day_d.strftime("%a")[:2]
+        dates_line += dn.center(cell_w)
+        blocks_line += (block_char * (cell_w - 1) + " ")
+        h_val = f"{total/3600:.1f}h" if total else "  -"
+        hours_line += h_val.center(cell_w)
+
+    safe_addstr(win, r, x+2, dates_line, curses.color_pair(C_DIM))
+    safe_addstr(win, r+1, x+2, blocks_line, curses.color_pair(C_BAR) | curses.A_BOLD)
+    safe_addstr(win, r+2, x+2, hours_line, curses.color_pair(C_DIM))
+
+
+def draw_personal_bests(win, y, x, bw, h, data):
+    """Personal best per type."""
+    draw_box(win, y, x, h, bw, curses.color_pair(C_BORDER), "PERSONAL BESTS ✦")
+    types = data["types"]
+    if not types:
+        return
+    # Pre-compute all display strings to find column widths
+    rows = []
+    for t in types:
+        name = t["session_type"]
+        best = fmt_dur(t["best"])
+        best_date = t.get("best_date", "")  # already YYYY-MM-DD from query
+        rows.append((name, best, best_date))
+
+    inner = bw - 4  # usable space between borders
+    raw_name_max = max(len(r[0]) for r in rows)
+    name_w = min(raw_name_max, max(10, inner * 30 // 100))
+    dur_w = max(len(r[1]) for r in rows)
+    date_w = 10  # YYYY-MM-DD is always 10 chars
+
+    for i, (raw_name, best, best_date) in enumerate(rows):
+        if i >= h - 2:
+            break
+        r = y + 1 + i
+        col = x + 2
+        # Name column
+        name = raw_name[:name_w].ljust(name_w)
+        safe_addstr(win, r, col, name, curses.color_pair(C_DIM))
+        col += name_w + 2
+        # Duration column (right-aligned within dur_w)
+        safe_addstr(win, r, col, best.rjust(dur_w),
+                    curses.color_pair(C_GOLD) | curses.A_BOLD)
+        col += dur_w + 2
+        # Date column
+        if best_date:
+            safe_addstr(win, r, col, best_date, curses.color_pair(C_DIM))
+
+
+def draw_footer(win, y, w):
+    """Bottom status bar."""
+    attr = curses.color_pair(C_DIM)
+    safe_addstr(win, y, 2, f"db: {DB_PATH}", attr)
+    safe_addstr(win, y, w - 25, "q:quit  r:refresh", attr)
+
+
+# ── Main ──────────────────────────────────────────────────────────────
+
+def main(stdscr):
+    curses.curs_set(0)
+    stdscr.timeout(REFRESH_SECS * 1000)
+    curses.start_color()
+    curses.use_default_colors()
+
+    # Define colors
+    curses.init_pair(C_HEADER,   curses.COLOR_WHITE,   -1)
+    curses.init_pair(C_ACCENT,   curses.COLOR_CYAN,    -1)
+    curses.init_pair(C_DIM,      246,                   -1)   # gray (256-color)
+    curses.init_pair(C_BAR,      curses.COLOR_MAGENTA, -1)
+    curses.init_pair(C_GOLD,     curses.COLOR_YELLOW,  -1)
+    curses.init_pair(C_GREEN,    curses.COLOR_GREEN,   -1)
+    curses.init_pair(C_RED,      curses.COLOR_RED,     -1)
+    curses.init_pair(C_CYAN,     curses.COLOR_CYAN,    -1)
+    curses.init_pair(C_BORDER,   240,                   -1)
+    curses.init_pair(C_TITLE_BG, curses.COLOR_BLACK,   curses.COLOR_CYAN)
+    curses.init_pair(C_STREAK,   208,                   -1)   # orange-ish
+
+    while True:
+        stdscr.erase()
+        h, w = stdscr.getmaxyx()
+
+        if w < 50 or h < 18:
+            safe_addstr(stdscr, 0, 0, "Terminal too small. Need at least 50x18.",
+                        curses.color_pair(C_RED))
+            stdscr.refresh()
+            key = stdscr.getch()
+            if key in (ord('q'), ord('Q'), 27):
+                break
+            continue
+
+        # Fetch data
+        try:
+            data = query_db(DB_PATH)
+        except Exception as e:
+            safe_addstr(stdscr, 1, 2, f"DB Error: {e}", curses.color_pair(C_RED))
+            stdscr.refresh()
+            key = stdscr.getch()
+            if key in (ord('q'), ord('Q'), 27):
+                break
+            continue
+
+        # Layout calculations
+        left_w = max(30, w // 2)
+        right_w = w - left_w
+        type_count = len(data["types"])
+        types_h = max(4, type_count + 2)
+        recents_h = max(4, min(len(data["recents"]) + 2, 10))
+        pb_h = max(4, type_count + 2)
+
+        # ── Draw ──
+        # Row 0: title bar
+        draw_title_bar(stdscr, w, data)
+
+        # Row 2: Lifetime (left) | Today/Week (right)
+        row = 2
+        draw_lifetime(stdscr, row, 0, left_w, data)
+        draw_today_week(stdscr, row, left_w, right_w, data)
+
+        # Row 9: Types (left) | Recents (right)
+        row = 9
+        max_panel_h = min(types_h, h - row - 8)
+        draw_types(stdscr, row, 0, left_w, max_panel_h, data)
+        # Recents + PBs stacked on the right
+        recents_avail = max(4, max_panel_h)
+        draw_recents(stdscr, row, left_w, right_w, recents_avail, data)
+
+        # Below types: Personal Bests (left) | —
+        row2 = row + max_panel_h
+        if row2 + pb_h + 6 < h:
+            draw_personal_bests(stdscr, row2, 0, left_w, pb_h, data)
+
+        # Heatmap at the bottom-ish
+        heatmap_row = max(row2 + pb_h if row2 + pb_h + 6 < h else row + max_panel_h, h - 7)
+        if heatmap_row + 5 < h:
+            draw_heatmap(stdscr, heatmap_row, 0, w, data)
+
+        # Footer
+        draw_footer(stdscr, h - 1, w)
+
+        stdscr.refresh()
+
+        # Input
+        key = stdscr.getch()
+        if key in (ord('q'), ord('Q'), 27):
+            break
+        elif key == ord('r'):
+            continue  # force refresh
+
+
+if __name__ == "__main__":
+    if not os.path.exists(DB_PATH):
+        print(f"Database not found: {DB_PATH}")
+        print("Usage: python3 session-dashboard.py [path/to/test.db]")
+        sys.exit(1)
+    curses.wrapper(main)

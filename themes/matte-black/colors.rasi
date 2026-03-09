@@ -1,0 +1,38 @@
+/* Matte Black */
+* {
+  base:            #121212;
+  surface:         #333333;
+  overlay:         #595959;
+
+  muted:           #8a8a8d;
+  subtle:          #eaeaea;
+  text:            #bebebe;
+
+  accent:          #595959;
+
+  red:             #D35F5F;
+  green:           #FFC107;
+  yellow:          #f59e0b;
+  blue:            #bebebe;
+  magenta:         #D35F5F;
+  cyan:            #eaeaea;
+  orange:          #f59e0b;
+
+  highlightlow:   #333333;
+  highlightmed:   #404040;
+  highlighthigh:  #595959;
+
+  border:          #595959;
+
+  selectionbg:    #333333;
+  selectionfg:    #121212;
+
+  url:             #bebebe;
+
+  /* rofi conventional aliases */
+  background:      @base;
+  background-alt:  @surface;
+  foreground:      @text;
+  selected:        @highlightmed;
+  urgent:          @red;
+}

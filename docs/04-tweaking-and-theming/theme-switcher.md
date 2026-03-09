@@ -43,7 +43,7 @@ sokratOS includes 11 themes:
 
 **Command**:
 ```bash
-sokratos-themes
+sokratos-theme-menu
 ```
 
 **Workflow**:
@@ -69,7 +69,7 @@ sokratos-themes
 
 **Command**:
 ```bash
-sokratos-next-theme
+sokratos-wallpaper-menu
 ```
 
 **Workflow**:
@@ -85,7 +85,7 @@ sokratos-next-theme
 Apply theme from any image:
 
 ```bash
-sokratos-apply-theme /path/to/image.jpg
+sokratos-mat-theme /path/to/image.jpg
 ```
 
 **What happens**:
@@ -162,7 +162,7 @@ SHADE=$(light or dark)
 # Example: "light darkseagreen" → everforest
 ```
 
-**Theme matching rules** (in `sokratos-apply-theme`):
+**Theme matching rules** (in `sokratos-mat-theme`):
 - Light steel blue → TokyoNight or Nord
 - Salmon → Gruvbox
 - Aquamarine → Osaka Jade
@@ -172,7 +172,7 @@ SHADE=$(light or dark)
 
 ### Customizing Matching
 
-Edit `~/.local/share/sokratOS/bin/sokratos-apply-theme`:
+Edit `~/.local/share/sokratOS/bin/sokratos-mat-theme`:
 
 ```bash
 case "$SHADE $COLOR1" in
@@ -344,7 +344,7 @@ paru -S matugen-bin
 
 ### Custom Color Extraction
 
-Edit `sokratos-apply-theme`:
+Edit `sokratos-mat-theme`:
 
 ```bash
 # Change image processing
@@ -359,7 +359,7 @@ magick "$WALL" \
 Change color temperature for wallpaper theming:
 
 ```bash
-# In sokratos-apply-theme
+# In sokratos-mat-theme
 matugen image "$PROCESSED_IMG" --temperature 0.7
 ```
 
@@ -402,10 +402,10 @@ hour=$(date +%H)
 
 if [ $hour -lt 6 ] || [ $hour -gt 18 ]; then
   # Night theme
-  sokratos-themes <<< "nord"
+  sokratos-theme-menu <<< "nord"
 else
   # Day theme
-  sokratos-themes <<< "everforest"
+  sokratos-theme-menu <<< "everforest"
 fi
 ```
 

@@ -1,0 +1,27 @@
+/* Gotham */
+@define-color base           #0c1014;
+@define-color surface        #11151c;
+@define-color overlay        #091f2e;
+
+@define-color muted          #4e5166;
+@define-color subtle         #1a3d48;
+@define-color text           #d3ebe9;
+
+@define-color accent         #2aa889;
+
+@define-color red            #c23127;
+@define-color green          #2aa889;
+@define-color yellow         #edb443;
+@define-color orange         #d26937;
+@define-color blue           #599cdb;
+@define-color magenta        #888ca6;
+@define-color cyan           #33859E;
+
+@define-color highlight_low  #11151c;
+@define-color highlight_med  #091f2e;
+@define-color highlight_high #0a3749;
+
+@define-color border         #0a3749;
+
+@define-color selection_bg   #0a3749;
+@define-color selection_fg   #d3ebe9;

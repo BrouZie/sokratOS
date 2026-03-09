@@ -1,0 +1,29 @@
+/* Cyberpunk */
+@define-color base           #0A0B10;
+@define-color surface        #101116;
+@define-color overlay        #120B10;
+
+@define-color muted          #777777;
+@define-color subtle         #EEFFFF; /* "soft" bright text */
+@define-color text           #EEFFFF;
+
+@define-color accent         #FF0055;
+
+@define-color red            #FF0055;
+@define-color green          #00FF9C;
+@define-color yellow         #FFFC58;
+@define-color blue           #76C1FF;
+@define-color magenta        #D57BFF;
+@define-color cyan           #00FFC8;
+@define-color orange         #FF4081;
+
+@define-color highlight_low  #101116;
+@define-color highlight_med  #120B10;
+@define-color highlight_high #1A1320;
+
+@define-color border         #777777;
+
+@define-color selection_bg   #120B10;
+@define-color selection_fg   #EEFFFF;
+
+@define-color url            #FFFC58;

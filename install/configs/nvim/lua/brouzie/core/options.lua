@@ -17,11 +17,12 @@ vim.opt.termguicolors = true
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.exrc = true
 vim.opt.secure = true
+vim.opt.scrolloff = 5 -- keep 10 lines above/below cursor
+vim.opt.sidescrolloff = 5 -- keep 10 lines to left/right of cursor
 
 -- Copilot (uncomment and follow docs to enable Copilot)
 -- vim.g.copilot_no_tab_map = true
 -- vim.g.copilot_enabled = false
-
 
 --- Dadbod (SQL setup) ---
 

@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+# Toggle color sourcing between matugen (auto-generated) and preconfigured themes.
+# State is persisted in ~/.local/state/sokratOS/.color-backend
+
+STATE_FILE="$HOME/.local/state/sokratOS/.color-backend"
+
+# If missing state file - default to matugen
+if [[ ! -f "$STATE_FILE" ]]; then
+	mkdir -p "$(dirname "$STATE_FILE")"
+	printf '%s\n' "matugen" > "$STATE_FILE"
+fi
+
+CURRENT=$(<"$STATE_FILE")
+
+# Check for existing symlinked directory (for preconfigured themes)
+THEME_SYMLINK="$HOME/.config/sokratOS/current/theme"
+DEFAULT_THEME="$HOME/.local/share/sokratOS/themes/gruvbox"
+
+if [[ ! -L "$THEME_SYMLINK" ]]; then
+	rm -rf -- "$THEME_SYMLINK"
+	ln -sfn "$DEFAULT_THEME" "${THEME_SYMLINK}.new"
+	mv -Tf "${THEME_SYMLINK}.new" "$THEME_SYMLINK"
+fi
+
+# Toggle
+[[ "$CURRENT" == "matugen" ]] && NEW="preconfigured" || NEW="matugen"
+
+# CSS files that all share the same import pattern
+CSS_FILES=(
+	~/.config/waybar/styles/round/style.css
+	~/.config/waybar/styles/sharp/style.css
+	~/.config/swaync/style.css
+	~/.config/gtk-3.0/gtk.css
+	~/.config/gtk-4.0/gtk.css
+)
+
+MAT_CSS='@import url("../sokratOS/matugen/shared/colors.css");'
+PRE_CSS='@import url("../sokratOS/current/theme/colors.css");'
+
+# --- Apply substitutions ---
+
+if [[ "$NEW" == "preconfigured" ]]; then
+	# kitty
+	sed -i 's|^include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|include ~/.config/sokratOS/current/theme/colors.conf|' \
+		~/.config/kitty/kitty.conf
+
+	# hyprland
+	sed -i 's|^source = ~/.config/sokratOS/matugen/hypr/colors.conf|source = ~/.config/sokratOS/current/theme/hcolors.conf|' \
+		~/.config/hypr/hyprland.conf
+
+	# rofi
+	sed -i 's|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|@theme "~/.config/sokratOS/current/theme/colors.rasi"|' \
+		~/.config/rofi/config.rasi
+
+	# tmux
+	sed -i 's|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|' \
+		~/.tmux.conf
+
+	# CSS files (waybar, swaync, gtk-3, gtk-4)
+	for f in "${CSS_FILES[@]}"; do
+		sed -i "s|$MAT_CSS|$PRE_CSS|" "$f"
+	done
+else
+	# kitty
+	sed -i 's|^include ~/.config/sokratOS/current/theme/colors.conf|include ~/.config/sokratOS/matugen/kitty/mat-colors.conf|' \
+		~/.config/kitty/kitty.conf
+
+	# hyprland
+	sed -i 's|^source = ~/.config/sokratOS/current/theme/hcolors.conf|source = ~/.config/sokratOS/matugen/hypr/colors.conf|' \
+		~/.config/hypr/hyprland.conf
+
+	# rofi
+	sed -i 's|@theme "~/.config/sokratOS/current/theme/colors.rasi"|@theme "~/.config/sokratOS/matugen/rofi/colors.rasi"|' \
+		~/.config/rofi/config.rasi
+
+	# tmux
+	sed -i 's|source-file ~/.config/sokratOS/current/theme/tmux-colors.conf|source-file ~/.config/sokratOS/matugen/tmux/tmux-colors.conf|' \
+		~/.tmux.conf
+
+	# CSS files (waybar, swaync, gtk-3, gtk-4)
+	for f in "${CSS_FILES[@]}"; do
+		sed -i "s|$PRE_CSS|$MAT_CSS|" "$f"
+	done
+fi
+
+# Persist new state
+echo "$NEW" > "$STATE_FILE"
+
+# Reload apps
+if [[ "$NEW" == "matugen" ]]; then
+	# Get current wallpaper from swww and regenerate colors
+	WALL=$(swww query | grep -o 'image: .*' | head -1 | cut -d' ' -f2)
+	if [[ -n "$WALL" ]]; then
+		sokratos-mat-theme "$WALL"
+	else
+		# Fallback: reload manually if swww can't report wallpaper
+		pkill -SIGUSR1 kitty
+		hyprctl reload
+		tmux source-file ~/.tmux.conf 2>/dev/null
+		refresh-app-daemons
+	fi
+else
+	pkill -SIGUSR1 kitty
+	hyprctl reload
+	tmux source-file ~/.tmux.conf 2>/dev/null
+	sokratos-export-wal
+	pywalfox update
+	refresh-app-daemons
+fi
+
+notify-send "Color backend" "Switched to $NEW"

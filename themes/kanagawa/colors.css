@@ -1,0 +1,30 @@
+/* Kanagawa (wave) */
+@define-color base           #1F1F28; /* sumiInk1 */
+@define-color surface        #2A2A37; /* sumiInk2 */
+@define-color overlay        #363646; /* sumiInk3 */
+
+@define-color muted          #727169; /* fujiGray */
+@define-color subtle         #938AA9; /* springViolet1 (softer fg) */
+@define-color text           #DCD7BA; /* fujiWhite */
+
+@define-color accent         #7FB4CA; /* springBlue */
+
+@define-color red            #C34043; /* autumnRed */
+@define-color green          #76946A; /* autumnGreen */
+@define-color yellow         #C0A36E; /* boatYellow2 */
+@define-color blue           #7FB4CA; /* springBlue */
+@define-color magenta        #957FB8; /* oniViolet */
+@define-color cyan           #6A9589; /* waveAqua1 */
+@define-color orange         #FFA066; /* surimiOrange */
+
+@define-color highlight_low  #16161D; /* sumiInk0 */
+@define-color highlight_med  #2A2A37; /* sumiInk2 */
+@define-color highlight_high #363646; /* sumiInk3 */
+
+@define-color border         #54546D; /* sumiInk4 */
+
+/* text selection semantics (terminal/editor) */
+@define-color selection_bg   #223249; /* waveBlue1 */
+@define-color selection_fg   #DCD7BA; /* fujiWhite */
+
+@define-color url            #72a7bc; /* your kitty url_color */

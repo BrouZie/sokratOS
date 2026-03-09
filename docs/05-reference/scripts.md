@@ -14,13 +14,13 @@ These scripts are in your `$PATH` and can be run from anywhere.
 
 ## Theme Management
 
-### sokratos-apply-theme
+### sokratos-mat-theme
 
 **Purpose**: Generate and apply theme from a wallpaper image
 
 **Usage**:
 ```bash
-sokratos-apply-theme /path/to/wallpaper.jpg
+sokratos-mat-theme /path/to/wallpaper.jpg
 ```
 
 **What it does**:
@@ -37,23 +37,23 @@ sokratos-apply-theme /path/to/wallpaper.jpg
 - `~/.config/sokratOS/matugen/` - Generated colors
 - `~/.config/sokratOS/current/theme/colors.conf` - Symlink to selected theme
 
-**Keybind**: None (used by `sokratos-next-theme`)
+**Keybind**: None (used by `sokratos-wallpaper-menu`)
 
 ---
 
-### sokratos-next-theme
+### sokratos-wallpaper-menu
 
 **Purpose**: Interactive wallpaper picker with automatic theme application
 
 **Usage**:
 ```bash
-sokratos-next-theme
+sokratos-wallpaper-menu
 ```
 
 **How it works**:
 1. Shows Rofi menu with wallpapers from `~/Pictures/wallpaper/`
 2. Select wallpaper
-3. Automatically calls `sokratos-apply-theme`
+3. Automatically calls `sokratos-mat-theme`
 
 **Keybind**: `SUPER + Shift + Space`
 
@@ -63,13 +63,13 @@ sokratos-next-theme
 
 ---
 
-### sokratos-themes
+### sokratos-theme-menu
 
 **Purpose**: Quick theme switcher (pre-configured themes only)
 
 **Usage**:
 ```bash
-sokratos-themes
+sokratos-theme-menu
 ```
 
 **How it works**:
@@ -276,13 +276,13 @@ sokratos-quick-search
 
 ---
 
-### sokratos-show-keybinds
+### sokratos-keybind-menu
 
 **Purpose**: Searchable Hyprland keybind list
 
 **Usage**:
 ```bash
-sokratos-show-keybinds
+sokratos-keybind-menu
 ```
 
 **How it works**:
@@ -292,19 +292,19 @@ sokratos-show-keybinds
 
 ---
 
-### sokratos-utilities
+### sokratos-utilities-menu
 
 **Purpose**: One-stop Rofi menu for common sokratOS actions
 
 **Usage**:
 ```bash
-sokratos-utilities
+sokratos-utilities-menu
 ```
 
 **Menu actions**:
-- Change wallpaper/theme (calls `sokratos-next-theme`)
+- Change wallpaper/theme (calls `sokratos-wallpaper-menu`)
 - Toggle focus mode or night mode
-- Show keybinds (`sokratos-show-keybinds`)
+- Show keybinds (`sokratos-keybind-menu`)
 - Update system (opens a floating terminal and runs `sokratos-update`)
 
 ---
@@ -385,7 +385,7 @@ Most scripts require these packages (installed by sokratOS):
 
 ```bash
 # Check script exists
-ls ~/.local/share/sokratOS/bin/sokratos-themes
+ls ~/.local/share/sokratOS/bin/sokratos-theme-menu
 
 # Check PATH
 echo $PATH | grep sokratOS
@@ -428,7 +428,7 @@ mkdir -p ~/.config/sokratOS/current/theme/
 which matugen
 
 # Test theme switching manually
-sokratos-themes
+sokratos-theme-menu
 ```
 
 ## Next Steps

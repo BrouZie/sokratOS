@@ -81,6 +81,34 @@ refresh_hypr() {
 	fi
 }
 
+refresh_matugen() {
+	gum style --bold --foreground 51 "Refreshing matugen configs…"
+
+	local src_dir="$CONFIG_ROOT/matugen"
+	local dest_dir="$HOME/.config/matugen"
+
+	if [ -d "$src_dir" ]; then
+		backup_path "$dest_dir"
+		cp -r "$src_dir" "$dest_dir"
+		gum style "Updated $dest_dir"
+	fi
+}
+
+refresh_kitty() {
+	gum style --bold --foreground 51 "Refreshing kitty config…"
+
+	local src_conf="$CONFIG_ROOT/kitty.conf"
+	local dest_conf="$HOME/.config/kitty/kitty.conf"
+
+	if [ -f "$src_conf" ]; then
+		backup_path "$dest_conf"
+		cp "$src_conf" "$dest_conf"
+		gum style "Updated $dest_conf"
+	else
+		gum style --foreground 196 "Missing $src_conf, skipping kitty"
+	fi
+}
+
 refresh_waybar() {
 	gum style --bold --foreground 51 "Refreshing waybar configs…"
 
@@ -90,6 +118,9 @@ refresh_waybar() {
 	if [ -d "$src_dir" ]; then
 		backup_path "$dest_dir"
 		cp -r "$src_dir" "$dest_dir"
+		ln -sf "$dest_dir/styles/round/config.jsonc" "$dest_dir/config.jsonc"
+		ln -sf "$dest_dir/styles/round/style.css" "$dest_dir/style.css"
+
 		gum style "Updated $dest_dir"
 	fi
 }
@@ -216,6 +247,8 @@ while true; do
 			--header "k/j move  •  TAB toggle  •  ENTER confirm  •  ESC to quit" \
 			"fzf-dirs" \
 			"hyprland" \
+			"matugen" \
+			"kitty" \
 			"waybar" \
 			"rofi" \
 			"neovim" \
@@ -246,6 +279,8 @@ while true; do
 for choice in $choices; do
 	case "$choice" in
 		hyprland) refresh_hypr ;;
+		matugen) refresh_matugen ;;
+		kitty) refresh_kitty ;;
 		neovim) refresh_nvim ;;
 		swaync) refresh_swaync ;;
 		waybar) refresh_waybar ;;

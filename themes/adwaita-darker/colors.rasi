@@ -1,0 +1,32 @@
+/* Adwaita darker */
+* {
+  base:           #000000;
+  surface:        #101010;
+  overlay:        #1c1c1c;
+
+  muted:          #9a9996;
+  subtle:         #c0bfbc;
+  text:           #deddda;
+
+  accent:         #62a0ea;
+
+  red:            #ed333b;
+  green:          #57e389;
+  orange:         #ff7800;
+  yellow:         #ffa348;
+  blue:           #62a0ea;
+  magenta:        #9141ac;
+  cyan:           #5bc8af;
+
+  highlightlow:  #101010;
+  highlightmed:  #1c1c1c;
+  highlighthigh: #282828;
+
+  border:         #282828;
+
+  selectionbg:   #1c1c1c;
+  selectionfg:   #deddda;
+
+  bg: @base;
+  fg: @text;
+}

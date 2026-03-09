@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+HYPR_PATH="$HOME/.config/hypr/hyprland.conf"
+
+OPTIONS=(
+	"󰏘   Themes"
+	"   Styles"
+	"󰸉   Wallpapers"
+	"   Edit Hyprland"
+	"󰋱   Focus Mode"
+	"󰖔   Night Mode"
+	"󰁨   Auto-Colorizer-Mode"
+)
+
+SELECTED=$(printf '%s\n' "${OPTIONS[@]}" | \
+  rofi -dmenu -i -p "Settings" \
+	-no-show-icons)
+
+case "$SELECTED" in
+	*"Themes") sokratos-theme-menu ;;
+	*"Wallpapers") sokratos-wallpaper-menu ;;
+	*"Styles") sokratos-style-menu ;;
+	*"Focus Mode") sokratos-focus-mode ;;
+	*"Night Mode") sokratos-night-mode ;;
+	*"Edit Hyprland") xdg-terminal-exec "$EDITOR" "$HYPR_PATH" ;;
+	*"Auto-Colorizer-Mode") sokratos-switch-color-backend ;;
+	*) exit 0;;
+esac

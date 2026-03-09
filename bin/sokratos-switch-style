@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+if [ "$#" -ne 1 ]; then
+	echo "Usage: $0 [round/sharp]"
+	exit 1
+fi
+
+ROFI_CONFIG="$HOME/.config/rofi/config.rasi"
+WAYBAR_DIR="$HOME/.config/waybar"
+
+if [[ "$1" == *"sharp"* ]]; then
+	# Hyprland source
+	sed -i 's|^source = ~/.config/hypr/configs/styles/round.conf|source = ~/.config/hypr/configs/styles/sharp.conf|' \
+	~/.config/hypr/hyprland.conf
+
+	# Rofi radius
+	OTHER_R=5
+	MIDDLE_R=2
+	INNER_R=0
+
+	# Waybar
+  NEXT="sharp"
+else
+	# Hyprland source
+	sed -i 's|^source = ~/.config/hypr/configs/styles/sharp.conf|source = ~/.config/hypr/configs/styles/round.conf|' \
+	~/.config/hypr/hyprland.conf
+
+	OTHER_R=28
+	MIDDLE_R=18
+	INNER_R=14
+
+	# Waybar
+  NEXT="round"
+fi
+
+# Rofi radius substitution
+sed -i "s/outer-radius: .*px/outer-radius: ${OTHER_R}px/" "$ROFI_CONFIG"
+sed -i "s/middle-radius: .*px/middle-radius: ${MIDDLE_R}px/" "$ROFI_CONFIG"
+sed -i "s/inner-radius: .*px/inner-radius:  ${INNER_R}px/" "$ROFI_CONFIG"
+
+# Waybar
+ln -sf "$WAYBAR_DIR/styles/$NEXT/config.jsonc" "$WAYBAR_DIR/config.jsonc"
+ln -sf "$WAYBAR_DIR/styles/$NEXT/style.css"    "$WAYBAR_DIR/style.css"
+
+# Restart waybar & swaync
+refresh-app-daemons

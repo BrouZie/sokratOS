@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Wallpaper selection via rofi -dmenu
+
+# Directory containing wallpapers
+WALL_DIR="$HOME/Pictures/wallpaper"
+
+cd "$WALL_DIR" || exit
+
+# Handle spaces in filenames
+IFS=$'\n'
+
+# Grab the user-selected wallpaper
+SELECTED_WALL=$(for a in *.jpg *.png *.jpeg; do echo -en "$a\0icon\x1f$a\n" ; done | rofi -dmenu -p "Wallpapers")
+
+# If not empty, apply wallpaper based on color backend
+if [ -n "$SELECTED_WALL" ]; then
+	STATE_FILE="$HOME/.local/state/sokratOS/.color-backend"
+	BACKEND="matugen"
+	[[ -f "$STATE_FILE" ]] && BACKEND=$(<"$STATE_FILE")
+
+	if [[ "$BACKEND" == "matugen" ]]; then
+		sokratos-mat-theme "$WALL_DIR/$SELECTED_WALL"
+	else
+		swww img "$SELECTED_WALL" -t fade --transition-step 170
+	fi
+fi

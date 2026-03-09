@@ -5,7 +5,7 @@ set -euo pipefail
 
 export REPO_PATH="$HOME/.local/share/sokratOS"
 export REPO_INSTALL="$REPO_PATH/install"
-export LOG_FILE="$HOME/.config/sokratOS-install.log"
+export LOG_FILE="$HOME/.cache/sokratOS-install.log"
 
 # Ensure log directory exists
 mkdir -p "$(dirname "$LOG_FILE")"
@@ -142,8 +142,9 @@ gum style --foreground 147 "⚙️  Setting up configurations..."
 
 # Step 4: Create directories and copy configs
 gum_spin "Creating directories..." "mkdir -p \
-    '$HOME/.config/sokratOS/current/theme' \
+    '$HOME/.config/sokratOS/current' \
     '$HOME/.config/sokratOS/env.d' \
+    '$HOME/.local/state/sokratOS' \
     '$HOME/.local/share/applications' \
     '$HOME/.config/kitty' \
     '$HOME/Pictures/wallpaper' \
@@ -155,7 +156,6 @@ gum_spin "Copying configuration files..." "
     cp '$REPO_INSTALL/configs/kitty.conf' '$HOME/.config/kitty/kitty.conf'
     cp '$REPO_INSTALL/configs/tmux.conf' '$HOME/.tmux.conf'
     cp -r '$REPO_INSTALL/configs/bash' '$HOME/.config/bash'
-    cp -r '$REPO_INSTALL/configs/colors/matugen' '$HOME/.config/sokratOS/matugen'
     cp -r '$REPO_INSTALL/configs/gtk-3.0' '$HOME/.config/gtk-3.0'
     cp -r '$REPO_INSTALL/configs/gtk-4.0' '$HOME/.config/gtk-4.0'
     cp -r '$REPO_INSTALL/configs/matugen' '$HOME/.config/matugen'
@@ -168,6 +168,11 @@ gum_spin "Copying configuration files..." "
     cp -r '$REPO_INSTALL/configs/nvim' '$HOME/.config/nvim'
     cp '$REPO_INSTALL/configs/applications/'*.desktop '$HOME/.local/share/applications/'
     cp -r '$REPO_INSTALL/configs/applications/icons' '$HOME/.local/share/applications/'
+
+		ln -sf '$HOME/.config/waybar/styles/round/config.jsonc' '$HOME/.config/waybar/config.jsonc'
+		ln -sf '$HOME/.config/waybar/styles/round/style.css' '$HOME/.config/waybar/style.css'
+
+		ln -sf '$HOME/.local/share/sokratOS/themes/gruvbox' '$HOME/.config/sokratOS/current/theme'
 "
 
 # Configure keyboard layout based on system settings
@@ -232,6 +237,10 @@ gum_spin "Setting up wallpaper and welcome screen..." "
     chmod +x '$HOME/.local/bin/sokratos-first-login'
     cp '$REPO_INSTALL/WELCOME.md' '$HOME/.config/sokratOS/WELCOME.md'
 "
+
+# Set initial migration version so fresh installs don't trigger migrations
+mkdir -p "$HOME/.local/state/sokratOS"
+cat "$REPO_PATH/migrations/latest" > "$HOME/.local/state/sokratOS/version"
 
 # Success message
 echo ""
