@@ -64,10 +64,12 @@ echo ""
 gum style --foreground 147 "Updating sokratOS repo..."
 echo ""
 
+pre_pull_head=$(git -C "$REPO_PATH" rev-parse HEAD)
+
 git -C "$REPO_PATH" pull --autostash
 
 # NOTE: Re-execute with the new version if this script was updated
-if ! git -C "$REPO_PATH" diff --quiet HEAD@{1} -- bin/sokratos-update 2>/dev/null; then
+if ! git -C "$REPO_PATH" diff --quiet "$pre_pull_head" -- bin/sokratos-update 2>/dev/null; then
 	exec "$REPO_PATH/bin/sokratos-update" "$@"
 fi
 
