@@ -129,7 +129,7 @@
 			"default": ["", ""]
 		},
 		"scroll-step": 1,
-		"on-click": "pavucontrol",
+		"on-click": "hyprctl dispatch exec pavucontrol",
 		"ignored-sinks": ["Easy Effects Sink"]
 	},
 	"bluetooth": {
