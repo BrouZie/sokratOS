@@ -25,11 +25,13 @@ vimtutor
 
 ## ✨ Features
 
-- 🎨 **Dynamic Theming**: Automatic color scheme generation from wallpapers using `matugen` and `pywal`
+- 🎨 **Dual Theming**: Wallpaper-based color generation (matugen) + 16 preconfigured themes (gruvbox, catppuccin, tokyonight, nord, etc.)
+- 🔲 **Style Variants**: Round and sharp UI styles for Hyprland, Waybar, and Rofi
 - 🖥️ **Hyprland Compositor**: Modern Wayland compositor with beautiful animations and tiling
-- 🛠️ **Custom Utility Scripts**: Theme switching, focus mode, screen recording, and more
+- 🛠️ **Custom Utility Scripts**: Theme/style/wallpaper menus, session management, config refresh
 - 🔧 **Development Ready**: Docker, development tools, and Neovim configuration included
 - 📱 **Modern UI Components**: Waybar, Rofi, SwayNC for notifications and menus
+- 🔄 **Migration System**: Automatic version-tracked migrations on update
 
 ## 📸 Preview
 
@@ -59,7 +61,7 @@ https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
    ```bash
    sudo pacman -S git --needed
    git clone https://github.com/BrouZie/sokratOS.git ~/.local/share/sokratOS
-   bash ~/.local/share/Sokratos/install.sh
+   bash ~/.local/share/sokratOS/install.sh
    ```
 
 > [!NOTE]
@@ -71,26 +73,34 @@ https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
     ```bash
     nvim ~/.config/hypr/configs/monitors.conf
     ```
-2. Change wallpaper with `SUPER + SHIFT + Space`
-1. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
+2. Open the wallpaper menu with `SUPER + SHIFT + Space`
+3. Familiarize yourself with sokratOS utilities (`SUPER + ALT + Space`)
 
 > [!NOTE]
 > Visit the **[First Boot Tour](docs/01-getting-started/first-boot-tour.md)** for further instructions
 
+## ⬆️ Upgrading
+
+> [!IMPORTANT]
+> **For users on a version before v0.0.1**: Run `sokratos-update` **twice**.
+>
+> The first run pulls the new code but the old script has no migration support — it just updates the repo. The second run uses the new script and applies migrations.
+
 ## 📁 Project Structure
 
 ```
-Sokratos/
-├── bin/                    # Custom utility scripts
+sokratOS/
+├── bin/                    # Utility scripts (menus, theming, sessions)
 ├── docs/                   # Documentation and screenshots
-├── install/                # Installation scripts
-│   ├── configs/           # Configuration files
-│   ├── desktop/           # Desktop environment setup
-│   ├── prerequisites/     # System prerequisites
-│   ├── terminal/          # Terminal and CLI tools
-│   └── xtras/             # Additional features
-├── themes/                # Pre-configured color schemes
-└── install.sh             # Main installation script
+├── install/                # Installation scripts and config templates
+│   ├── configs/            # Configuration file templates
+│   ├── desktop/            # Desktop environment setup
+│   ├── prerequisites/      # System prerequisites
+│   ├── terminal/           # Terminal and CLI tools
+│   └── xtras/              # Additional packages
+├── migrations/             # Version-tracked migration scripts
+├── themes/                 # 16 pre-configured color schemes
+└── install.sh              # Main installation script
 ```
 
 ## 🎯 Hardware Support
