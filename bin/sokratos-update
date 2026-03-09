@@ -1,28 +1,80 @@
 #!/usr/bin/env bash
 
 REPO_PATH="$HOME/.local/share/sokratOS"
+STATE_DIR="$HOME/.local/state/sokratOS"
+VERSION_FILE="$STATE_DIR/version"
+MIGRATIONS_DIR="$REPO_PATH/migrations"
+
+run_migrations() {
+	mkdir -p "$STATE_DIR"
+
+	local current_version=0
+	if [[ -f "$VERSION_FILE" ]]; then
+		current_version=$(cat "$VERSION_FILE")
+	fi
+
+	local repo_version
+	repo_version=$(cat "$REPO_PATH/migrations/latest")
+
+	if [[ "$current_version" -ge "$repo_version" ]]; then
+		return 0
+	fi
+
+	gum style --bold --foreground 214 --border rounded --padding "1 2" \
+		"Migration required: v${current_version} → v${repo_version}"
+
+	for script in "$MIGRATIONS_DIR"/[0-9]*.sh; do
+		[[ -f "$script" ]] || continue
+
+		local num
+		num=$(basename "$script" | grep -oP '^\d+')
+		num=$((10#$num))
+
+		if [[ "$num" -le "$current_version" ]]; then
+			continue
+		fi
+
+		local name
+		name=$(basename "$script" .sh | sed 's/^[0-9]*-//')
+
+		gum style --foreground 51 "Running migration ${num}: ${name}..."
+
+		if bash "$script"; then
+			echo "$num" > "$VERSION_FILE"
+			gum style --foreground 46 "✓  Migration ${num} complete"
+		else
+			gum style --foreground 196 "✗  Migration ${num} failed!"
+			gum style --foreground 196 "Run 'sokratos-update' again after fixing the issue."
+			return 1
+		fi
+	done
+
+	gum style --foreground 46 --bold "All migrations applied successfully."
+}
 
 gum style \
-    --border double \
-    --border-foreground 212 \
-    --padding "1 2" \
-    --margin "1 1" \
-    "Starting sokratOS Update!"
+	--border double \
+	--border-foreground 212 \
+	--padding "1 2" \
+	--margin "1 1" \
+	"Starting sokratOS Update!"
 echo ""
-
-
-if gum confirm "Do you wish to refresh dotfiles (~/.config)"; then
-	STATE=1
-else
-	STATE=0
-fi
 
 echo ""
 gum style --foreground 147 "Updating sokratOS repo..."
 echo ""
 
 git -C "$REPO_PATH" pull --autostash
-git -C "$REPO_PATH" diff --check || git -C $REPO_PATH reset
+
+# NOTE: Re-execute with the new version if this script was updated
+if ! git -C "$REPO_PATH" diff --quiet HEAD@{1} -- bin/sokratos-update 2>/dev/null; then
+	exec "$REPO_PATH/bin/sokratos-update" "$@"
+fi
+
+git -C "$REPO_PATH" diff --check || git -C "$REPO_PATH" reset
+
+echo ""
+run_migrations || exit 1
 
 echo ""
 gum style --foreground 147 "Updating system packages..."
@@ -33,16 +85,6 @@ fi
 
 if command -v yay &> /dev/null; then
 	yay -Syu || sudo pacman -Syu
-fi
-
-# Refresh configs
-if [[ "$STATE" == 1 ]]; then
-	echo ""
-	gum style --foreground 46 "Choose configs to refresh:"
-	echo ""
-	sokratos-refresh-configs
-	# Set a default wallpaper and colorscheme (ensure colors are generated)
-	sokratos-mat-theme "$HOME/.local/share/sokratOS/install/configs/wallpaper/morning.png"
 fi
 
 echo ""

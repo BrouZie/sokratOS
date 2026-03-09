@@ -238,6 +238,10 @@ gum_spin "Setting up wallpaper and welcome screen..." "
     cp '$REPO_INSTALL/WELCOME.md' '$HOME/.config/sokratOS/WELCOME.md'
 "
 
+# Set initial migration version so fresh installs don't trigger migrations
+mkdir -p "$HOME/.local/state/sokratOS"
+cat "$REPO_PATH/migrations/latest" > "$HOME/.local/state/sokratOS/version"
+
 # Success message
 echo ""
 gum style \
