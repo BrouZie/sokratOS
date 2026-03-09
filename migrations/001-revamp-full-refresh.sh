@@ -12,11 +12,6 @@ sudo pacman -S matugen
 
 revamp() {
 	local src="$1" dest="$2"
-	if [[ -e "$dest" ]]; then
-		local backup="${dest}.pre-revamp"
-		[[ -e "$backup" ]] && rm -rf "$backup"
-		mv "$dest" "$backup"
-	fi
 	if [[ -d "$src" ]]; then
 		cp -r "$src" "$dest"
 	elif [[ -f "$src" ]]; then
@@ -43,6 +38,11 @@ revamp "$CONFIG_ROOT/bash"       "$HOME/.config/bash"
 revamp "$CONFIG_ROOT/zshrc"      "$HOME/.zshrc"
 revamp "$CONFIG_ROOT/zsh"        "$HOME/.config/zsh"
 revamp "$CONFIG_ROOT/tmux.conf"  "$HOME/.tmux.conf"
+
+# Clean bad neovim state
+rm -rf "$HOME/.local/state/nvim"
+rm -rf "$HOME/.local/share/nvim"
+rm -rf "$HOME/.cache/nvim"
 
 # Waybar symlinks (default to round style)
 ln -sf "$HOME/.config/waybar/styles/round/config.jsonc" "$HOME/.config/waybar/config.jsonc"
