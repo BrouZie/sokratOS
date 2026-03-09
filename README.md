@@ -82,7 +82,7 @@ https://github.com/user-attachments/assets/d63283af-eb93-4078-8bd3-a0ec6c1d6c99
 ## ⬆️ Upgrading
 
 > [!IMPORTANT]
-> **For users on a version before v0.0.1**: Run `sokratos-update` **twice**.
+> **For users on a version before v0.1.0**: Run `sokratos-update` **twice**.
 >
 > The first run pulls the new code but the old script has no migration support — it just updates the repo. The second run uses the new script and applies migrations.
 
