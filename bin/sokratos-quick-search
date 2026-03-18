@@ -22,7 +22,7 @@ navigate_to_directory() {
 
 	# cd and open nvim
 	cd "$selected" || exit 1
-	exec nvim .
+	tmux new-window
 }
 
 # ====
