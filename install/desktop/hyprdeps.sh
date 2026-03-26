@@ -1,6 +1,6 @@
 yay -S --noconfirm --needed \
   hyprland hyprshot wf-recorder hypridle polkit-gnome \
-  hyprlock rofi hyprpicker hyprsunset waybar swaync swww \
+  hyprlock rofi hyprpicker hyprsunset waybar swaync awww \
   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
   xdg-terminal-exec xdg-utils xdg-user-dirs \
   brightnessctl wl-clip-persist nautilus ffmpegthumbnailer \

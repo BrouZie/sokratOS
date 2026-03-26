@@ -311,11 +311,11 @@ echo "vim.cmd('colorscheme $NVIM_THEME')" > ~/.config/nvim/lua/current-theme.lua
 ### Wallpaper Not Changing
 
 ```bash
-# Check swww is running
-pgrep swww
+# Check awww is running
+pgrep awww
 
 # Start if not running
-swww init
+awww-daemon
 ```
 
 ### Colors Look Wrong

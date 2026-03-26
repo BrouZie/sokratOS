@@ -76,7 +76,7 @@ The installation is organized into several modules:
 - **SwayNC** notification daemon
 - **Hyprlock** screen locker
 - **Hypridle** idle manager
-- **swww** wallpaper daemon
+- **awww** wallpaper daemon
 - **Audio** (Pipewire with full stack)
 - **Bluetooth** support
 - **Fonts** for UI and icons

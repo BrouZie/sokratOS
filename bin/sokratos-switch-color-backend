@@ -89,12 +89,12 @@ echo "$NEW" > "$STATE_FILE"
 
 # Reload apps
 if [[ "$NEW" == "matugen" ]]; then
-	# Get current wallpaper from swww and regenerate colors
-	WALL=$(swww query | grep -o 'image: .*' | head -1 | cut -d' ' -f2)
+	# Get current wallpaper from awww and regenerate colors
+	WALL=$(awww query | grep -o 'image: .*' | head -1 | cut -d' ' -f2)
 	if [[ -n "$WALL" ]]; then
 		sokratos-mat-theme "$WALL"
 	else
-		# Fallback: reload manually if swww can't report wallpaper
+		# Fallback: reload manually if awww can't report wallpaper
 		pkill -SIGUSR1 kitty
 		hyprctl reload
 		tmux source-file ~/.tmux.conf 2>/dev/null

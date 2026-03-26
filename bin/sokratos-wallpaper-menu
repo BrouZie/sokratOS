@@ -22,6 +22,6 @@ if [ -n "$SELECTED_WALL" ]; then
 	if [[ "$BACKEND" == "matugen" ]]; then
 		sokratos-mat-theme "$WALL_DIR/$SELECTED_WALL"
 	else
-		swww img "$SELECTED_WALL" -t fade --transition-step 170
+		awww img "$SELECTED_WALL" -t fade --transition-step 170
 	fi
 fi

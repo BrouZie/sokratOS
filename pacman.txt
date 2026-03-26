@@ -148,7 +148,7 @@ spotify-launcher
 stow
 swaync
 swtpm
-swww
+awww
 tectonic
 tldr
 tmux

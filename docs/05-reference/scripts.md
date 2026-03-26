@@ -25,7 +25,7 @@ sokratos-mat-theme /path/to/wallpaper.jpg
 
 **What it does**:
 1. Processes image (crops and resizes for color analysis)
-2. Sets wallpaper with `swww`
+2. Sets wallpaper with `awww`
 3. Generates color scheme with `matugen`
 4. Analyzes dominant colors and brightness
 5. Selects best matching pre-configured theme
@@ -355,7 +355,7 @@ Most scripts require these packages (installed by sokratOS):
 
 **Theme scripts**:
 - `matugen` - Color generation
-- `swww` - Wallpaper daemon
+- `awww` - Wallpaper daemon
 - `imagemagick` - Image processing
 - `pastel` - Color manipulation
 

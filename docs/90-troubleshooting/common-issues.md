@@ -354,19 +354,19 @@ sudo pacman -Rns $(pacman -Qtdq)
 
 **Solutions**:
 
-1. **Check swww running**:
+1. **Check awww running**:
    ```bash
-   pgrep swww
+   pgrep awww
    ```
 
-2. **Start swww**:
+2. **Start awww**:
    ```bash
-   swww init
+   awww init
    ```
 
 3. **Test manually**:
    ```bash
-   swww img ~/Pictures/wallpaper/your-image.jpg
+   awww img ~/Pictures/wallpaper/your-image.jpg
    ```
 
 ## Keybind Issues

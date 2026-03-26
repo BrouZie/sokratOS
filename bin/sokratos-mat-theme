@@ -19,7 +19,7 @@ magick "$WALL" \
 	"$PROCESSED_IMG"
 
 # Set wallpaper asynchronously (non-blocking)
-swww img "$WALL" -t fade &
+awww img "$WALL" -t fade &
 
 # Analyze shade in parallel using the processed image
 SHADE=$(magick "$PROCESSED_IMG" \
