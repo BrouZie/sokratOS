@@ -1,7 +1,7 @@
 /* Crimson Rose */
-@define-color base           #0f0406;
-@define-color surface        #18080b;
-@define-color overlay        #231014;
+@define-color base           #121212;
+@define-color surface        #333333;
+@define-color overlay        #595959;
 
 @define-color muted          #8d85a6;
 @define-color subtle         #b9b1d3;
@@ -17,11 +17,11 @@
 @define-color cyan           #8fc3cb;
 @define-color orange         #d8aba9;
 
-@define-color highlight_low  #18080b;
-@define-color highlight_med  #231014;
-@define-color highlight_high #2f161c;
+@define-color highlight_low  #333333;
+@define-color highlight_med  #404040;
+@define-color highlight_high #595959;
 
-@define-color border         #351a20;
+@define-color border         #595959;
 
-@define-color selection_bg   #231014;
-@define-color selection_fg   #e0def4;
+@define-color selection_bg   #333333;
+@define-color selection_fg   #121212;

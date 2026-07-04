@@ -1,8 +1,8 @@
 /* Crimson Rose */
 * {
-  base:            #0f0406;
-  surface:         #18080b;
-  overlay:         #231014;
+  base:            #121212;
+  surface:         #333333;
+  overlay:         #595959;
 
   muted:           #8d85a6;
   subtle:          #b9b1d3;
@@ -18,14 +18,14 @@
   cyan:            #8fc3cb;
   orange:          #d8aba9;
 
-  highlightlow:   #18080b;
-  highlightmed:   #231014;
-  highlighthigh:  #2f161c;
+  highlightlow:  #101010;
+  highlightmed:  #1c1c1c;
+  highlighthigh: #282828;
 
-  border:          #351a20;
+  border:         #282828;
 
-  selectionbg:    #231014;
-  selectionfg:    #e0def4;
+  selectionbg:    #333333;
+  selectionfg:    #121212;
 
   background:      @base;
   background-alt:  @surface;
